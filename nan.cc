@@ -26,18 +26,18 @@ Variable *NaN::coerce_to_type(VariableType vt) {
 }
 
 Variable *NaN::add(Variable *) {
-    return NULL;
+    return new NaN();
 }
 Variable *NaN::subtract(Variable *) {
-    return NULL;
+    return new NaN();
 }
 Variable *NaN::multiply(Variable *) {
-    return NULL;
+    return new NaN();
 }
 Variable *NaN::divide(Variable *) {
-    return NULL;
+    return new NaN();
 }
 Variable *NaN::modulo(Variable *) {
-    return NULL;
+    return new NaN();
 }
 

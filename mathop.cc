@@ -57,11 +57,17 @@ void MathopInstruction::parse_and_validate_params(ScopeStack *scope_stack) {
 
 
 
+/**
+ * UNDONE: marcwan 2014-07-24: this is the worst place ever for this
+ * function. Move it!!!!!
+ */
 Variable *MathopInstruction::get_variable_for_value(ScopeStack *ss, string arg) {
     if (isdigit(arg[0]) || (arg[0] == '-' && isdigit(arg[1])))
         return new Number(strtold(arg.c_str(), NULL));
     else if (arg[0] == '"' || arg[0] == '\'')
         return String::from_quoted_literal(arg);
+    else if (arg.compare("NaN") == 0)
+        return new NaN();
     else {
         return ss->find_variable_by_name(arg);
     }

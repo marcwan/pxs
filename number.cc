@@ -28,6 +28,16 @@ Number::Number(long double value) : Variable(kTypeNumber) {
 Number::~Number() {
 }
 
+
+string Number::to_string() {
+    char buffer[50];
+    snprintf(buffer, sizeof(buffer), "%Lf", m_value);
+
+    // UNDONE: trim trailing zeros!!!!
+    return string(buffer);
+}
+
+
 void Number::set_value(int value) {
     m_value = (long double)value;
 }
@@ -50,6 +60,7 @@ long double Number::get_value() {
 Variable *Number::coerce_to_type(VariableType vt) {
     switch (vt) {
         case kTypeNumber: return new Number(this->m_value);
+        case kTypeString: return new String(this->to_string());
         default: throw InternalErrorException("NOT IMPLEMENTED YET");
     }
 }
@@ -57,7 +68,9 @@ Variable *Number::coerce_to_type(VariableType vt) {
 
 Variable *Number::add(Variable *n) {
     Variable *v;
-    if (n->get_type() != kTypeNumber) {
+    if (n->get_type() == kTypeNaN)
+        return new NaN();
+    else if (n->get_type() != kTypeNumber) {
         v = n->coerce_to_type(kTypeNumber);
     } else {
         v = n;
@@ -71,7 +84,9 @@ Variable *Number::add(Variable *n) {
 
 Variable *Number::subtract(Variable *n) {
     Variable *v;
-    if (n->get_type() != kTypeNumber) {
+    if (n->get_type() == kTypeNaN)
+        return new NaN();
+    else if (n->get_type() != kTypeNumber) {
         v = n->coerce_to_type(kTypeNumber);
     } else {
         v = n;
@@ -84,7 +99,9 @@ Variable *Number::subtract(Variable *n) {
 }
 Variable *Number::multiply(Variable *n) { 
     Variable *v;
-    if (n->get_type() != kTypeNumber) {
+    if (n->get_type() == kTypeNaN)
+        return new NaN();
+    else if (n->get_type() != kTypeNumber) {
         v = n->coerce_to_type(kTypeNumber);
     } else {
         v = n;
@@ -97,7 +114,9 @@ Variable *Number::multiply(Variable *n) {
 }
 Variable *Number::divide(Variable *n) {
     Variable *v;
-    if (n->get_type() != kTypeNumber) {
+    if (n->get_type() == kTypeNaN)
+        return new NaN();
+    else if (n->get_type() != kTypeNumber) {
         v = n->coerce_to_type(kTypeNumber);
     } else {
         v = n;
@@ -110,7 +129,9 @@ Variable *Number::divide(Variable *n) {
 }
 Variable *Number::modulo(Variable *n) {
     Variable *v;
-    if (n->get_type() != kTypeNumber) {
+    if (n->get_type() == kTypeNaN)
+        return new NaN();
+    else if (n->get_type() != kTypeNumber) {
         v = n->coerce_to_type(kTypeNumber);
     } else {
         v = n;
@@ -121,19 +142,6 @@ Variable *Number::modulo(Variable *n) {
     v->release();
     return num;
 }
-
-
-
-
-
-string Number::to_string() {
-    char buffer[50];
-    snprintf(buffer, sizeof(buffer), "%Lf", m_value);
-
-    // UNDONE: trim trailing zeros!!!!
-    return string(buffer);
-}
-
 
 
 
