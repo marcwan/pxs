@@ -50,18 +50,6 @@ bool Varpool::declare_var(string name, bool throw_if_exists) {
     return true;
 }
 
-
-/*
-string Varpool::get_temp() {
-    string name = _unique_name_for_map(this->m_tmps, "tmp");
-
-    // map takes ownership of ref.
-    Variable *v = Variable::create_for_type(kTypeUnknown);
-    m_tmps[name] = v;
-    return name;
-}
-*/
-
 /**
  * returns false if the variable did not exist already.
  */
@@ -78,39 +66,12 @@ bool Varpool::set_value_for_var(string name, Variable *v, bool throw_if_not_exis
 }
 
 
-/*
-bool Varpool::set_value_for_temp(string tmpname, Variable *v, bool throw_if_not_exists) {
-    bool existed = (this->m_tmps[tmpname] != NULL);
-    if (existed)
-        this->m_tmps[tmpname]->release();  // dead pointer can replace.
-    else if (throw_if_not_exists)
-        throw NoSuchTempVariableException(tmpname);
-
-    this->m_tmps[tmpname] = v;
-    v->addref();
-    return existed;
-    }*/
-
 bool Varpool::set_value_for_name(string name,
                                  Variable *v,
                                  bool throw_if_not_exists) {
     return this->set_value_for_var(name, v, throw_if_not_exists);
 }
 
-
-/*
-bool Varpool::remove_tmp(string tmpname, bool throw_if_not_exists) {
-    bool existed = (this->m_tmps[tmpname] != NULL);
-    if (existed) {
-        Variable *v = this->m_tmps[tmpname];
-        v->release();
-        this->m_tmps.erase(tmpname);
-    } else if (throw_if_not_exists)
-        throw NoSuchTempVariableException(tmpname);
-
-    return existed;
-}
-*/
 
 bool Varpool::undeclare_var(string name, bool throw_if_not_exists) {
     if (this->m_vars[name] == NULL) {
@@ -136,27 +97,6 @@ Variable *Varpool::find_variable_by_name(string var_name) {
 
     return NULL;
 }
-
-
-/*Variable *Varpool::find_temp_or_var_by_name(string var_name) {
-    // is it a temp?
-    if (var_name[0] == ':' && var_name[1] == ':') {
-        if (this->m_tmps[var_name] != NULL) {
-            Variable *v = this->m_tmps[var_name];
-            v->addref();
-            return v;
-        }
-    } else {
-        if (this->m_vars[var_name] != NULL) {
-            Variable *v = this->m_vars[var_name];
-            v->addref();
-            return v;
-        }
-    }
-
-    return NULL;
-    }*/
-
 
 
 

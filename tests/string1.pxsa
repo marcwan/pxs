@@ -1,0 +1,5 @@
+        ADDVAR          x
+        ADD             "cat's ", "are cute", x
+        DEBUGPRINT      x
+LABEL1:
+        EXIT            0

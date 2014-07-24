@@ -28,15 +28,14 @@ struct TypeNameMappings {
 
 Variable *Variable::create_for_type(VariableType t) {
     switch (t) {
+        case kTypeNaN: return new NaN();
         case kTypeNumber: return new Number();
+        case kTypeString: return new String();
         case kTypeUnknown: return new Unknown();
         default:
             throw InternalErrorException("NOT IMPLEMENTED YET");
     }
-    
 }
-
-
 
 
 

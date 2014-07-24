@@ -64,7 +64,7 @@ Variable *Number::add(Variable *n) {
         v->addref();
     }
 
-    Number *num = new Number(this->m_value + dynamic_cast<Number *>(n)->get_value());
+    Number *num = new Number(this->m_value + dynamic_cast<Number *>(v)->get_value());
     v->release();
     return num;
 }
@@ -78,7 +78,7 @@ Variable *Number::subtract(Variable *n) {
         v->addref();
     }
 
-    Number *num = new Number(this->m_value - dynamic_cast<Number *>(n)->get_value());
+    Number *num = new Number(this->m_value - dynamic_cast<Number *>(v)->get_value());
     v->release();
     return num;
 }
@@ -91,7 +91,7 @@ Variable *Number::multiply(Variable *n) {
         v->addref();
     }
 
-    Number *num = new Number(this->m_value * dynamic_cast<Number *>(n)->get_value());
+    Number *num = new Number(this->m_value * dynamic_cast<Number *>(v)->get_value());
     v->release();
     return num;
 }
@@ -117,7 +117,7 @@ Variable *Number::modulo(Variable *n) {
         v->addref();
     }
 
-    Number *num = new Number(fmodl(this->m_value,dynamic_cast<Number *>(n)->get_value()));
+    Number *num = new Number(fmodl(this->m_value, dynamic_cast<Number *>(n)->get_value()));
     v->release();
     return num;
 }

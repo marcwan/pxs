@@ -84,7 +84,8 @@ struct OperationForTypeNotSupported : public std::exception {
 
 
 #include "number.h"
+#include "nan.h"
+#include "string.h"
 #include "unknown.h"
-
 
 #endif // __VARIABLE_H_

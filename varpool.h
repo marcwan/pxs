@@ -13,27 +13,19 @@ class Varpool : public Refcounted {
     virtual ~Varpool();
 
     virtual bool declare_var(std::string name, bool throw_if_exists = false);
-//    virtual std::string get_temp();
     virtual bool set_value_for_var(std::string name,
                                    Variable *v,
                                    bool throw_if_not_exists = false);
-/*    virtual bool set_value_for_temp(std::string tmpname,
-                                    Variable *v,
-                                    bool throw_if_not_exists = false);
-*/
     virtual bool set_value_for_name(std::string tmpname,
                                     Variable *v,
                                     bool throw_if_not_exists = false);
 
-//    virtual bool remove_tmp(std::string, bool throw_if_not_exists = false);
     virtual bool undeclare_var(std::string name, bool throw_if_not_exists = true);
 
     virtual Variable *find_variable_by_name(std::string var_name);
-//    virtual Variable *find_temp_or_var_by_name(std::string var_name);
 
   protected:
     std::map<std::string, Variable *> m_vars;
-//    std::map<std::string, Variable *> m_tmps; 
 };
 
 
