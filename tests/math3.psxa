@@ -1,0 +1,5 @@
+        ADDVAR          王马克
+        SUB             8, 5, 王马克
+        DEBUGPRINT      王马克
+LABEL1:
+        EXIT            0

@@ -9,20 +9,30 @@
 class Varpool;
 
 
-extern const char * kInstGETTEMP;
-extern const char * kInstFREETEMP;
-extern const char * kInstADD;
-extern const char * kInstDEBUGPRINT;
-extern const char * kInstADDVAR;
-extern const char * kInstEXIT;
+extern const char * kInstNameGETTEMP;
+extern const char * kInstNameFREETEMP;
+extern const char * kInstNameADD;
+extern const char * kInstNameSUB;
+extern const char * kInstNameMUL;
+extern const char * kInstNameDIV;
+extern const char * kInstNameMOD;
+extern const char * kInstNameDEBUGPRINT;
+extern const char * kInstNameADDVAR;
+extern const char * kInstNameREMOVEVAR;
+extern const char * kInstNameEXIT;
 
 typedef enum InstructionCode {
-    GETTEMP,
-    FREETEMP,
-    ADD,
-    DEBUGPRINT,
-    ADDVAR,
-    EXIT
+    kInstGETTEMP,
+    kInstFREETEMP,
+    kInstADD,
+    kInstSUB,
+    kInstMUL,
+    kInstDIV,
+    kInstMOD,
+    kInstDEBUGPRINT,
+    kInstADDVAR,
+    kInstREMOVEVAR,
+    kInstEXIT
 } InstructionCode;
 
 std::string instruction_code_to_string(InstructionCode);
@@ -81,12 +91,12 @@ struct InstructionParseException : public std::exception {
  * We'll include all the instructions here to save people some include hell.
  */
 #include "addvar.h"
-#include "add.h"
 #include "debugprint.h"
 #include "exit.h"
 #include "freetemp.h"
 #include "gettemp.h"
-
+#include "mathop.h"
+#include "removevar.h"
 
 
 

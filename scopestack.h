@@ -17,7 +17,7 @@ class ScopeStack : public Refcounted {
 
     virtual Varpool *get_current_scope();
     virtual Variable *find_variable_by_name(std::string var_name, bool go_deep = true);
-    virtual Varpool *find_scope_for_variable(std::string var_name);
+    virtual Varpool *find_scope_for_name(std::string var_name);
 
   protected:
     std::vector<Varpool *> m_scopes;

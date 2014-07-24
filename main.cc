@@ -50,7 +50,7 @@ int main (int argc, char **argv) {
             if (!i) {
                 cout << "WAT, Didn't get back an instruction object!!!" << endl;
             }
-            cout << "Parsed: " << instruction_code_to_string(i->get_instruction()) << endl;
+//cout << "Parsed: " << instruction_code_to_string(i->get_instruction()) << endl;
 
             instructions.push_back(i);
             
@@ -73,6 +73,7 @@ int main (int argc, char **argv) {
     vp->release();  // stack takes ownership
 
     for (int i = 0; i < instructions.size(); i++) {
+cerr << "Executing: " << instruction_code_to_string(instructions[i]->get_instruction()) << endl;
         instructions[i]->execute(module_stack);
     }
 

@@ -1,11 +1,14 @@
 #include "vm.h"
+
+#include "math.h"
 #include "number.h"
 
 using namespace std;
 
 
+
 Number::Number() : Variable(kTypeNumber), m_value(0) {
-    
+   
 }
 Number::Number(int value) : Variable(kTypeNumber) {
     m_value = (long double)value;
@@ -61,31 +64,62 @@ Variable *Number::add(Variable *n) {
         v->addref();
     }
 
-    Number *num = new Number(dynamic_cast<Number *>(n)->get_value() + this->m_value);
+    Number *num = new Number(this->m_value + dynamic_cast<Number *>(n)->get_value());
     v->release();
     return num;
 }
 
 Variable *Number::subtract(Variable *n) {
-    if (n->get_type() == kTypeNumber) {
-        return new Number(this->m_value - dynamic_cast<Number *>(n)->get_value());
+    Variable *v;
+    if (n->get_type() != kTypeNumber) {
+        v = n->coerce_to_type(kTypeNumber);
     } else {
-        throw OperationForTypeNotSupported("subtract", "number", n->get_type());
+        v = n;
+        v->addref();
     }
+
+    Number *num = new Number(this->m_value - dynamic_cast<Number *>(n)->get_value());
+    v->release();
+    return num;
 }
 Variable *Number::multiply(Variable *n) { 
-    if (n->get_type() == kTypeNumber) {
-        return new Number(this->m_value * dynamic_cast<Number *>(n)->get_value());
+    Variable *v;
+    if (n->get_type() != kTypeNumber) {
+        v = n->coerce_to_type(kTypeNumber);
     } else {
-        throw OperationForTypeNotSupported("multiply", "number", n->get_type());
+        v = n;
+        v->addref();
     }
+
+    Number *num = new Number(this->m_value * dynamic_cast<Number *>(n)->get_value());
+    v->release();
+    return num;
 }
 Variable *Number::divide(Variable *n) {
-    if (n->get_type() == kTypeNumber) {
-        return new Number(this->m_value / dynamic_cast<Number *>(n)->get_value());
+    Variable *v;
+    if (n->get_type() != kTypeNumber) {
+        v = n->coerce_to_type(kTypeNumber);
     } else {
-        throw OperationForTypeNotSupported("divide", "number", n->get_type());
+        v = n;
+        v->addref();
     }
+
+    Number *num = new Number(this->m_value / dynamic_cast<Number *>(n)->get_value());
+    v->release();
+    return num;
+}
+Variable *Number::modulo(Variable *n) {
+    Variable *v;
+    if (n->get_type() != kTypeNumber) {
+        v = n->coerce_to_type(kTypeNumber);
+    } else {
+        v = n;
+        v->addref();
+    }
+
+    Number *num = new Number(fmodl(this->m_value,dynamic_cast<Number *>(n)->get_value()));
+    v->release();
+    return num;
 }
 
 
@@ -100,3 +134,40 @@ string Number::to_string() {
     return string(buffer);
 }
 
+
+
+
+
+
+
+
+
+/*
+i don't think i can use these, because i'll want different semantics
+for differnet types.  i'll leave it here in case!
+
+long double _add(long double op1, long double op2);
+long double _sub(long double op1, long double op2);
+long double _mul(long double op1, long double op2);
+long double _div(long double op1, long double op2);
+long double _mod(long double op1, long double op2);
+
+
+
+
+long double _add(long double op1, long double op2) {
+    return op1 + op2;
+}
+long double _sub(long double op1, long double op2) {
+    return op1 - op2;
+}
+long double _mul(long double op1, long double op2) {
+    return op1 * op2;
+}
+long double _div(long double op1, long double op2) {
+    return op1 / op2;
+}
+long double _mod(long double op1, long double op2) {
+    return op1 % op2;
+}
+*/

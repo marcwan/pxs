@@ -76,7 +76,9 @@ Variable *ScopeStack::find_variable_by_name(string var_name, bool go_deep) {
 }
 
 
-Varpool *ScopeStack::find_scope_for_variable(string var_name) {
+Varpool *ScopeStack::find_scope_for_name(string var_name) {
+    if (this->m_scopes.size() == 0) return NULL;
+
     for (int i = this->m_scopes.size() - 1; i >= 0; i--) {
         Variable *v = m_scopes[i]->find_variable_by_name(var_name);
         if (v) {

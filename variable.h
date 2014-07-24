@@ -10,6 +10,7 @@ extern const char *kTypeNameArray;
 extern const char *kTypeNameObject;
 extern const char *kTypeNameFunction;
 extern const char *kTypeNameUnknown;
+extern const char *kTypeNameNaN;
 
 
 typedef enum VariableType {
@@ -19,7 +20,8 @@ typedef enum VariableType {
     kTypeArray,
     kTypeObject,
     kTypeFunction,
-    kTypeUnknown
+    kTypeUnknown,
+    kTypeNaN
 } VariableType;
 
 
@@ -41,6 +43,7 @@ class Variable : public Refcounted {
     virtual Variable *subtract(Variable *) = 0;
     virtual Variable *multiply(Variable *) = 0;
     virtual Variable *divide(Variable *) = 0;
+    virtual Variable *modulo(Variable *) = 0;
 
   protected:
     VariableType m_type;

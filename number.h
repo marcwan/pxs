@@ -23,15 +23,21 @@ class Number : public Variable {
 
     virtual Variable *coerce_to_type(VariableType);
 
+    // all of these ops =  ME %op% arg1
     virtual Variable *add(Variable *);
     virtual Variable *subtract(Variable *);
     virtual Variable *multiply(Variable *);
     virtual Variable *divide(Variable *);
+    virtual Variable *modulo(Variable *);
 
     virtual std::string to_string();
     
   protected:
     long double m_value;
+
+    Variable *_perform_op(Variable *arg2,
+                          long double(* popfn)(long double, long double));
+
 };
     
 

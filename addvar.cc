@@ -18,9 +18,11 @@ void AddVarInstruction::execute(ScopeStack *scope_stack) {
     // if they re-declare it in this scope.
     if (!v) {
         Varpool *vp = scope_stack->get_current_scope();
-        Variable *v = vp->add_var(this->m_args[0], kTypeUnknown);
-        v->release();
+        vp->declare_var(this->m_args[0]);
         vp->release();
+    } else {
+        // UNDONE: add a runtime flag to be strict?
+        v->release();
     }
 }
 

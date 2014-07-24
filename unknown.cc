@@ -31,4 +31,7 @@ Variable *Unknown::multiply(Variable *) {
 Variable *Unknown::divide(Variable *) {
     return NULL;
 }
+Variable *Unknown::modulo(Variable *) {
+    return NULL;
+}
 

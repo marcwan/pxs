@@ -9,24 +9,34 @@ using namespace std;
 //#define PARSE_DEBUG
 
 
-const char * kInstGETTEMP = "GETTEMP";
-const char * kInstFREETEMP = "FREETEMP";
-const char * kInstADD = "ADD";
-const char * kInstDEBUGPRINT = "DEBUGPRINT";
-const char * kInstADDVAR = "ADDVAR";
-const char * kInstEXIT = "EXIT";
+const char * kInstNameGETTEMP = "GETTEMP";
+const char * kInstNameFREETEMP = "FREETEMP";
+const char * kInstNameADD = "ADD";
+const char * kInstNameSUB = "SUB";
+const char * kInstNameMUL = "MUL";
+const char * kInstNameDIV = "DIV";
+const char * kInstNameMOD = "MOD";
+const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
+const char * kInstNameADDVAR = "ADDVAR";
+const char * kInstNameREMOVEVAR = "REMOVEVAR";
+const char * kInstNameEXIT = "EXIT";
 
 struct InstCodeMapping {
     const char *instruction;
     InstructionCode code;
     int cargs;
 } const g_mappings [] = {
-    { kInstGETTEMP, GETTEMP, 2  },
-    { kInstFREETEMP, FREETEMP, 1 },
-    { kInstADD, ADD, 3 },
-    { kInstDEBUGPRINT, DEBUGPRINT, 1},
-    { kInstADDVAR, ADDVAR, 1},
-    { kInstEXIT, EXIT, 1 }
+    { kInstNameGETTEMP, kInstGETTEMP, 2  },
+    { kInstNameFREETEMP, kInstFREETEMP, 1 },
+    { kInstNameADD, kInstADD, 3 },
+    { kInstNameSUB, kInstSUB, 3 },
+    { kInstNameMUL, kInstMUL, 3 },
+    { kInstNameDIV, kInstDIV, 3 },
+    { kInstNameMOD, kInstMOD, 3 },
+    { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
+    { kInstNameADDVAR, kInstADDVAR, 1},
+    { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
+    { kInstNameEXIT, kInstEXIT, 1 }
 };
 
 
@@ -48,18 +58,24 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
 
         // it'll have already thrown if the instruction is invalid
         switch (g_mappings[inst_idx].code) {
-            case ADDVAR:
+            case kInstADDVAR:
                 i = new AddVarInstruction(); break;
-            case ADD:
-                i = new AddInstruction(); break;
-            case DEBUGPRINT:
+            case kInstADD:
+            case kInstSUB:
+            case kInstMUL:
+            case kInstDIV:
+            case kInstMOD:
+                i = new MathopInstruction(g_mappings[inst_idx].code); break;
+            case kInstDEBUGPRINT:
                 i = new DebugPrintInstruction(); break;
-            case EXIT:
+            case kInstEXIT:
                 i = new ExitInstruction(); break;
-            case GETTEMP:
+            case kInstGETTEMP:
                 i = new GetTempInstruction(); break;
-            case FREETEMP:
+            case kInstFREETEMP:
                 i = new FreeTempInstruction(); break;
+            case kInstREMOVEVAR:
+                i = new RemoveVarInstruction(); break;
         }
 
         i->m_label = label;

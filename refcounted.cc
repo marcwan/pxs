@@ -7,7 +7,6 @@ using namespace std;
 
 
 Refcounted::Refcounted() : m_refcount(1) {
-    
 }
 
 
@@ -18,7 +17,7 @@ int Refcounted::addref() {
 
 int Refcounted::release() {
     int ret = --m_refcount;
-    cout << "release :" << ret << endl;
+    cerr << "release :" << ret << endl;
     if (ret == 0) {
         delete this;
     }

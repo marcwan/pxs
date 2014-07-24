@@ -8,6 +8,7 @@
 
 using namespace std;
 
+string _unique_name_for_map(const map<string, Variable *> &m, string base);
 
 Varpool::Varpool() {
 }
@@ -35,8 +36,13 @@ Varpool::~Varpool() {
  * returns true if it created the variable, false if it already
  * existed.
  */
-bool Varpool::declare_var(string name) {
-    if (this->m_vars[name] != NULL) return false;
+bool Varpool::declare_var(string name, bool throw_if_exists) {
+    if (this->m_vars[name] != NULL) {
+        if (throw_if_exists)
+            throw VariableAlreadyExistsException(name);
+        else
+            return false;
+    }
 
     // our hash table takes ownership of ref.
     Variable *v = Variable::create_for_type(kTypeUnknown);
@@ -45,47 +51,78 @@ bool Varpool::declare_var(string name) {
 }
 
 
+/*
 string Varpool::get_temp() {
-    string name = utils_unique_name_for_map(this->m_tmps, "tmp");
+    string name = _unique_name_for_map(this->m_tmps, "tmp");
 
     // map takes ownership of ref.
     Variable *v = Variable::create_for_type(kTypeUnknown);
     m_tmps[name] = v;
     return name;
 }
+*/
 
+/**
+ * returns false if the variable did not exist already.
+ */
+bool Varpool::set_value_for_var(string name, Variable *v, bool throw_if_not_exists) {
+    bool existed = (this->m_vars[name] != NULL);
+    if (existed)
+        this->m_vars[name]->release();  // dead pointer can replace.
+    else if (throw_if_not_exists)
+        throw NoSuchVariableException(name);
 
-void Varpool::replace_value_for_var(string name, Variable *v) {
-    if (this->m_vars[n
-}
-void Varpool::replace_value_for_temp(Variable *v) {
-}
-
-
-
-
-bool Varpool::free_tmp(Variable *var) {
-    vector<Variable *>::iterator position = find(m_tmps.begin(), m_tmps.end(), var);
-    if (position != m_tmps.end())
-        m_tmps.erase(position);
-    else
-        throw NoSuchTempVariableException();
-
-    return true;
+    this->m_vars[name] = v;
+    v->addref();
+    return existed;
 }
 
 
-bool Varpool::free_var(string name, bool throw_on_failure) {
+/*
+bool Varpool::set_value_for_temp(string tmpname, Variable *v, bool throw_if_not_exists) {
+    bool existed = (this->m_tmps[tmpname] != NULL);
+    if (existed)
+        this->m_tmps[tmpname]->release();  // dead pointer can replace.
+    else if (throw_if_not_exists)
+        throw NoSuchTempVariableException(tmpname);
+
+    this->m_tmps[tmpname] = v;
+    v->addref();
+    return existed;
+    }*/
+
+bool Varpool::set_value_for_name(string name,
+                                 Variable *v,
+                                 bool throw_if_not_exists) {
+    return this->set_value_for_var(name, v, throw_if_not_exists);
+}
+
+
+/*
+bool Varpool::remove_tmp(string tmpname, bool throw_if_not_exists) {
+    bool existed = (this->m_tmps[tmpname] != NULL);
+    if (existed) {
+        Variable *v = this->m_tmps[tmpname];
+        v->release();
+        this->m_tmps.erase(tmpname);
+    } else if (throw_if_not_exists)
+        throw NoSuchTempVariableException(tmpname);
+
+    return existed;
+}
+*/
+
+bool Varpool::undeclare_var(string name, bool throw_if_not_exists) {
     if (this->m_vars[name] == NULL) {
-        if (throw_on_failure)
+        if (throw_if_not_exists)
             throw NoSuchVariableException(name);
         else
             return false;
     }
 
     Variable *v = this->m_vars[name];
-    this->m_vars.erase(name);
     v->release();
+    this->m_vars.erase(name);
     return true;
 }
 
@@ -98,5 +135,48 @@ Variable *Varpool::find_variable_by_name(string var_name) {
     }
 
     return NULL;
+}
+
+
+/*Variable *Varpool::find_temp_or_var_by_name(string var_name) {
+    // is it a temp?
+    if (var_name[0] == ':' && var_name[1] == ':') {
+        if (this->m_tmps[var_name] != NULL) {
+            Variable *v = this->m_tmps[var_name];
+            v->addref();
+            return v;
+        }
+    } else {
+        if (this->m_vars[var_name] != NULL) {
+            Variable *v = this->m_vars[var_name];
+            v->addref();
+            return v;
+        }
+    }
+
+    return NULL;
+    }*/
+
+
+
+
+string _unique_name_for_map(const map<string, Variable *> &m, string base) {
+    int len = base.length() + 256;
+    char *buf = (char *)malloc(len + 1);
+    if (!buf) return "internal_error_out_of_memory";
+    bool found = true;
+    do {
+        snprintf(buf, len, "::%s%ld%d", base.c_str(), time(NULL), rand());
+
+        try {
+            m.at(buf);
+            found = true;
+        } catch (out_of_range e) {
+            found = false;
+        }
+
+    } while (found);
+
+    return string(buf);
 }
 

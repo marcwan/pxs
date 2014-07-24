@@ -14,7 +14,7 @@ class Unknown : public Variable {
     virtual Variable *subtract(Variable *);
     virtual Variable *multiply(Variable *);
     virtual Variable *divide(Variable *);
-
+    virtual Variable *modulo(Variable *);
 
 };
 

@@ -1,8 +1,8 @@
 
-CPPFLAGS = -g -Wc++11-extensions
+CPPFLAGS=-g -Wc++11-extensions
 
 
-SRCS = main.cc instruction.cc refcounted.cc variable.cc varpool.cc number.cc unknown.cc exception.cc add.cc addvar.cc exit.cc debugprint.cc freetemp.cc gettemp.cc scopestack.cc utils.cc
+SRCS = main.cc instruction.cc refcounted.cc variable.cc varpool.cc number.cc unknown.cc exception.cc mathop.cc addvar.cc exit.cc debugprint.cc freetemp.cc gettemp.cc removevar.cc scopestack.cc utils.cc
 OBJS = $(SRCS:.cc=.o)
 MAIN = pxs
 

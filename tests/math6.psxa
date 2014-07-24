@@ -1,0 +1,13 @@
+        ADDVAR          王马克
+        ADDVAR          ::__TMP1
+        ADDVAR          ::__TMP2
+        MUL             8, 5, ::__TMP1
+        DEBUGPRINT      ::__TMP1
+        SUB             10, 4, ::__TMP2
+        DEBUGPRINT      ::__TMP2
+        ADD             ::__TMP1, ::__TMP2, 王马克
+        DEBUGPRINT      王马克
+        REMOVEVAR       ::__TMP2
+        REMOVEVAR       ::__TMP1
+LABEL1:
+        EXIT            0
