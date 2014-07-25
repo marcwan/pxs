@@ -1,12 +1,16 @@
-#ifndef __NAN_H_
-#define __NAN_H_
+#ifndef __INFINITY_H_
+#define __INFINITY_H_
 
-extern const char *kValueNaN;
 
-class NaN : public Variable {
+extern const char *kValueInfinity;
+extern const char *kValueNegInfinity;
+
+
+class Infinity : public Variable {
   public:
-    NaN();
-    virtual ~NaN();
+    Infinity();
+    Infinity(bool positive);
+    virtual ~Infinity();
 
     virtual std::string to_string();
 
@@ -17,7 +21,8 @@ class NaN : public Variable {
     virtual Variable *multiply(Variable *);
     virtual Variable *divide(Variable *);
     virtual Variable *modulo(Variable *);
-
+  protected:
+    bool m_positive;
 };
 
-#endif // __NAN_H_
+#endif // __INFINITY_H_

@@ -5,6 +5,10 @@
 using namespace std;
 
 
+const char *kValueNaN = "NaN";
+
+
+
 NaN::NaN() : Variable(kTypeNaN) {
 }
 
@@ -12,12 +16,12 @@ NaN::~NaN() {
 }
 
 string NaN::to_string() {
-    return "NaN";
+    return kValueNaN;
 }
 
 Variable *NaN::coerce_to_type(VariableType vt) {
     if (vt == kTypeString) {
-        return new String("NaN");
+        return new String(kValueNaN);
     } else if (vt == kTypeNumber) {
         return new NaN();
     } else {

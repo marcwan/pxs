@@ -20,6 +20,7 @@ const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
 const char * kInstNameADDVAR = "ADDVAR";
 const char * kInstNameREMOVEVAR = "REMOVEVAR";
 const char * kInstNameEXIT = "EXIT";
+const char * kInstNameSET = "SET";
 
 struct InstCodeMapping {
     const char *instruction;
@@ -36,7 +37,8 @@ struct InstCodeMapping {
     { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameADDVAR, kInstADDVAR, 1},
     { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
-    { kInstNameEXIT, kInstEXIT, 1 }
+    { kInstNameEXIT, kInstEXIT, 1 },
+    { kInstNameSET, kInstSET, 2 }
 };
 
 
@@ -76,6 +78,8 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new FreeTempInstruction(); break;
             case kInstREMOVEVAR:
                 i = new RemoveVarInstruction(); break;
+            case kInstSET:
+                i = new SetInstruction(); break;
         }
 
         i->m_label = label;

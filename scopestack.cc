@@ -90,3 +90,13 @@ Varpool *ScopeStack::find_scope_for_name(string var_name) {
 
     return NULL;
 }
+
+
+bool ScopeStack::set_variable_in_scope(std::string name, Variable *v) {
+    Varpool *vp = this->find_scope_for_name(name);
+    if (!vp) {
+        return false;
+    }
+
+    return vp->set_value_for_var(name, v, false);
+}

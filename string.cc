@@ -8,7 +8,9 @@ using namespace std;
 Variable *String::from_quoted_literal(string literal) {
     char f, l;
 
-    // this shouldn't really happen.
+    // this shouldn't really happen. if it did, the compiler
+    // didn't do its job properly and we'll chop off a char.
+    // i don't feel too strongly about this.
     if (literal.length() < 2) return new String("");
 
     return new String(literal.substr(1, literal.size() - 2));

@@ -1,0 +1,7 @@
+        ADDVAR          招呼
+        SET             招呼, "你好吗？"
+        DEBUGPRINT      招呼
+        ADD             招呼, "我想知道！", 招呼
+        DEBUGPRINT      招呼
+___LABEL:
+        EXIT            0

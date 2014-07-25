@@ -1,7 +1,6 @@
 #include "vm.h"
-#include <ctype.h>
-#include <stdlib.h>
 
+#include "constantparser.h"
 #include "instruction.h"
 #include "varpool.h"
 
@@ -50,25 +49,17 @@ void MathopInstruction::execute(ScopeStack *scope_stack) {
     this->m_right = this->m_left = NULL;
 }
 
+
 void MathopInstruction::parse_and_validate_params(ScopeStack *scope_stack) {
     this->m_left = this->get_variable_for_value(scope_stack, this->m_args[0]);
     this->m_right = this->get_variable_for_value(scope_stack, this->m_args[1]);
 }
 
 
-
-/**
- * UNDONE: marcwan 2014-07-24: this is the worst place ever for this
- * function. Move it!!!!!
- */
 Variable *MathopInstruction::get_variable_for_value(ScopeStack *ss, string arg) {
-    if (isdigit(arg[0]) || (arg[0] == '-' && isdigit(arg[1])))
-        return new Number(strtold(arg.c_str(), NULL));
-    else if (arg[0] == '"' || arg[0] == '\'')
-        return String::from_quoted_literal(arg);
-    else if (arg.compare("NaN") == 0)
-        return new NaN();
-    else {
+    Variable *v = ConstantParser::parse_value(arg);
+    if (v)
+        return v;
+    else
         return ss->find_variable_by_name(arg);
-    }
 }

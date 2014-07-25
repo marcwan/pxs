@@ -19,6 +19,7 @@ extern const char * kInstNameMOD;
 extern const char * kInstNameDEBUGPRINT;
 extern const char * kInstNameADDVAR;
 extern const char * kInstNameREMOVEVAR;
+extern const char * kInstNameSET;
 extern const char * kInstNameEXIT;
 
 typedef enum InstructionCode {
@@ -32,6 +33,7 @@ typedef enum InstructionCode {
     kInstDEBUGPRINT,
     kInstADDVAR,
     kInstREMOVEVAR,
+    kInstSET,
     kInstEXIT
 } InstructionCode;
 
@@ -97,6 +99,7 @@ struct InstructionParseException : public std::exception {
 #include "gettemp.h"
 #include "mathop.h"
 #include "removevar.h"
+#include "set.h"
 
 
 

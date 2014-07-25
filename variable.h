@@ -11,6 +11,7 @@ extern const char *kTypeNameObject;
 extern const char *kTypeNameFunction;
 extern const char *kTypeNameUnknown;
 extern const char *kTypeNameNaN;
+extern const char *kTypeNameInfinity;
 
 
 typedef enum VariableType {
@@ -21,7 +22,8 @@ typedef enum VariableType {
     kTypeObject,
     kTypeFunction,
     kTypeUnknown,
-    kTypeNaN
+    kTypeNaN,
+    kTypeInfinity
 } VariableType;
 
 
@@ -83,6 +85,7 @@ struct OperationForTypeNotSupported : public std::exception {
 };
 
 
+#include "infinity.h"
 #include "number.h"
 #include "nan.h"
 #include "string.h"

@@ -1,0 +1,11 @@
+        ADDVAR          x
+        SET             x, 5
+        DEBUGPRINT      x
+        ADDVAR          y
+        SET             y, 8
+        DEBUGPRINT      y
+        ADDVAR          王马克
+        ADD             x, y, 王马克
+        DEBUGPRINT      王马克
+LABEL1:
+        EXIT            0
