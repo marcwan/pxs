@@ -32,7 +32,7 @@ class ScopeStack : public Refcounted {
     virtual Varpool *find_scope_for_name(std::string var_name);
     virtual bool set_variable_in_scope(std::string, Variable *);
 
-    virtual void set_compare_flags(byte);
+    inline void set_compare_flags(byte f) { this->m_last_compare_flags = f; }
 
   protected:
     std::vector<Varpool *> m_scopes;
