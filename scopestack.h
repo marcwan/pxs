@@ -5,6 +5,17 @@
 #include "varpool.h"
 
 
+#define kCompareResetMask    0x80
+#define kCompareInvalid      0x40
+#define kCompareAlwaysFalse  0x20
+#define kCompareIdentical    0x10
+#define kCompareEqual        0x04
+#define kCompareLessThan     0x03
+#define kCompareGreaterThan  0x02
+#define kCompareNotEqual     0x00
+
+
+
 class ScopeStack : public Refcounted {
   public:
     
@@ -21,8 +32,11 @@ class ScopeStack : public Refcounted {
     virtual Varpool *find_scope_for_name(std::string var_name);
     virtual bool set_variable_in_scope(std::string, Variable *);
 
+    virtual void set_compare_flags(byte);
+
   protected:
     std::vector<Varpool *> m_scopes;
+    byte m_last_compare_flags;
 };
 
 

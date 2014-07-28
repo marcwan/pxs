@@ -134,6 +134,7 @@ Variable *String::convert_to_number() {
 }
 
 
+
 bool String::is_numeric_string(Variable *v) {
     if (v->get_type() != kTypeString) return false;
 
@@ -163,3 +164,28 @@ bool String::is_numeric_string(Variable *v) {
     }
     return true;
 }
+
+
+
+int String::compare(String *a, String *b) {
+    string s1 = a->get_value();
+    string s2 = b->get_value();
+
+    return s1.compare(s2);
+}
+
+
+
+int String::compare(Variable *a, Variable *b) {
+    String *n1, *n2;
+
+    if (a->get_type() != kTypeString
+        || a->get_type() != kTypeString)
+        throw InternalErrorException("String compare is only for strings");
+
+    n1 = dynamic_cast<String *>(n1);
+    n2 = dynamic_cast<String *>(n2);
+
+    return String::compare(n1, n2);
+}
+

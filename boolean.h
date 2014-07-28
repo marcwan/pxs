@@ -1,30 +1,31 @@
-#ifndef __INFINITY_H_
-#define __INFINITY_H_
+#ifndef __BOOLEAN_H_
+#define __BOOLEAN_H_
 
 
-extern const char *kValueInfinity;
-extern const char *kValueNegInfinity;
+extern const char *kValueTrue;
+extern const char *kValueFalse;
 
-
-class Infinity : public Variable {
+class Boolean : public Variable {
   public:
-    Infinity();
-    Infinity(bool positive);
-    virtual ~Infinity();
+    Boolean();
+    Boolean(bool value);
+    virtual ~Boolean();
 
     virtual std::string to_string();
 
     virtual Variable *coerce_to_type(VariableType);
-
-    inline bool positive() { return this->m_positive; }
 
     virtual Variable *add(Variable *);
     virtual Variable *subtract(Variable *);
     virtual Variable *multiply(Variable *);
     virtual Variable *divide(Variable *);
     virtual Variable *modulo(Variable *);
+
+    virtual bool get_value();
+
   protected:
-    bool m_positive;
+    bool m_value;
+
 };
 
-#endif // __INFINITY_H_
+#endif // __BOOLEAN_H_

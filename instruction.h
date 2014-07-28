@@ -9,31 +9,29 @@
 class Varpool;
 
 
-extern const char * kInstNameGETTEMP;
-extern const char * kInstNameFREETEMP;
 extern const char * kInstNameADD;
-extern const char * kInstNameSUB;
-extern const char * kInstNameMUL;
+extern const char * kInstNameADDVAR;
+extern const char * kInstNameCOMPARE;
+extern const char * kInstNameDEBUGPRINT;
 extern const char * kInstNameDIV;
 extern const char * kInstNameMOD;
-extern const char * kInstNameDEBUGPRINT;
-extern const char * kInstNameADDVAR;
+extern const char * kInstNameMUL;
 extern const char * kInstNameREMOVEVAR;
 extern const char * kInstNameSET;
+extern const char * kInstNameSUB;
 extern const char * kInstNameEXIT;
 
 typedef enum InstructionCode {
-    kInstGETTEMP,
-    kInstFREETEMP,
     kInstADD,
-    kInstSUB,
-    kInstMUL,
+    kInstADDVAR,
+    kInstCOMPARE,
+    kInstDEBUGPRINT,
     kInstDIV,
     kInstMOD,
-    kInstDEBUGPRINT,
-    kInstADDVAR,
+    kInstMUL,
     kInstREMOVEVAR,
     kInstSET,
+    kInstSUB,
     kInstEXIT
 } InstructionCode;
 
@@ -65,6 +63,8 @@ class Instruction {
     int m_inst_idx;
     std::vector<std::string> m_args;
 
+    static Variable *get_const_or_var(ScopeStack *, std::string);    
+
     static std::string parse_label(std::string lbl);
     static int parse_instruction(std::string line, int &lastchar);
     static std::vector<std::string> parse_arguments(std::string line,
@@ -93,10 +93,9 @@ struct InstructionParseException : public std::exception {
  * We'll include all the instructions here to save people some include hell.
  */
 #include "addvar.h"
+#include "compare.h"
 #include "debugprint.h"
 #include "exit.h"
-#include "freetemp.h"
-#include "gettemp.h"
 #include "mathop.h"
 #include "removevar.h"
 #include "set.h"

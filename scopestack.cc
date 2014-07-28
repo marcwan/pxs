@@ -100,3 +100,8 @@ bool ScopeStack::set_variable_in_scope(std::string name, Variable *v) {
 
     return vp->set_value_for_var(name, v, false);
 }
+
+
+void ScopeStack::set_compare_flags(byte flags) {
+    this->m_last_compare_flags = flags;
+}

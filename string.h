@@ -23,6 +23,9 @@ class String : public Variable {
     static Variable *from_quoted_literal(std::string);
     static bool is_numeric_string(Variable *);
 
+    static int compare(String *, String *);
+    static int compare(Variable *, Variable *);
+
   protected:
     std::string m_value;
 

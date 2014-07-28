@@ -31,6 +31,9 @@ class Number : public Variable {
     virtual Variable *modulo(Variable *);
 
     virtual std::string to_string();
+
+    static int compare(Variable *a, Variable *b);
+    static int compare(Number *a, Number *b);
     
   protected:
     long double m_value;

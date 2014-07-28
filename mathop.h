@@ -13,7 +13,6 @@ class MathopInstruction : public Instruction {
   protected:
     InstructionCode m_code;
     void parse_and_validate_params(ScopeStack *);
-    Variable *get_variable_for_value(ScopeStack *, std::string);
 
     Variable *m_left, *m_right;
 };

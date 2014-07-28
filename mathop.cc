@@ -37,9 +37,8 @@ void MathopInstruction::execute(ScopeStack *scope_stack) {
 
     cerr << this->m_args[2] << " " << endl;
     Varpool *scope = scope_stack->find_scope_for_name(this->m_args[2]);
-    if (!scope) {
+    if (!scope)
         throw InternalErrorException("Variable undeclared / has no scope?");
-    }
 
     scope->set_value_for_name(this->m_args[2], result);
     scope->release();
@@ -51,15 +50,12 @@ void MathopInstruction::execute(ScopeStack *scope_stack) {
 
 
 void MathopInstruction::parse_and_validate_params(ScopeStack *scope_stack) {
-    this->m_left = this->get_variable_for_value(scope_stack, this->m_args[0]);
-    this->m_right = this->get_variable_for_value(scope_stack, this->m_args[1]);
+    this->m_left = Instruction::get_const_or_var(scope_stack, this->m_args[0]);
+    if (!this->m_left)
+        throw UndeclaredVariableException(this->m_args[0]);
+    this->m_right = Instruction::get_const_or_var(scope_stack, this->m_args[1]);
+    if (!this->m_right)
+        throw UndeclaredVariableException(this->m_args[1]);
 }
 
 
-Variable *MathopInstruction::get_variable_for_value(ScopeStack *ss, string arg) {
-    Variable *v = ConstantParser::parse_value(arg);
-    if (v)
-        return v;
-    else
-        return ss->find_variable_by_name(arg);
-}

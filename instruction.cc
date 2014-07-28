@@ -1,44 +1,42 @@
 #include "vm.h"
 
-#include "utf8.h"
-
+#include "constantparser.h"
 #include "instruction.h"
+#include "utf8.h"
 
 using namespace std;
 
 //#define PARSE_DEBUG
 
 
-const char * kInstNameGETTEMP = "GETTEMP";
-const char * kInstNameFREETEMP = "FREETEMP";
 const char * kInstNameADD = "ADD";
-const char * kInstNameSUB = "SUB";
-const char * kInstNameMUL = "MUL";
-const char * kInstNameDIV = "DIV";
-const char * kInstNameMOD = "MOD";
-const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
 const char * kInstNameADDVAR = "ADDVAR";
+const char * kInstNameCOMPARE = "COMPARE";
+const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
+const char * kInstNameDIV = "DIV";
+const char * kInstNameMUL = "MUL";
+const char * kInstNameMOD = "MOD";
 const char * kInstNameREMOVEVAR = "REMOVEVAR";
-const char * kInstNameEXIT = "EXIT";
 const char * kInstNameSET = "SET";
+const char * kInstNameSUB = "SUB";
+const char * kInstNameEXIT = "EXIT";
 
 struct InstCodeMapping {
     const char *instruction;
     InstructionCode code;
     int cargs;
 } const g_mappings [] = {
-    { kInstNameGETTEMP, kInstGETTEMP, 2  },
-    { kInstNameFREETEMP, kInstFREETEMP, 1 },
     { kInstNameADD, kInstADD, 3 },
-    { kInstNameSUB, kInstSUB, 3 },
-    { kInstNameMUL, kInstMUL, 3 },
+    { kInstNameADDVAR, kInstADDVAR, 1},
+    { kInstNameCOMPARE, kInstCOMPARE, 2},
+    { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameDIV, kInstDIV, 3 },
     { kInstNameMOD, kInstMOD, 3 },
-    { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
-    { kInstNameADDVAR, kInstADDVAR, 1},
+    { kInstNameMUL, kInstMUL, 3 },
     { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
-    { kInstNameEXIT, kInstEXIT, 1 },
-    { kInstNameSET, kInstSET, 2 }
+    { kInstNameSET, kInstSET, 2 },
+    { kInstNameSUB, kInstSUB, 3 },
+    { kInstNameEXIT, kInstEXIT, 1 }
 };
 
 
@@ -72,14 +70,12 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new DebugPrintInstruction(); break;
             case kInstEXIT:
                 i = new ExitInstruction(); break;
-            case kInstGETTEMP:
-                i = new GetTempInstruction(); break;
-            case kInstFREETEMP:
-                i = new FreeTempInstruction(); break;
             case kInstREMOVEVAR:
                 i = new RemoveVarInstruction(); break;
             case kInstSET:
                 i = new SetInstruction(); break;
+            case kInstCOMPARE:
+                i = new CompareInstruction(); break;
         }
 
         i->m_label = label;
@@ -220,8 +216,13 @@ vector<string> Instruction::parse_arguments(string line, int inst_idx, int &last
 }
 
 
-
-
+Variable *Instruction::get_const_or_var(ScopeStack *ss, string arg) {
+    Variable *v = ConstantParser::parse_value(arg);
+    if (v)
+        return v;
+    else
+        return ss->find_variable_by_name(arg);
+}
 
 
 

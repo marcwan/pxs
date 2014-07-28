@@ -1,0 +1,26 @@
+
+//import("module1.pxs");
+
+
+
+function factorial(var idx) {
+    var result = 1;
+    for (var i = 0; i < idx - 1; i++) {
+        result *= (idx - i);
+    }
+    return result;    
+}
+
+
+var res = factorial(10);
+
+DEBUGPRINT(res);
+
+
+/*
+function fibonacci(var idx) {
+    if (idx == 0) return 0;
+    if (idx == 1) return 1;
+    return fibonacci(idx - 2) + fibonacci(idx - 1);
+}
+*/

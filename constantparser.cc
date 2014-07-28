@@ -14,6 +14,10 @@ Variable *ConstantParser::parse_value(string arg) {
         return new Number(strtold(arg.c_str(), NULL));
     else if (arg[0] == '"' || arg[0] == '\'')
         return String::from_quoted_literal(arg);
+    else if (arg.compare(kValueTrue) == 0)
+        return new Boolean(true);
+    else if (arg.compare(kValueFalse) == 0)
+        return new Boolean(false);
     else if (arg.compare(kValueNaN) == 0)
         return new NaN();
     else if (arg.compare(kValueInfinity) == 0)

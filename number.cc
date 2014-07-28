@@ -145,8 +145,29 @@ Variable *Number::modulo(Variable *n) {
 
 
 
+int Number::compare(Variable *a, Variable *b) {
+    Number *n1, *n2;
+
+    if (a->get_type() != kTypeNumber
+        || a->get_type() != kTypeNumber)
+        throw InternalErrorException("Number compare is only for numbers");
+
+    n1 = dynamic_cast<Number *>(n1);
+    n2 = dynamic_cast<Number *>(n2);
+
+    return Number::compare(n1, n2);
+}
 
 
+int Number::compare(Number *a, Number *b) {
+    long double val = a->get_value() - b->get_value();
+    if (val == 0)
+        return 0;
+    else if (val < 0)
+        return -1;
+    else
+        return 1;
+}
 
 
 
