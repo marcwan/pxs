@@ -12,5 +12,10 @@ see this. I decided to do this all from scratch and not do any reading on
 common "VM implementation strategies" -- I want to do this all the hard way
 and make all the mistakes possible.
 
+I also am using this an excuse to brush up on my C++ -- I haven't programmed
+in it on a daily basis in a few years, and wanted to learn all the cool new
+C++ 11 features and whatnot.
+
+
 
 
