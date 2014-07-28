@@ -6,12 +6,12 @@
 
 
 #define kCompareResetMask    0x80
-#define kCompareInvalid      0x40
-#define kCompareAlwaysFalse  0x20
-#define kCompareIdentical    0x10
+#define kCompareInvalid      0x20
+#define kCompareAlwaysFalse  0x10
+#define kCompareIdentical    0x08
 #define kCompareEqual        0x04
-#define kCompareLessThan     0x03
-#define kCompareGreaterThan  0x02
+#define kCompareLessThan     0x02
+#define kCompareGreaterThan  0x01
 #define kCompareNotEqual     0x00
 
 

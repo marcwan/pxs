@@ -24,3 +24,4 @@ void DebugPrintInstruction::execute(ScopeStack *scope_stack) {
         v->release();
     }
 }
+

@@ -183,8 +183,8 @@ int String::compare(Variable *a, Variable *b) {
         || a->get_type() != kTypeString)
         throw InternalErrorException("String compare is only for strings");
 
-    n1 = dynamic_cast<String *>(n1);
-    n2 = dynamic_cast<String *>(n2);
+    n1 = dynamic_cast<String *>(a);
+    n2 = dynamic_cast<String *>(b);
 
     return String::compare(n1, n2);
 }

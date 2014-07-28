@@ -2,6 +2,7 @@
 
 #include "constantparser.h"
 #include "instruction.h"
+#include <iomanip>
 #include <sstream>
 #include "varpool.h"
 
@@ -36,6 +37,7 @@ void CompareInstruction::execute(ScopeStack *scope_stack) {
     this->parse_and_validate_params(scope_stack);
 
     byte result = this->compare();
+    fprintf(stdout, "COMPARE instruction result: 0x%x\n", (int)result);
 }
 
 
@@ -56,7 +58,11 @@ byte CompareInstruction::compare() {
     vtr = this->m_right->get_type();
     if (vtl == vtr)
         return this->compare_equal_types();
-    else if (vtl == kTypeNaN || vtr == kTypeNaN)
+    
+    /**
+     * Otherwise, let's just figure the rest of this out.
+     */
+    if (vtl == kTypeNaN || vtr == kTypeNaN)
         return kCompareAlwaysFalse;
     else if (vtl == kTypeUnknown || vtr == kTypeUnknown)
         return kCompareNotEqual;

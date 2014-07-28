@@ -152,8 +152,8 @@ int Number::compare(Variable *a, Variable *b) {
         || a->get_type() != kTypeNumber)
         throw InternalErrorException("Number compare is only for numbers");
 
-    n1 = dynamic_cast<Number *>(n1);
-    n2 = dynamic_cast<Number *>(n2);
+    n1 = dynamic_cast<Number *>(a);
+    n2 = dynamic_cast<Number *>(b);
 
     return Number::compare(n1, n2);
 }
