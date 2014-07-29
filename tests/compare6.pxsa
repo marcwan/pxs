@@ -1,0 +1,6 @@
+        ADDVAR          x
+        SET             x, 500
+        ADDVAR          y
+        SET             y, true
+        COMPARE         x, y
+        DEBUGPRINT      :::FLAGS:::

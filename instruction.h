@@ -20,6 +20,13 @@ extern const char * kInstNameREMOVEVAR;
 extern const char * kInstNameSET;
 extern const char * kInstNameSUB;
 extern const char * kInstNameEXIT;
+extern const char * kInstNameJUMPEQ;
+extern const char * kInstNameJUMPIDENT;
+extern const char * kInstNameJUMPNE;
+extern const char * kInstNameJUMPGT;
+extern const char * kInstNameJUMPGTE;
+extern const char * kInstNameJUMPLT;
+extern const char * kInstNameJUMPLTE;
 
 typedef enum InstructionCode {
     kInstADD,
@@ -32,6 +39,13 @@ typedef enum InstructionCode {
     kInstREMOVEVAR,
     kInstSET,
     kInstSUB,
+    kInstJUMPEQ,
+    kInstJUMPIDENT,
+    kInstJUMPNE,
+    kInstJUMPGT,
+    kInstJUMPGTE,
+    kInstJUMPLT,
+    kInstJUMPLTE,
     kInstEXIT
 } InstructionCode;
 
@@ -96,10 +110,10 @@ struct InstructionParseException : public std::exception {
 #include "compare.h"
 #include "debugprint.h"
 #include "exit.h"
+#include "jump.h"
 #include "mathop.h"
 #include "removevar.h"
 #include "set.h"
-
 
 
 #endif // __INSTRUCTION_H_

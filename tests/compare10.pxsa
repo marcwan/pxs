@@ -1,0 +1,6 @@
+        ADDVAR          x
+        SET             x, NaN
+        ADDVAR          y
+        SET             y, 234234234.2352352
+        COMPARE         x, y
+        DEBUGPRINT      :::FLAGS:::

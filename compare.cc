@@ -37,7 +37,7 @@ void CompareInstruction::execute(ScopeStack *scope_stack) {
     this->parse_and_validate_params(scope_stack);
 
     byte result = this->compare();
-    fprintf(stdout, "COMPARE instruction result: 0x%x\n", (int)result);
+    scope_stack->set_compare_flags(result);
 }
 
 
