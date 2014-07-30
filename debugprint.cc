@@ -16,10 +16,10 @@ DebugPrintInstruction::~DebugPrintInstruction() {
 }
 
 
-void DebugPrintInstruction::execute(ScopeStack *scope_stack) {
+void DebugPrintInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     // find out which variable it is
     if (this->m_args[0].compare(kNameDebugFlags) == 0) {
-        byte b = scope_stack->get_compare_flags();
+        byte b = state->get_compare_flags();
         char buf[200];
         snprintf(buf, sizeof(buf),
                  "DEBUGPRINT COMPARE FLAGS: 0x%x\n", b);

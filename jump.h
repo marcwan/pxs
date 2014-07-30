@@ -7,7 +7,7 @@ class JumpInstruction : public Instruction {
     JumpInstruction(InstructionCode);
     ~JumpInstruction();
 
-    void execute(ScopeStack *);
+    virtual void execute(IExecutionState *, ScopeStack *);
 
   protected:
     InstructionCode m_op;

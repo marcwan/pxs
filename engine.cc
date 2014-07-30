@@ -1,9 +1,9 @@
     #include "vm.h"
 
 #include <fstream>
+#include "engine.h"
 #include "instructionrunner.h"
 #include "instruction.h"
-#include "engine.h"
 #include "scopestack.h"
 
 using namespace std;
@@ -86,7 +86,7 @@ bool Engine::run() {
     runner = m_module_stack.back();
 
     while (true) {
-        InstructionResult res = runner->execute_next(this->m_scope_stack);
+        InstructionResult res = runner->execute_next(this, this->m_scope_stack);
         if (res == kInstResultException)
             return false;
         if (res == kInstResultNoMoreInstructions) {
@@ -98,4 +98,35 @@ bool Engine::run() {
     }
 
     // deed code
+}
+
+
+/**
+ *=---------------------------------------------------------------------------=
+ * IExecutionState
+ *=---------------------------------------------------------------------------=
+ */
+byte Engine::get_compare_flags() {
+    return this->m_last_compare_flags;
+}
+
+
+void Engine::set_compare_flags(byte flags) {
+    this->m_last_compare_flags = flags;
+}
+
+
+void Engine::jump_to_label(string label) {
+    InstructionRunner *runner;
+    if (m_module_stack.size() == 0)
+        throw InternalErrorException("Asked to jump to label, but no instructions!");
+    runner = m_module_stack.back();
+
+    runner->jump_to_label(label);
+}
+  
+
+void Engine::terminate_execution(int code) {
+    cerr << "IMPLEMENT THIS FOR REAL YA BUM" << endl;
+    exit(code);
 }

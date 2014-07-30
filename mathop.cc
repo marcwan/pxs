@@ -15,7 +15,7 @@ MathopInstruction::~MathopInstruction() {
 }
 
 
-void MathopInstruction::execute(ScopeStack *scope_stack) {
+void MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
 
     this->parse_and_validate_params(scope_stack);
     Variable *result;

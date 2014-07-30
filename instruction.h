@@ -1,6 +1,7 @@
 #ifndef __INSTRUCTION_H_
 #define __INSTRUCTION_H_
 
+#include "executionstate.h"
 #include "scopestack.h"
 
 /**
@@ -66,7 +67,7 @@ class Instruction : public Refcounted {
      * run this puppy. will throw one of many exceptions if things go
      * horribly wrong.
      */
-   virtual void execute(ScopeStack *) = 0;
+    virtual void execute(IExecutionState *, ScopeStack *) = 0;
 
   protected:
     Instruction();

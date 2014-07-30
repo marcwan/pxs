@@ -9,7 +9,7 @@ class RemoveVarInstruction : public Instruction {
     RemoveVarInstruction();
     ~RemoveVarInstruction();
 
-    void execute(ScopeStack *);
+    virtual void execute(IExecutionState *, ScopeStack *);
 
   protected:
     void parse_and_validate_params();

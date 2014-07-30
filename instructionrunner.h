@@ -16,7 +16,7 @@ class InstructionRunner : Refcounted {
     InstructionRunner(std::vector<Instruction *>);
     ~InstructionRunner();
 
-    InstructionResult execute_next(ScopeStack *);
+    InstructionResult execute_next(IExecutionState *, ScopeStack *);
     void jump_to_label(std::string label);
 
   protected:

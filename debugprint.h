@@ -10,7 +10,7 @@ class DebugPrintInstruction : public Instruction {
     DebugPrintInstruction();
     ~DebugPrintInstruction();
 
-    void execute(ScopeStack *);
+    virtual void execute(IExecutionState *, ScopeStack *);
 };
 
 

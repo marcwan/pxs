@@ -11,7 +11,7 @@ class CompareInstruction : public Instruction {
      * compare teh two operands and put the resulting state in the 
      * scope stack!
      */
-    void execute(ScopeStack *);
+    virtual void execute(IExecutionState *, ScopeStack *);
 
   protected:
     Variable *m_left, *m_right;

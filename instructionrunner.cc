@@ -17,13 +17,18 @@ InstructionRunner::~InstructionRunner() {
 }
 
 
-InstructionResult InstructionRunner::execute_next(ScopeStack *ss) {
+InstructionResult InstructionRunner::execute_next
+(
+    IExecutionState *state,
+    ScopeStack *ss
+)
+{
     if (this->m_position >= this->m_instructions.size())
         return kInstResultNoMoreInstructions;
 
     // otherwise, let's execute that puppy!
     try {
-        this->m_instructions[this->m_position]->execute(ss);
+        this->m_instructions[this->m_position]->execute(state, ss);
         m_position++;
     } catch (std::exception e) {
         cout << "Fatal error: " << e.what() << endl;
@@ -43,7 +48,7 @@ void InstructionRunner::jump_to_label(string lbl) {
     }
 
     throw InternalErrorException(string("Asked to jump to non-existant label: ")
- + lbl);
+                                 + lbl);
 }
 
 

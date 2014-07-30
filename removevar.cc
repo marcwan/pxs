@@ -12,7 +12,8 @@ RemoveVarInstruction::RemoveVarInstruction() : Instruction() {
 RemoveVarInstruction::~RemoveVarInstruction() {
 }
 
-void RemoveVarInstruction::execute(ScopeStack *scope_stack) {
+
+void RemoveVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     this->parse_and_validate_params();
 
     Varpool *vp = scope_stack->get_current_scope();

@@ -18,7 +18,7 @@ SetInstruction::~SetInstruction() {
 /**
  * basic format:  SET var, var_or_const
  */
-void SetInstruction::execute(ScopeStack *scope_stack) {
+void SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 2)
         throw InternalErrorException("Unexpected # args for SET");
 

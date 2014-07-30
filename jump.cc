@@ -18,7 +18,7 @@ JumpInstruction::~JumpInstruction() {
 /**
  * basic format:  JUMP var, var_or_const
  */
-void JumpInstruction::execute(ScopeStack *scope_stack) {
+void JumpInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
 
 }
 
