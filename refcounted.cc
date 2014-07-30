@@ -17,7 +17,7 @@ int Refcounted::addref() {
 
 int Refcounted::release() {
     int ret = --m_refcount;
-    cerr << "release :" << ret << endl;
+//    cerr << "release :" << ret << endl;
     if (ret == 0) {
         delete this;
     }

@@ -29,7 +29,7 @@ CompareInstruction::~CompareInstruction() {
 /**
  * basic format:  COMPARE var, var_or_const
  */
-void CompareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool CompareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 2)
         throw InternalErrorException("Unexpected # args for COMPARE");
 
@@ -38,6 +38,7 @@ void CompareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack
 
     byte result = this->compare();
     state->set_compare_flags(result);
+    return false;
 }
 
 

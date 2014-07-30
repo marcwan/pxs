@@ -9,7 +9,7 @@ class AddVarInstruction : public Instruction {
     AddVarInstruction();
     ~AddVarInstruction();
 
-    virtual void execute(IExecutionState *, ScopeStack *);
+    virtual bool execute(IExecutionState *, ScopeStack *);
 
   protected:
     void parse_and_validate_params();

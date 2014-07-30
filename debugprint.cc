@@ -16,7 +16,7 @@ DebugPrintInstruction::~DebugPrintInstruction() {
 }
 
 
-void DebugPrintInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool DebugPrintInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     // find out which variable it is
     if (this->m_args[0].compare(kNameDebugFlags) == 0) {
         byte b = state->get_compare_flags();
@@ -35,5 +35,7 @@ void DebugPrintInstruction::execute(IExecutionState *state, ScopeStack *scope_st
             v->release();
         }
     }
+
+    return false;
 }
 

@@ -15,7 +15,7 @@ MathopInstruction::~MathopInstruction() {
 }
 
 
-void MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
 
     this->parse_and_validate_params(scope_stack);
     Variable *result;
@@ -35,7 +35,6 @@ void MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
             throw InternalErrorException("Unknown math operation.");
     }
 
-    cerr << this->m_args[2] << " " << endl;
     Varpool *scope = scope_stack->find_scope_for_name(this->m_args[2]);
     if (!scope)
         throw InternalErrorException("Variable undeclared / has no scope?");
@@ -46,6 +45,7 @@ void MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
     this->m_right->release();
     this->m_left->release();
     this->m_right = this->m_left = NULL;
+    return false;
 }
 
 

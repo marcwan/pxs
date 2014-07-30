@@ -13,7 +13,7 @@ AddVarInstruction::~AddVarInstruction() {
 }
 
 
-void AddVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool AddVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     Variable *v = scope_stack->find_variable_by_name(this->m_args[0]);
     // only add this var if we don't have it in this scope. we don't care
     // if they re-declare it in this scope.
@@ -25,6 +25,8 @@ void AddVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
         // UNDONE: add a runtime flag to be strict?
         v->release();
     }
+
+    return false;
 }
 
 

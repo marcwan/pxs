@@ -21,9 +21,11 @@ extern const char * kInstNameREMOVEVAR;
 extern const char * kInstNameSET;
 extern const char * kInstNameSUB;
 extern const char * kInstNameEXIT;
+extern const char * kInstNameJUMP;
 extern const char * kInstNameJUMPEQ;
 extern const char * kInstNameJUMPIDENT;
-extern const char * kInstNameJUMPNE;
+extern const char * kInstNameJUMPNEQ;
+extern const char * kInstNameJUMPNIDENT;
 extern const char * kInstNameJUMPGT;
 extern const char * kInstNameJUMPGTE;
 extern const char * kInstNameJUMPLT;
@@ -40,9 +42,11 @@ typedef enum InstructionCode {
     kInstREMOVEVAR,
     kInstSET,
     kInstSUB,
+    kInstJUMP,
     kInstJUMPEQ,
     kInstJUMPIDENT,
-    kInstJUMPNE,
+    kInstJUMPNEQ,
+    kInstJUMPNIDENT,
     kInstJUMPGT,
     kInstJUMPGTE,
     kInstJUMPLT,
@@ -58,6 +62,8 @@ class Instruction : public Refcounted {
     static Instruction *instruction_from_line(std::string line, std::string label);
     virtual ~Instruction();
 
+    std::string debug_string();
+
     inline std::string get_label() { return this->m_label; }
     inline std::string get_line() { return this->m_line; }
     InstructionCode get_instruction();
@@ -65,9 +71,10 @@ class Instruction : public Refcounted {
 
     /**
      * run this puppy. will throw one of many exceptions if things go
-     * horribly wrong.
+     * horribly wrong. Return true if you changed instruction pointer,
+     * else false means we'll just incr to next instruction.
      */
-    virtual void execute(IExecutionState *, ScopeStack *) = 0;
+    virtual bool execute(IExecutionState *, ScopeStack *) = 0;
 
   protected:
     Instruction();

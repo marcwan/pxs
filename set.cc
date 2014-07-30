@@ -18,7 +18,7 @@ SetInstruction::~SetInstruction() {
 /**
  * basic format:  SET var, var_or_const
  */
-void SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 2)
         throw InternalErrorException("Unexpected # args for SET");
 
@@ -34,5 +34,6 @@ void SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (!scope_stack->set_variable_in_scope(this->m_args[0], v)) 
         throw UndeclaredVariableException(this->m_args[0]);
     v->release();
+    return false;
 }
 

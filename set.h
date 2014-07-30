@@ -7,7 +7,7 @@ class SetInstruction : public Instruction {
     SetInstruction();
     ~SetInstruction();
 
-    virtual void execute(IExecutionState *, ScopeStack *);
+    virtual bool execute(IExecutionState *, ScopeStack *);
 };
 
 

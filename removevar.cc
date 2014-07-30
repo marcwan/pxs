@@ -13,13 +13,14 @@ RemoveVarInstruction::~RemoveVarInstruction() {
 }
 
 
-void RemoveVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool RemoveVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     this->parse_and_validate_params();
 
     Varpool *vp = scope_stack->get_current_scope();
     // remove it and throw if it's not there.
     vp->undeclare_var(this->m_args[0], true);
     vp->release();
+    return false;
 }
 
 

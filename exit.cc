@@ -14,7 +14,7 @@ ExitInstruction::~ExitInstruction() {
 
 
 
-void ExitInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool ExitInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     this->m_exitcode = Instruction::get_const_or_var(scope_stack, this->m_args[0]);
     if (!this->m_exitcode)
         throw UndeclaredVariableException(this->m_args[0]);
@@ -23,5 +23,6 @@ void ExitInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     int code = (int)dynamic_cast<Number *>(v)->get_value();
     v->release();
     state->terminate_execution(code);
+    return false;
 }
 

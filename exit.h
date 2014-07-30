@@ -7,7 +7,7 @@ class ExitInstruction : public Instruction {
     ExitInstruction();
     ~ExitInstruction();
 
-    virtual void execute(IExecutionState *, ScopeStack *);
+    virtual bool execute(IExecutionState *, ScopeStack *);
 
   protected:
     Variable *m_exitcode;

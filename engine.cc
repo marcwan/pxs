@@ -127,6 +127,6 @@ void Engine::jump_to_label(string label) {
   
 
 void Engine::terminate_execution(int code) {
-    cerr << "IMPLEMENT THIS FOR REAL YA BUM" << endl;
-    exit(code);
+    cerr << "IMPLEMENT 'EXIT' FOR REAL YA BUM" << endl;
+//    exit(code);
 }

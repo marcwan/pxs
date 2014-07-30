@@ -7,7 +7,7 @@ class MathopInstruction : public Instruction {
     MathopInstruction(InstructionCode);
     ~MathopInstruction();
 
-    virtual void execute(IExecutionState *, ScopeStack *);
+    virtual bool execute(IExecutionState *, ScopeStack *);
 
   protected:
     InstructionCode m_code;

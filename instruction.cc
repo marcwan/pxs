@@ -20,6 +20,15 @@ const char * kInstNameREMOVEVAR = "REMOVEVAR";
 const char * kInstNameSET = "SET";
 const char * kInstNameSUB = "SUB";
 const char * kInstNameEXIT = "EXIT";
+const char * kInstNameJUMP = "JUMP";
+const char * kInstNameJUMPEQ = "JUMPEQ";
+const char * kInstNameJUMPIDENT = "JUMPIDENT";
+const char * kInstNameJUMPNEQ = "JUMPNEQ";
+const char * kInstNameJUMPNIDENT = "JUMPNIDENT";
+const char * kInstNameJUMPGT = "JUMPGT";
+const char * kInstNameJUMPGTE = "JUMPGTE";
+const char * kInstNameJUMPLT = "JUMPLT";
+const char * kInstNameJUMPLTE = "JUMPLTE";
 
 struct InstCodeMapping {
     const char *instruction;
@@ -36,7 +45,16 @@ struct InstCodeMapping {
     { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
     { kInstNameSET, kInstSET, 2 },
     { kInstNameSUB, kInstSUB, 3 },
-    { kInstNameEXIT, kInstEXIT, 1 }
+    { kInstNameEXIT, kInstEXIT, 1 },
+    { kInstNameJUMP, kInstJUMP, 1 },
+    { kInstNameJUMPEQ, kInstJUMPEQ, 1 },
+    { kInstNameJUMPIDENT, kInstJUMPIDENT, 1 },
+    { kInstNameJUMPNEQ, kInstJUMPNEQ, 1 },
+    { kInstNameJUMPNIDENT, kInstJUMPNIDENT, 1 },
+    { kInstNameJUMPGT, kInstJUMPGT, 1 },
+    { kInstNameJUMPGTE, kInstJUMPGTE, 1 },
+    { kInstNameJUMPLT, kInstJUMPLT, 1 },
+    { kInstNameJUMPLTE, kInstJUMPLTE, 1 }
 };
 
 
@@ -76,9 +94,11 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new SetInstruction(); break;
             case kInstCOMPARE:
                 i = new CompareInstruction(); break;
+            case kInstJUMP:
             case kInstJUMPEQ:
             case kInstJUMPIDENT:
-            case kInstJUMPNE:
+            case kInstJUMPNEQ:
+            case kInstJUMPNIDENT:
             case kInstJUMPGT:
             case kInstJUMPGTE:
             case kInstJUMPLT:
@@ -108,6 +128,10 @@ Instruction::Instruction() : Refcounted() {
 }
     
 Instruction::~Instruction() {
+}
+
+string Instruction::debug_string() {
+    return m_label + ": " + m_line;
 }
 
 
