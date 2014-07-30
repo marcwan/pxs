@@ -7,7 +7,7 @@
 using namespace std;
 
 
-SetInstruction::SetInstruction() {
+SetInstruction::SetInstruction() : Instruction() {
 }
 
 SetInstruction::~SetInstruction() {

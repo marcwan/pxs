@@ -7,7 +7,7 @@
 using namespace std;
 
 
-JumpInstruction::JumpInstruction(InstructionCode type) : m_op(type) {
+JumpInstruction::JumpInstruction(InstructionCode type) : Instruction(), m_op(type) {
 }
 
 JumpInstruction::~JumpInstruction() {

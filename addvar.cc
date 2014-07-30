@@ -6,7 +6,7 @@
 using namespace std;
 
 
-AddVarInstruction::AddVarInstruction() {
+AddVarInstruction::AddVarInstruction() : Instruction() {
 }
 
 AddVarInstruction::~AddVarInstruction() {

@@ -52,13 +52,13 @@ typedef enum InstructionCode {
 std::string instruction_code_to_string(InstructionCode);
 InstructionCode string_to_instruction_code(std::string);
 
-class Instruction {
+class Instruction : public Refcounted {
   public:
     static Instruction *instruction_from_line(std::string line, std::string label);
     virtual ~Instruction();
 
-    std::string get_label();
-    std::string get_line();
+    inline std::string get_label() { return this->m_label; }
+    inline std::string get_line() { return this->m_line; }
     InstructionCode get_instruction();
     std::vector<std::string> get_arguments();
 

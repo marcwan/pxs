@@ -18,7 +18,7 @@ byte _int_to_compare_state(int val);
 
 
 
-CompareInstruction::CompareInstruction() {
+CompareInstruction::CompareInstruction() : Instruction() {
 }
 
 CompareInstruction::~CompareInstruction() {

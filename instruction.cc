@@ -76,6 +76,14 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new SetInstruction(); break;
             case kInstCOMPARE:
                 i = new CompareInstruction(); break;
+            case kInstJUMPEQ:
+            case kInstJUMPIDENT:
+            case kInstJUMPNE:
+            case kInstJUMPGT:
+            case kInstJUMPGTE:
+            case kInstJUMPLT:
+            case kInstJUMPLTE:
+                i = new JumpInstruction(g_mappings[inst_idx].code); break;
         }
 
         i->m_label = label;
@@ -96,20 +104,12 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
 
 
 
-Instruction::Instruction() {
+Instruction::Instruction() : Refcounted() {
 }
     
 Instruction::~Instruction() {
 }
 
-
-string Instruction::get_label() {
-    return m_label;
-}
-
-string Instruction::get_line() {
-    return m_line;
-}
 
 InstructionCode Instruction::get_instruction() {
     if (m_inst_idx < 0 || m_inst_idx > (sizeof(g_mappings) / sizeof(InstCodeMapping)))

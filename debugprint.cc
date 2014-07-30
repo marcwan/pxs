@@ -9,7 +9,7 @@ const char *kNameDebugFlags = ":::FLAGS:::";
 
 
 
-DebugPrintInstruction::DebugPrintInstruction() {
+DebugPrintInstruction::DebugPrintInstruction() : Instruction() {
 }
 
 DebugPrintInstruction::~DebugPrintInstruction() {

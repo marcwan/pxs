@@ -6,7 +6,7 @@
 using namespace std;
 
 
-RemoveVarInstruction::RemoveVarInstruction() {
+RemoveVarInstruction::RemoveVarInstruction() : Instruction() {
 }
 
 RemoveVarInstruction::~RemoveVarInstruction() {

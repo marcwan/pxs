@@ -6,7 +6,7 @@
 using namespace std;
 
 
-ExitInstruction::ExitInstruction() {
+ExitInstruction::ExitInstruction() : Instruction() {
 }
 
 ExitInstruction::~ExitInstruction() {

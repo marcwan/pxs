@@ -1,10 +1,10 @@
 #include "vm.h"
 
-
 #include <stdio.h>
-#include <fstream>
 
+#include "engine.h"
 #include "instruction.h"
+#include "instructionrunner.h"
 #include "scopestack.h"
 
 
@@ -18,65 +18,29 @@ int main (int argc, char **argv) {
         return 0;
     }
 
-    const char *byte_code_path = argv[1];
-    ifstream bcf(byte_code_path);
-    if (!bcf.is_open()) {
-        cout << "Could not open " << byte_code_path << endl;
-        return 0;
+    Engine engine;
+    try {
+        engine.init();
+    } catch (std::exception e) {
+        cout << "Unable to initialise engine: " << e.what()
+             << ", terminating." << endl;
+        return -1;
     }
 
-    unsigned line_count = 1;
-    string line;
-    string last_label("");
-
-    vector<Instruction *> instructions;
-
-    while (getline(bcf, line)) {
-
-        // first see if this is a label. if so, remember for next
-        // line
-        if (!std::isspace(line[0])
-            && (line[line.length() - 1] == ':')) {
-            last_label = line;
-            continue;
-        }
-
-        trim(line);
-        if (line.length() == 0) continue;
-
-        try {
-            Instruction *i = Instruction::instruction_from_line(line, last_label);
-            last_label = "";
-            if (!i) {
-                cout << "WAT, Didn't get back an instruction object!!!" << endl;
-            }
-//cout << "Parsed: " << instruction_code_to_string(i->get_instruction()) << endl;
-
-            instructions.push_back(i);
-            
-        } catch (UnknownInstructionException e) {
-            cout << "Unknown instruction in " << byte_code_path << ": " << e.what() << endl;
-            break;
-        } catch (InstructionParseException e) {
-            cout << "Incorrect # arguments parsing: " << e.what() << endl;
-            break;
-        }
+    if (!engine.parse_assembly_file(argv[1])) {
+        return false;
     }
 
-    /**
-     * Once we have the file loaded, time to start executing the code in it.
-     * Step 1: Set up a scope stack and a "global" varpool.
-     */
-    ScopeStack * module_stack = new ScopeStack();
-    Varpool *vp = new Varpool();
-    module_stack->push_pool(vp);
-    vp->release();  // stack takes ownership
-
+    bool res = engine.run();
+        
+/*
     for (int i = 0; i < instructions.size(); i++) {
-cerr << "Executing: " << instruction_code_to_string(instructions[i]->get_instruction()) << endl;
+        string lbl = module_stack->jump_to_label();
+        if (lbl) {
+            
+        cerr << "Executing: " << instruction_code_to_string(instructions[i]->get_instruction()) << endl;
         instructions[i]->execute(module_stack);
     }
-
 
     // clean up.
     for (int i = 0; i < instructions.size(); i++) {
@@ -85,6 +49,7 @@ cerr << "Executing: " << instruction_code_to_string(instructions[i]->get_instruc
 
     module_stack->pop_pool();
     module_stack->release();
+*/
     return 0;
 }
 

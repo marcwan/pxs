@@ -8,7 +8,7 @@ using namespace std;
 
 
 
-MathopInstruction::MathopInstruction(InstructionCode ic) : m_code(ic) {
+MathopInstruction::MathopInstruction(InstructionCode ic) : Instruction(), m_code(ic) {
 }
 
 MathopInstruction::~MathopInstruction() {
