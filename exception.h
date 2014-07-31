@@ -9,7 +9,12 @@ struct InternalErrorException : public std::exception {
     InternalErrorException(std::string in) : message(in) {}
     InternalErrorException(std::string m, int val);
     ~InternalErrorException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() {
+        std::string s("Fatal Internal Error:");
+        s += message;
+        return s.c_str();
+    }
+
 };
 
 

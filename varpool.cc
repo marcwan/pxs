@@ -39,7 +39,7 @@ Varpool::~Varpool() {
 bool Varpool::declare_var(string name, bool throw_if_exists) {
     if (this->m_vars[name] != NULL) {
         if (throw_if_exists)
-            throw VariableAlreadyExistsException(name);
+            throw new VariableAlreadyExistsException(name);
         else
             return false;
     }
@@ -59,7 +59,7 @@ bool Varpool::set_value_for_var(string name, Variable *v, bool throw_if_not_exis
     if (existed)
         this->m_vars[name]->release();  // dead pointer can replace.
     else if (throw_if_not_exists)
-        throw NoSuchVariableException(name);
+        throw new NoSuchVariableException(name);
 
     this->m_vars[name] = v;
     v->addref();
@@ -77,7 +77,7 @@ bool Varpool::set_value_for_name(string name,
 bool Varpool::undeclare_var(string name, bool throw_if_not_exists) {
     if (this->m_vars[name] == NULL) {
         if (throw_if_not_exists)
-            throw NoSuchVariableException(name);
+            throw new NoSuchVariableException(name);
         else
             return false;
     }

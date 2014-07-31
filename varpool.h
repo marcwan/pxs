@@ -31,14 +31,22 @@ struct VariableAlreadyExistsException : public std::exception {
     std::string varname;
     VariableAlreadyExistsException(std::string in) : varname(in) {}
     ~VariableAlreadyExistsException() throw () {} // Updated
-    const char *what() const throw() { return varname.c_str(); }
+    const char *what() const throw() {
+        std::string s("Variable already declared: ");
+        s += varname;
+        return s.c_str();
+    }
 };
 
 struct NoSuchVariableException : public std::exception {
     std::string varname;
     NoSuchVariableException(std::string in) : varname(in) {}
     ~NoSuchVariableException() throw () {} // Updated
-    const char *what() const throw() { return varname.c_str(); }
+    const char *what() const throw() {
+        std::string s("Use of undeclared variable: ");
+        s += varname;
+        return s.c_str();
+    }
 };
 
 struct NoSuchTempVariableException : public NoSuchVariableException {

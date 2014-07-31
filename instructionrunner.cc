@@ -54,8 +54,8 @@ void InstructionRunner::jump_to_label(string lbl) {
         }
     }
 
-    throw InternalErrorException(string("Asked to jump to non-existant label: ")
-                                 + lbl);
+    throw new InternalErrorException(string("Asked to jump to non-existant label: ")
+                                     + lbl);
 }
 
 

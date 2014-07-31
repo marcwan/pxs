@@ -26,8 +26,8 @@ bool RemoveVarInstruction::execute(IExecutionState *state, ScopeStack *scope_sta
 
 void RemoveVarInstruction::parse_and_validate_params() {
     if (this->m_args.size() != 1)
-        throw InternalErrorException("Expecting 1 arg, got: %d", this->m_args.size());
+        throw new InternalErrorException("Expecting 1 arg, got: %d", this->m_args.size());
 
     if (this->m_args[0].length() == 0)
-        throw InternalErrorException("Variable name must not be empty.");
+        throw new InternalErrorException("Variable name must not be empty.");
 }

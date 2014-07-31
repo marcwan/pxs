@@ -33,7 +33,7 @@ Variable *Variable::create_for_type(VariableType t) {
         case kTypeString: return new String();
         case kTypeUnknown: return new Unknown();
         default:
-            throw InternalErrorException("NOT IMPLEMENTED YET");
+            throw new InternalErrorException("NOT IMPLEMENTED YET");
     }
 }
 
@@ -55,7 +55,7 @@ VariableType string_to_variable_type(string typestr) {
             return g_mappings[i].type;
     }
 
-    throw InvalidVariableTypeException(typestr);
+    throw new InvalidVariableTypeException(typestr);
 }
 
 string variable_type_to_string(VariableType type) {
@@ -64,7 +64,7 @@ string variable_type_to_string(VariableType type) {
             return g_mappings[i].name;
     }
 
-    throw InternalErrorException("Variable has an unknown type %d", type);
+    throw new InternalErrorException("Variable has an unknown type %d", type);
 }
 
 

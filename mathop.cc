@@ -32,12 +32,12 @@ bool MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
         case kInstMOD:
             result = this->m_left->modulo(this->m_right); break;
         default:
-            throw InternalErrorException("Unknown math operation.");
+            throw new InternalErrorException("Unknown math operation.");
     }
 
     Varpool *scope = scope_stack->find_scope_for_name(this->m_args[2]);
     if (!scope)
-        throw InternalErrorException("Variable undeclared / has no scope?");
+        throw new InternalErrorException("Variable undeclared / has no scope?");
 
     scope->set_value_for_name(this->m_args[2], result);
     scope->release();
@@ -52,10 +52,10 @@ bool MathopInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
 void MathopInstruction::parse_and_validate_params(ScopeStack *scope_stack) {
     this->m_left = Instruction::get_const_or_var(scope_stack, this->m_args[0]);
     if (!this->m_left)
-        throw UndeclaredVariableException(this->m_args[0]);
+        throw new UndeclaredVariableException(this->m_args[0]);
     this->m_right = Instruction::get_const_or_var(scope_stack, this->m_args[1]);
     if (!this->m_right)
-        throw UndeclaredVariableException(this->m_args[1]);
+        throw new UndeclaredVariableException(this->m_args[1]);
 }
 
 

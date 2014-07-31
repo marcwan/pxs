@@ -37,23 +37,23 @@ Variable *Boolean::coerce_to_type(VariableType vt) {
     else {
         ostringstream str;
         str << "Unimplemented: Convert bool to " << vt << endl;
-        throw InternalErrorException(str.str().c_str());
+        throw new InternalErrorException(str.str().c_str());
     }
 }
 
 Variable *Boolean::add(Variable *) {
-    throw InternalErrorException("UNIMPLEMENTED: Boolean::add");
+    throw new InternalErrorException("UNIMPLEMENTED: Boolean::add");
 }
 Variable *Boolean::subtract(Variable *) {
-    throw InternalErrorException("UNIMPLEMENTED: Boolean::subtract");
+    throw new InternalErrorException("UNIMPLEMENTED: Boolean::subtract");
 }
 Variable *Boolean::multiply(Variable *) {
-    throw InternalErrorException("UNIMPLEMENTED: Boolean::multiply");
+    throw new InternalErrorException("UNIMPLEMENTED: Boolean::multiply");
 }
 Variable *Boolean::divide(Variable *) {
-    throw InternalErrorException("UNIMPLEMENTED: Boolean::divide");
+    throw new InternalErrorException("UNIMPLEMENTED: Boolean::divide");
 }
 Variable *Boolean::modulo(Variable *) {
-    throw InternalErrorException("UNIMPLEMENTED: Boolean::modulo");
+    throw new InternalErrorException("UNIMPLEMENTED: Boolean::modulo");
 }
 

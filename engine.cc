@@ -12,7 +12,7 @@ using namespace std;
 void Engine::init() {
     this->m_scope_stack = new ScopeStack();
     if (!this->m_scope_stack)
-        throw InternalErrorException("Out of memory allocating scope stack");
+        throw new InternalErrorException("Out of memory allocating scope stack");
 
     Varpool *vp = new Varpool();
     this->m_scope_stack->push_pool(vp);
@@ -22,16 +22,20 @@ void Engine::init() {
 
 
 bool Engine::parse_assembly_file(const char *path) {
-    InstructionRunner *ir;
+    InstructionRunner *ir = NULL;
     AssemblyLoader al;
 
     // this will add any new functions to the global function pool.
-    ir = al.load_assembly(path, m_function_pool);
+    try {
+        ir = al.load_assembly(path, m_function_pool);
+    } catch (std::exception *e) {
+        cout << e->what() << endl;
+        delete e;
+        return false;
+    }
 
-    if (ir) m_module_stack.push_back(ir);
-
-    // we'll keep the refcount on the ir
-    return ir != NULL;
+    m_module_stack.push_back(ir);
+    return true;
 }
 
 
@@ -75,7 +79,7 @@ void Engine::set_compare_flags(byte flags) {
 void Engine::jump_to_label(string label) {
     InstructionRunner *runner;
     if (m_module_stack.size() == 0)
-        throw InternalErrorException("Asked to jump to label, but no instructions!");
+        throw new InternalErrorException("Asked to jump to label, but no instructions!");
     runner = m_module_stack.back();
 
     runner->jump_to_label(label);

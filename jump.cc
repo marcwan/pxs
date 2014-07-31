@@ -22,7 +22,7 @@ JumpInstruction::~JumpInstruction() {
  */
 bool JumpInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 1)
-        throw InternalErrorException("Need a destination label for JUMPXYZ inst.");
+        throw new InternalErrorException("Need a destination label for JUMPXYZ inst.");
 
     string label = this->m_args[0];
     byte flags = state->get_compare_flags();
@@ -80,7 +80,7 @@ bool JumpInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
             }
             break;
         default:
-            throw InternalErrorException("Are you sure that's a jump?");
+            throw new InternalErrorException("Are you sure that's a jump?");
     }
 
     // didn't actually modify instruction pointer. as you were.

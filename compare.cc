@@ -31,7 +31,7 @@ CompareInstruction::~CompareInstruction() {
  */
 bool CompareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 2)
-        throw InternalErrorException("Unexpected # args for COMPARE");
+        throw new InternalErrorException("Unexpected # args for COMPARE");
 
     // this sets m_left and m_right
     this->parse_and_validate_params(scope_stack);
@@ -46,10 +46,10 @@ bool CompareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack
 void CompareInstruction::parse_and_validate_params(ScopeStack *scope_stack) {
     this->m_left = Instruction::get_const_or_var(scope_stack, this->m_args[0]);
     if (!this->m_left)
-        throw UndeclaredVariableException(this->m_args[0]);
+        throw new UndeclaredVariableException(this->m_args[0]);
     this->m_right = Instruction::get_const_or_var(scope_stack, this->m_args[1]);
     if (!this->m_right)
-        throw UndeclaredVariableException(this->m_args[1]);
+        throw new UndeclaredVariableException(this->m_args[1]);
 }
 
 
@@ -82,7 +82,7 @@ byte CompareInstruction::compare() {
         ostringstream str;
         str << "Unimplemented: Comparing vars of type ";
         str << vtl << " and " << vtr << "in " __FILE__ << endl;
-        throw InternalErrorException(str.str().c_str());
+        throw new InternalErrorException(str.str().c_str());
     }
 }
 
@@ -133,7 +133,7 @@ byte CompareInstruction::compare_equal_types() {
             return kCompareIdentical | kCompareEqual;
 
         default:
-            throw InternalErrorException("COMPARE NOT SUPPORTED YET");
+            throw new InternalErrorException("COMPARE NOT SUPPORTED YET");
     }
 }
 

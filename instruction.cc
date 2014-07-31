@@ -112,11 +112,7 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
         i->m_line = line;
         i->m_inst_idx = inst_idx;
         i->m_args = args;
-
-    } catch (UnknownInstructionException e) {
-        if (i) i->release();
-        throw e;
-    } catch (InstructionParseException e) {
+    } catch (std::exception *e) {
         if (i) i->release();
         throw e;
     }
@@ -190,7 +186,7 @@ int Instruction::parse_instruction(string line, int &lastchar) {
     }
 
     // didn't find it, it's not an instruction we don't know about yet.
-    throw UnknownInstructionException(instruction);
+    throw new UnknownInstructionException(instruction);
 }
 
 
@@ -223,11 +219,11 @@ vector<string> Instruction::parse_arguments(string line, int inst_idx, int &last
         args.push_back(arg);
         arg = "";
         if (args.size() != g_mappings[inst_idx].cargs) {
-            throw InstructionParseException(arglist);
+            throw new InstructionParseException(arglist);
         }
     } else {
         if (g_mappings[inst_idx].cargs != 0) {
-            throw InstructionParseException(arglist);
+            throw new InstructionParseException(arglist);
         }
     }
    
@@ -273,5 +269,5 @@ InstructionCode string_to_instruction_code(string inst) {
         }
     }
 
-    throw UnknownInstructionException(inst);
+    throw new UnknownInstructionException(inst);
 }

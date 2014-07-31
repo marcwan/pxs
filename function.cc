@@ -10,14 +10,14 @@ Function::Function(string impl) : Variable(kTypeFunction),
                                   m_name(""),
                                   m_implementation(impl) {
     if (this->m_implementation.length() == 0)
-        throw InternalErrorException("Function needs an implementation");
+        throw new InternalErrorException("Function needs an implementation");
 }
 
 Function::Function(string name, string impl) : Variable(kTypeFunction),
                                                m_name(name),
                                                m_implementation(impl) {
     if (this->m_implementation.length() == 0)
-        throw InternalErrorException("Function needs an implementation");
+        throw new InternalErrorException("Function needs an implementation");
 }
 
 Function::~Function() {
@@ -35,7 +35,7 @@ Variable *Function::coerce_to_type(VariableType vt) {
     } else if (vt == kTypeNumber) {
         return new NaN();
     } else {
-        throw InternalErrorException("Hum. Function coercsion to sth else");
+        throw new InternalErrorException("Hum. Function coercsion to sth else");
     }
 }
 

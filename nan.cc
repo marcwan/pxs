@@ -25,7 +25,7 @@ Variable *NaN::coerce_to_type(VariableType vt) {
     } else if (vt == kTypeNumber) {
         return new NaN();
     } else {
-        throw InternalErrorException("Hum. NaN coercsion to sth else");
+        throw new InternalErrorException("Hum. NaN coercsion to sth else");
     }
 }
 

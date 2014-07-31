@@ -20,7 +20,7 @@ SetInstruction::~SetInstruction() {
  */
 bool SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (this->m_args.size() != 2)
-        throw InternalErrorException("Unexpected # args for SET");
+        throw new InternalErrorException("Unexpected # args for SET");
 
     Variable *v = ConstantParser::parse_value(this->m_args[1]);
     if (!v) {
@@ -28,11 +28,11 @@ bool SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
         // we have declared.
         v = scope_stack->find_variable_by_name(this->m_args[0]);
         if (!v)
-            throw UndeclaredVariableException(this->m_args[1]);
+            throw new UndeclaredVariableException(this->m_args[1]);
     }
 
     if (!scope_stack->set_variable_in_scope(this->m_args[0], v)) 
-        throw UndeclaredVariableException(this->m_args[0]);
+        throw new UndeclaredVariableException(this->m_args[0]);
     v->release();
     return false;
 }

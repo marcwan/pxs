@@ -33,7 +33,7 @@ Variable *Infinity::coerce_to_type(VariableType vt) {
     } else if (vt == kTypeNumber) {
         return new Infinity();
     } else {
-        throw InternalErrorException("Hum. Infinity coercsion to sth else");
+        throw new InternalErrorException("Hum. Infinity coercsion to sth else");
     }
 }
 

@@ -43,7 +43,7 @@ Variable *String::coerce_to_type(VariableType vt) {
     } else if (vt == kTypeNumber) {
         return this->convert_to_number();
     } else 
-        throw InternalErrorException("Asked to coerce string to sth new.");
+        throw new InternalErrorException("Asked to coerce string to sth new.");
 }
 
 
@@ -181,7 +181,7 @@ int String::compare(Variable *a, Variable *b) {
 
     if (a->get_type() != kTypeString
         || a->get_type() != kTypeString)
-        throw InternalErrorException("String compare is only for strings");
+        throw new InternalErrorException("String compare is only for strings");
 
     n1 = dynamic_cast<String *>(a);
     n2 = dynamic_cast<String *>(b);

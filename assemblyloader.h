@@ -25,11 +25,16 @@ class AssemblyLoader {
 };
 
 
+
 struct MalformedAssemblyException : public std::exception {
     std::string message;
     MalformedAssemblyException(std::string in) : message(in) {}
     ~MalformedAssemblyException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() { 
+        std::string s("Malformed Assembly: ");
+        s += message;
+        return s.c_str();
+    }
 };
 
 
@@ -37,7 +42,11 @@ struct AssemblyLoadException : public std::exception {
     std::string message;
     AssemblyLoadException(std::string in) : message(in) {}
     ~AssemblyLoadException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() {
+        std::string s("Unable to load Assembly file: ");
+        s += message;
+        return s.c_str();
+    }
 };
 
 

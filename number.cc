@@ -61,7 +61,7 @@ Variable *Number::coerce_to_type(VariableType vt) {
     switch (vt) {
         case kTypeNumber: return new Number(this->m_value);
         case kTypeString: return new String(this->to_string());
-        default: throw InternalErrorException("NOT IMPLEMENTED YET");
+        default: throw new InternalErrorException("NOT IMPLEMENTED YET");
     }
 }
 
@@ -150,7 +150,7 @@ int Number::compare(Variable *a, Variable *b) {
 
     if (a->get_type() != kTypeNumber
         || a->get_type() != kTypeNumber)
-        throw InternalErrorException("Number compare is only for numbers");
+        throw new InternalErrorException("Number compare is only for numbers");
 
     n1 = dynamic_cast<Number *>(a);
     n2 = dynamic_cast<Number *>(b);

@@ -30,7 +30,7 @@ ScopeStack::~ScopeStack() {
 
 
 void ScopeStack::push_pool(Varpool *vp) {
-    if (!vp) throw invalid_argument("ScopeStack::push_pool -- vp must not be null");
+    if (!vp) throw new invalid_argument("ScopeStack::push_pool -- vp must not be null");
 
     vp->addref();
     m_scopes.push_back(vp);
@@ -40,7 +40,7 @@ void ScopeStack::push_pool(Varpool *vp) {
 
 Varpool *ScopeStack::pop_pool() {
     if (m_scopes.size() == 0)
-        throw InternalErrorException("Being asked to pop an empty scope stack");
+        throw new InternalErrorException("Being asked to pop an empty scope stack");
 
     Varpool *vp = this->m_scopes.back();
     vp->release();
@@ -51,7 +51,7 @@ Varpool *ScopeStack::pop_pool() {
 
 Varpool *ScopeStack::get_current_scope() {
     if (m_scopes.size() == 0)
-        throw InternalErrorException("Being asked for scope in an empty scope stack");
+        throw new InternalErrorException("Being asked for scope in an empty scope stack");
 
     Varpool *vp = m_scopes.back();
     vp->addref();

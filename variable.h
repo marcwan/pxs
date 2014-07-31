@@ -62,7 +62,11 @@ struct InvalidVariableTypeException : public std::exception {
     std::string message;
     InvalidVariableTypeException(std::string in) : message(in) {}
     ~InvalidVariableTypeException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() {
+        std::string s("Cannot convert to type: ");
+        s += message;
+        return s.c_str();
+    }
 };
 
 
@@ -70,7 +74,11 @@ struct UndeclaredVariableException : public std::exception {
     std::string message;
     UndeclaredVariableException(std::string in) : message(in) {}
     ~UndeclaredVariableException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() {
+        std::string s("Undeclared variable: ");
+        s += message;
+        return s.c_str();
+    }
 };
 
 
@@ -81,6 +89,7 @@ struct OperationForTypeNotSupported : public std::exception {
                                  std::string mytype,
                                  VariableType other_type);
     ~OperationForTypeNotSupported() throw () {}
+    // this has a full cons in variable.cc
     const char *what() const throw() { return message.c_str(); }
 };
 

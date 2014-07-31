@@ -101,7 +101,11 @@ struct UnknownInstructionException : public std::exception {
     std::string message;
     UnknownInstructionException(std::string in) : message(in) {}
     ~UnknownInstructionException() throw () {} // Updated
-    const char *what() const throw() { return message.c_str(); }
+    const char *what() const throw() {
+        std::string s("Unknown instruction found: ");
+        s += message;
+        return s.c_str();
+    }
 };
 
 
@@ -109,7 +113,11 @@ struct InstructionParseException : public std::exception {
     std::string arguments;
     InstructionParseException(std::string args) : arguments(args)  { }
     ~InstructionParseException() throw () {} // Updated
-    const char * what() const throw() { return arguments.c_str(); }
+    const char * what() const throw() {
+        std::string s("Incorrect # arguments parsing: ");
+        s += arguments;
+        return s.c_str();
+    }
 };
 
 

@@ -36,14 +36,11 @@ InstructionRunner *AssemblyLoader::load_assembly
 {
     m_path = path;
     m_stream.open(path);
-    if (!m_stream.is_open()) {
-        cout << "Could not open \"" << path << "\": " 
-             << strerror(errno) << endl;
-        return 0;
-    }
+    if (!m_stream.is_open())
+        throw new AssemblyLoadException(strerror(errno));
 
     if (!this->look_for(kMarkerModuleBody))
-        throw MalformedAssemblyException("No \"MODULE_BODY\" marker");
+        throw new MalformedAssemblyException("No \"MODULE_BODY\" marker");
 
     InstructionRunner *body;
     body = this->read_until(kMarkerEndModuleBody);
@@ -77,7 +74,7 @@ bool AssemblyLoader::look_for(string what, bool start_only) {
 InstructionRunner *AssemblyLoader::read_until(string marker) {
     string line;
     string last_label("");
-    bool errored = false;
+//    bool errored = false;
 
     vector<Instruction *> instructions;
 
@@ -109,6 +106,13 @@ InstructionRunner *AssemblyLoader::read_until(string marker) {
 
             instructions.push_back(i);
 
+        } catch (std::exception *e) {
+            for (int i = 0; i < instructions.size(); i++) {
+                instructions[i]->release();
+            }
+            throw e;
+        }
+/*
         } catch (UnknownInstructionException e) {
             cout << "Unknown instruction: " << e.what() << endl;
             errored = true; break;
@@ -122,18 +126,15 @@ InstructionRunner *AssemblyLoader::read_until(string marker) {
             cerr << "Fatal error processing file: " << e.what() << endl;
             errored = true; break;
         }
+*/
     }
 
-    if (errored) {
-        for (int i = 0; i < instructions.size(); i++) {
-            instructions[i]->release();
-        }
-        return NULL;
+/*    if (errored) {
     } else {
-        InstructionRunner *ir = new InstructionRunner(instructions);
+*/        InstructionRunner *ir = new InstructionRunner(instructions);
         if (!ir)
-            throw AssemblyLoadException("out of memory parsing instructions.");
+            throw new AssemblyLoadException("out of memory parsing instructions.");
         // they take ownership
         return ir;
-    }
+//    }
 }
