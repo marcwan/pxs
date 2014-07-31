@@ -34,23 +34,37 @@ InstructionRunner *AssemblyLoader::load_assembly
     map<string, InstructionRunner *> &fn_pool
 )
 {
+    string marker;
+
     m_path = path;
     m_stream.open(path);
     if (!m_stream.is_open())
         throw new AssemblyLoadException(strerror(errno));
 
-    if (!this->look_for(kMarkerModuleBody))
+    if (!this->look_for(kMarkerModuleBody, marker))
         throw new MalformedAssemblyException("No \"MODULE_BODY\" marker");
 
     InstructionRunner *body;
-    body = this->read_until(kMarkerEndModuleBody);
+    body = this->parse_until(kMarkerEndModuleBody);
+
+    // next, load functions.
+    m_stream.seekg(0);
+    while (this->look_for(kMarkerFunctionStart, marker, true)) {
+        string fnname = this->extract_fn_name(marker);
+        string endmarker = kMarkerFunctionEnd + fnname;
+
+        cout << "GOT FUNCTION: " << fnname << endl;
+        InstructionRunner *fnbody = this->parse_until(endmarker);
+        fn_pool[fnname] = fnbody;
+        // fn_pool will own ref
+    }
 
     // make caller take ownership of refcount
     return body;
 }
     
 
-bool AssemblyLoader::look_for(string what, bool start_only) {
+bool AssemblyLoader::look_for(string what, string &marker, bool start_only) {
     string line;
     int len;
     if (start_only) len = what.length();
@@ -60,10 +74,14 @@ bool AssemblyLoader::look_for(string what, bool start_only) {
         if (start_only) {
             if (line.length() >= len
                 && line.substr(0, len).compare(what) == 0) {
+                marker = line;
                 return true;
             }
         } else {
-            if (line.compare(what) == 0) return true;
+            if (line.compare(what) == 0) {
+                marker = line;
+                return true;
+            }
         }
     }
 
@@ -71,10 +89,9 @@ bool AssemblyLoader::look_for(string what, bool start_only) {
 }
 
 
-InstructionRunner *AssemblyLoader::read_until(string marker) {
+InstructionRunner *AssemblyLoader::parse_until(string marker) {
     string line;
     string last_label("");
-//    bool errored = false;
 
     vector<Instruction *> instructions;
 
@@ -112,29 +129,21 @@ InstructionRunner *AssemblyLoader::read_until(string marker) {
             }
             throw e;
         }
-/*
-        } catch (UnknownInstructionException e) {
-            cout << "Unknown instruction: " << e.what() << endl;
-            errored = true; break;
-        } catch (InstructionParseException e) {
-            cout << "Incorrect # arguments parsing: " << e.what() << endl;
-            errored = true; break;
-        } catch (MalformedAssemblyException e) {
-            cout << "Malformed assembly: " << e.what() << endl;
-            errored = true; break;
-        } catch (AssemblyLoadException e) {
-            cerr << "Fatal error processing file: " << e.what() << endl;
-            errored = true; break;
-        }
-*/
     }
 
-/*    if (errored) {
-    } else {
-*/        InstructionRunner *ir = new InstructionRunner(instructions);
-        if (!ir)
-            throw new AssemblyLoadException("out of memory parsing instructions.");
-        // they take ownership
-        return ir;
-//    }
+    InstructionRunner *ir = new InstructionRunner(instructions);
+    if (!ir)
+        throw new AssemblyLoadException("out of memory parsing instructions.");
+    return ir;
+}
+
+
+
+/**
+ * This is unicode safe -- I only skip through the guaranteed
+ * ascii chars at the beginning using ++
+ */
+string AssemblyLoader::extract_fn_name(string from) {
+    trim(from);
+    return from.substr(strlen(kMarkerFunctionStart));
 }

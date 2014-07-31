@@ -10,17 +10,14 @@ using namespace std;
 
 
 const char * kInstNameADD = "ADD";
-const char * kInstNameDECLARE = "DECLARE";
-const char * kInstNameDECLAREFN = "DECLAREFN";
+const char * kInstNameCALLFUNC = "CALLFUNC";
 const char * kInstNameCOMPARE = "COMPARE";
 const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
+const char * kInstNameDECLARE = "DECLARE";
+const char * kInstNameDECLAREFN = "DECLAREFN";
 const char * kInstNameDIV = "DIV";
-const char * kInstNameMUL = "MUL";
-const char * kInstNameMOD = "MOD";
-const char * kInstNameREMOVEVAR = "REMOVEVAR";
-const char * kInstNameSET = "SET";
-const char * kInstNameSUB = "SUB";
 const char * kInstNameEXIT = "EXIT";
+const char * kInstNameEXITFUNC = "EXITFUNC";
 const char * kInstNameJUMP = "JUMP";
 const char * kInstNameJUMPEQ = "JUMPEQ";
 const char * kInstNameJUMPIDENT = "JUMPIDENT";
@@ -30,6 +27,11 @@ const char * kInstNameJUMPGT = "JUMPGT";
 const char * kInstNameJUMPGTE = "JUMPGTE";
 const char * kInstNameJUMPLT = "JUMPLT";
 const char * kInstNameJUMPLTE = "JUMPLTE";
+const char * kInstNameMUL = "MUL";
+const char * kInstNameMOD = "MOD";
+const char * kInstNameREMOVEVAR = "REMOVEVAR";
+const char * kInstNameSET = "SET";
+const char * kInstNameSUB = "SUB";
 
 struct InstCodeMapping {
     const char *instruction;
@@ -38,8 +40,10 @@ struct InstCodeMapping {
 } const g_mappings [] = {
     { kInstNameADD, kInstADD, 3 },
     { kInstNameDECLARE, kInstDECLARE, 1},
-    { kInstNameDECLAREFN, kInstDECLAREFN, 1},
+    { kInstNameDECLAREFN, kInstDECLAREFN, 2},
     { kInstNameCOMPARE, kInstCOMPARE, 2},
+    { kInstNameCALLFUNC, kInstCALLFUNC, 1},
+    { kInstNameEXITFUNC, kInstEXITFUNC, 1},
     { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameDIV, kInstDIV, 3 },
     { kInstNameMOD, kInstMOD, 3 },
@@ -80,6 +84,12 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
         switch (g_mappings[inst_idx].code) {
             case kInstDECLARE:
                 i = new DeclareInstruction(); break;
+            case kInstDECLAREFN:
+                i = new DeclareFnInstruction(); break;
+            case kInstCALLFUNC:
+                i = new CallFuncInstruction(); break;
+            case kInstEXITFUNC:
+                i = new ExitFuncInstruction(); break;
             case kInstADD:
             case kInstSUB:
             case kInstMUL:

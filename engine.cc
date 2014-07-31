@@ -8,6 +8,9 @@
 
 using namespace std;
 
+const char *kNameReturnValue = "::__RETURN_VALUE__::";
+
+
 
 void Engine::init() {
     this->m_scope_stack = new ScopeStack();
@@ -34,7 +37,7 @@ bool Engine::parse_assembly_file(const char *path) {
         return false;
     }
 
-    m_module_stack.push_back(ir);
+    m_execution_stack.push_back(ir);
     return true;
 }
 
@@ -42,18 +45,16 @@ bool Engine::parse_assembly_file(const char *path) {
 
 bool Engine::run() {
     InstructionRunner *runner;
-    if (m_module_stack.size() == 0) return true;  // exited no probs
-    runner = m_module_stack.back();
 
     while (true) {
+        if (m_execution_stack.size() == 0) return true;  // exited no probs
+        runner = m_execution_stack.back();
+
         InstructionResult res = runner->execute_next(this, this->m_scope_stack);
         if (res == kInstResultException)
             return false;
         if (res == kInstResultNoMoreInstructions) {
-            m_module_stack.pop_back();
-
-            if (m_module_stack.size() == 0)
-                return true;
+            m_execution_stack.pop_back();
         }
     }
 
@@ -76,11 +77,34 @@ void Engine::set_compare_flags(byte flags) {
 }
 
 
+void Engine::invoke_function(string impl_name) {
+    if (m_function_pool[impl_name] == NULL)
+        throw new InternalNoSuchFunctionException(impl_name);
+
+    Varpool *vp = new Varpool();
+    this->m_scope_stack->push_pool(vp);
+    vp->release();  // stack takes ownership
+
+    m_execution_stack.push_back(m_function_pool[impl_name]);
+}
+
+
+void Engine::exit_function(Variable *retval) {
+    this->m_execution_stack.pop_back();
+    this->m_scope_stack->pop_pool();
+
+    // now set ::__RETVAL__:: in the current scope.
+    Varpool *vp = this->m_scope_stack->get_current_scope();
+    vp->set_value_for_name(kNameReturnValue, retval, false);
+    vp->release();
+}
+
+
 void Engine::jump_to_label(string label) {
     InstructionRunner *runner;
-    if (m_module_stack.size() == 0)
+    if (m_execution_stack.size() == 0)
         throw new InternalErrorException("Asked to jump to label, but no instructions!");
-    runner = m_module_stack.back();
+    runner = m_execution_stack.back();
 
     runner->jump_to_label(label);
 }

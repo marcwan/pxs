@@ -54,7 +54,7 @@ bool Varpool::declare_var(string name, bool throw_if_exists) {
 /**
  * returns false if the variable did not exist already.
  */
-bool Varpool::set_value_for_var(string name, Variable *v, bool throw_if_not_exists) {
+bool Varpool::set_value_for_name(string name, Variable *v, bool throw_if_not_exists) {
     bool existed = (this->m_vars[name] != NULL);
     if (existed)
         this->m_vars[name]->release();  // dead pointer can replace.
@@ -66,12 +66,6 @@ bool Varpool::set_value_for_var(string name, Variable *v, bool throw_if_not_exis
     return existed;
 }
 
-
-bool Varpool::set_value_for_name(string name,
-                                 Variable *v,
-                                 bool throw_if_not_exists) {
-    return this->set_value_for_var(name, v, throw_if_not_exists);
-}
 
 
 bool Varpool::undeclare_var(string name, bool throw_if_not_exists) {

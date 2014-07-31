@@ -4,8 +4,8 @@
 
 class Function : public Variable {
   public:
-    Function();
-    Function(bool positive);
+    Function(std::string implname);
+    Function(std::string fnname, std::string implname);
     virtual ~Function();
 
     virtual std::string to_string();
@@ -13,6 +13,8 @@ class Function : public Variable {
     virtual Variable *coerce_to_type(VariableType);
 
     inline bool positive() { return this->m_positive; }
+
+    inline std::string get_implementation_name() { return m_implementation; }
 
     virtual Variable *add(Variable *);
     virtual Variable *subtract(Variable *);

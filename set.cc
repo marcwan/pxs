@@ -1,3 +1,4 @@
+
 #include "vm.h"
 
 #include "constantparser.h"
@@ -26,14 +27,15 @@ bool SetInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     if (!v) {
         // it's not a constant, so let's see if it's a variable
         // we have declared.
-        v = scope_stack->find_variable_by_name(this->m_args[0]);
+        v = scope_stack->find_variable_by_name(this->m_args[1]);
         if (!v)
             throw new UndeclaredVariableException(this->m_args[1]);
     }
 
     if (!scope_stack->set_variable_in_scope(this->m_args[0], v)) 
         throw new UndeclaredVariableException(this->m_args[0]);
+
     v->release();
-    return false;
+    return false;  // continue to next instruction
 }
 

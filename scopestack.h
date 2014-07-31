@@ -8,7 +8,7 @@ class ScopeStack : public Refcounted {
   public:
     
     void push_pool(Varpool *);
-    Varpool *pop_pool();
+    void pop_pool();
 
     ScopeStack();
     ScopeStack(const ScopeStack &copyme);

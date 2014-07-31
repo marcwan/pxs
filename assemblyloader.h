@@ -19,9 +19,9 @@ class AssemblyLoader {
     std::ifstream m_stream;
     std::string m_path;
 
-    bool look_for(std::string what, bool start_only = false);
-    InstructionRunner *read_until(std::string marker);
-
+    bool look_for(std::string what, std::string &marker,  bool start_only = false);
+    InstructionRunner *parse_until(std::string marker);
+    std::string extract_fn_name(std::string from);
 };
 
 

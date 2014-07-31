@@ -11,20 +11,19 @@ class Varpool : public Refcounted {
     virtual ~Varpool();
 
     virtual bool declare_var(std::string name, bool throw_if_exists = false);
-    virtual bool set_value_for_var(std::string name,
-                                   Variable *v,
-                                   bool throw_if_not_exists = false);
     virtual bool set_value_for_name(std::string tmpname,
                                     Variable *v,
                                     bool throw_if_not_exists = false);
 
     virtual bool undeclare_var(std::string name, bool throw_if_not_exists = true);
-
     virtual Variable *find_variable_by_name(std::string var_name);
 
   protected:
     std::map<std::string, Variable *> m_vars;
 };
+
+
+
 
 
 struct VariableAlreadyExistsException : public std::exception {

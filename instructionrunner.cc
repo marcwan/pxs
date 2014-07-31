@@ -30,15 +30,10 @@ InstructionResult InstructionRunner::execute_next
 
     // otherwise, let's execute that puppy!
     try {
-//        cerr << this->m_instructions[this->m_position]->debug_string() << endl;
-
         bool dont_incr = this->m_instructions[this->m_position]->execute(state, ss);
         if (!dont_incr) m_position++;
-    } catch (InternalErrorException e) {
-        cout << "Fatal error: " << e.what() << endl;
-        return kInstResultException;
-    } catch (std::exception e) {
-        cout << "Fatal error: " << e.what() << endl;
+    } catch (std::exception *e) {
+        cout << "Fatal error: " << e->what() << endl;
         return kInstResultException;
     }
 

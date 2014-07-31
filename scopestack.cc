@@ -38,14 +38,13 @@ void ScopeStack::push_pool(Varpool *vp) {
 
 
 
-Varpool *ScopeStack::pop_pool() {
+void ScopeStack::pop_pool() {
     if (m_scopes.size() == 0)
         throw new InternalErrorException("Being asked to pop an empty scope stack");
 
     Varpool *vp = this->m_scopes.back();
     vp->release();
     this->m_scopes.pop_back();
-    return vp;
 }
 
 
@@ -92,13 +91,17 @@ Varpool *ScopeStack::find_scope_for_name(string var_name) {
 }
 
 
-bool ScopeStack::set_variable_in_scope(std::string name, Variable *v) {
+bool ScopeStack::set_variable_in_scope
+(
+    std::string name,
+    Variable *v
+)
+{
     Varpool *vp = this->find_scope_for_name(name);
-    if (!vp) {
+    if (!vp)
         return false;
-    }
 
-    return vp->set_value_for_var(name, v, false);
+    return vp->set_value_for_name(name, v, false);
 }
 
 
