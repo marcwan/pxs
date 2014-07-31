@@ -77,6 +77,7 @@ bool AssemblyLoader::look_for(string what, bool start_only) {
 InstructionRunner *AssemblyLoader::read_until(string marker) {
     string line;
     string last_label("");
+    bool errored = false;
 
     vector<Instruction *> instructions;
 
@@ -108,18 +109,31 @@ InstructionRunner *AssemblyLoader::read_until(string marker) {
 
             instructions.push_back(i);
 
-        } catch (std::exception e) {
-            for (int i = 0; i < instructions.size(); i++) {
-                instructions[i]->release();
-            }
-            throw e;
+        } catch (UnknownInstructionException e) {
+            cout << "Unknown instruction: " << e.what() << endl;
+            errored = true; break;
+        } catch (InstructionParseException e) {
+            cout << "Incorrect # arguments parsing: " << e.what() << endl;
+            errored = true; break;
+        } catch (MalformedAssemblyException e) {
+            cout << "Malformed assembly: " << e.what() << endl;
+            errored = true; break;
+        } catch (AssemblyLoadException e) {
+            cerr << "Fatal error processing file: " << e.what() << endl;
+            errored = true; break;
         }
     }
 
-    InstructionRunner *ir = new InstructionRunner(instructions);
-    if (!ir)
-        throw AssemblyLoadException("out of memory parsing instructions.");
-
-    // they take ownership
-    return ir;
+    if (errored) {
+        for (int i = 0; i < instructions.size(); i++) {
+            instructions[i]->release();
+        }
+        return NULL;
+    } else {
+        InstructionRunner *ir = new InstructionRunner(instructions);
+        if (!ir)
+            throw AssemblyLoadException("out of memory parsing instructions.");
+        // they take ownership
+        return ir;
+    }
 }

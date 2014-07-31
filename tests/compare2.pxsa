@@ -1,7 +1,7 @@
 MODULE_BODY:
-        ADDVAR          x
+        DECLARE         x
         SET             x, 12345.123
-        ADDVAR          y
+        DECLARE         y
         SET             y, 12345.123
         COMPARE         x, y
         DEBUGPRINT      :::FLAGS:::

@@ -1,5 +1,5 @@
 MODULE_BODY:
-        ADDVAR          王马克
+        DECLARE         王马克
         ADD             NaN, 5, 王马克
         DEBUGPRINT      王马克
 LABEL1:

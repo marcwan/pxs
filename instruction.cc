@@ -10,7 +10,8 @@ using namespace std;
 
 
 const char * kInstNameADD = "ADD";
-const char * kInstNameADDVAR = "ADDVAR";
+const char * kInstNameDECLARE = "DECLARE";
+const char * kInstNameDECLAREFN = "DECLAREFN";
 const char * kInstNameCOMPARE = "COMPARE";
 const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
 const char * kInstNameDIV = "DIV";
@@ -36,7 +37,8 @@ struct InstCodeMapping {
     int cargs;
 } const g_mappings [] = {
     { kInstNameADD, kInstADD, 3 },
-    { kInstNameADDVAR, kInstADDVAR, 1},
+    { kInstNameDECLARE, kInstDECLARE, 1},
+    { kInstNameDECLAREFN, kInstDECLAREFN, 1},
     { kInstNameCOMPARE, kInstCOMPARE, 2},
     { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameDIV, kInstDIV, 3 },
@@ -76,8 +78,8 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
 
         // it'll have already thrown if the instruction is invalid
         switch (g_mappings[inst_idx].code) {
-            case kInstADDVAR:
-                i = new AddVarInstruction(); break;
+            case kInstDECLARE:
+                i = new DeclareInstruction(); break;
             case kInstADD:
             case kInstSUB:
             case kInstMUL:
@@ -111,9 +113,11 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
         i->m_inst_idx = inst_idx;
         i->m_args = args;
 
-    } catch (std::exception e) {
-        // clean up and re-throw
-        if (i) delete i;
+    } catch (UnknownInstructionException e) {
+        if (i) i->release();
+        throw e;
+    } catch (InstructionParseException e) {
+        if (i) i->release();
         throw e;
     }
 

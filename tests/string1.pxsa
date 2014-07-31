@@ -1,5 +1,5 @@
 MODULE_BODY:
-        ADDVAR          x
+        DECLARE         x
         ADD             "cat's ", "are cute", x
         DEBUGPRINT      x
 LABEL1:

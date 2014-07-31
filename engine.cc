@@ -26,26 +26,12 @@ bool Engine::parse_assembly_file(const char *path) {
     AssemblyLoader al;
 
     // this will add any new functions to the global function pool.
-    try {
     ir = al.load_assembly(path, m_function_pool);
-    } catch (UnknownInstructionException e) {
-        cout << "Unknown instruction: " << e.what() << endl;
-        return false;
-    } catch (InstructionParseException e) {
-        cout << "Incorrect # arguments parsing: " << e.what() << endl;
-        return false;
-    } catch (MalformedAssemblyException e) {
-        cout << "Malformed assembly: " << e.what() << endl;
-        return false;
-    } catch (AssemblyLoadException e) {
-        cerr << "Fatal error processing file: " << e.what() << endl;
-        return false;
-    }
 
-    m_module_stack.push_back(ir);
+    if (ir) m_module_stack.push_back(ir);
 
     // we'll keep the refcount on the ir
-    return true;
+    return ir != NULL;
 }
 
 

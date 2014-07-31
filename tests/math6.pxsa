@@ -1,7 +1,7 @@
 MODULE_BODY:
-        ADDVAR          王马克
-        ADDVAR          ::__TMP1
-        ADDVAR          ::__TMP2
+        DECLARE         王马克
+        DECLARE         ::__TMP1
+        DECLARE         ::__TMP2
         MUL             8, 5, ::__TMP1
         DEBUGPRINT      ::__TMP1
         SUB             10, 4, ::__TMP2

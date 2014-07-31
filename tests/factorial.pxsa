@@ -1,17 +1,17 @@
 MODULE_BODY:
-        ADDVAR          idx
+        DECLARE         idx
         SET             idx, 4
-        ADDVAR          result
+        DECLARE         result
         SET             result, 1
-        ADDVAR          i
+        DECLARE         i
         SET             i, 0
 __FOR_LOOP_12345_TEST:
-        ADDVAR          ::__TMP1_::
+        DECLARE         ::__TMP1_::
         SUB             idx, 1, ::__TMP1_::
         COMPARE         i, ::__TMP1_::
         REMOVEVAR       ::__TMP1_::
         JUMPGTE         __FOR_LOOP_12345_END
-        ADDVAR          ::__TMP2__::
+        DECLARE         ::__TMP2__::
         SUB             idx, i, ::__TMP2__::
         MUL             result, ::__TMP2__::, result
         REMOVEVAR       ::__TMP2__::

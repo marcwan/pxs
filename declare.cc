@@ -6,14 +6,14 @@
 using namespace std;
 
 
-AddVarInstruction::AddVarInstruction() : Instruction() {
+DeclareInstruction::DeclareInstruction() : Instruction() {
 }
 
-AddVarInstruction::~AddVarInstruction() {
+DeclareInstruction::~DeclareInstruction() {
 }
 
 
-bool AddVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
+bool DeclareInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
     Variable *v = scope_stack->find_variable_by_name(this->m_args[0]);
     // only add this var if we don't have it in this scope. we don't care
     // if they re-declare it in this scope.
@@ -30,7 +30,7 @@ bool AddVarInstruction::execute(IExecutionState *state, ScopeStack *scope_stack)
 }
 
 
-void AddVarInstruction::parse_and_validate_params() {
+void DeclareInstruction::parse_and_validate_params() {
     if (this->m_args.size() != 1)
         throw InternalErrorException("Expecting 1 arg, got: %d", this->m_args.size());
 

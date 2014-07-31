@@ -1,11 +1,11 @@
 MODULE_BODY:
-        ADDVAR          x
+        DECLARE         x
         SET             x, 5
         DEBUGPRINT      x
-        ADDVAR          y
+        DECLARE         y
         SET             y, 8
         DEBUGPRINT      y
-        ADDVAR          王马克
+        DECLARE         王马克
         ADD             x, y, 王马克
         DEBUGPRINT      王马克
 LABEL1:

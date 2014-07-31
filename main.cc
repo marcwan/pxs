@@ -7,7 +7,6 @@
 #include "instructionrunner.h"
 #include "scopestack.h"
 
-
 using namespace std;
 
 

@@ -11,7 +11,8 @@ class Varpool;
 
 
 extern const char * kInstNameADD;
-extern const char * kInstNameADDVAR;
+extern const char * kInstNameDECLARE;
+extern const char * kInstNameDECLAREFN;
 extern const char * kInstNameCOMPARE;
 extern const char * kInstNameDEBUGPRINT;
 extern const char * kInstNameDIV;
@@ -33,7 +34,8 @@ extern const char * kInstNameJUMPLTE;
 
 typedef enum InstructionCode {
     kInstADD,
-    kInstADDVAR,
+    kInstDECLARE,
+    kInstDECLAREFN,
     kInstCOMPARE,
     kInstDEBUGPRINT,
     kInstDIV,
@@ -114,8 +116,9 @@ struct InstructionParseException : public std::exception {
 /**
  * We'll include all the instructions here to save people some include hell.
  */
-#include "addvar.h"
 #include "compare.h"
+#include "declare.h"
+//#include "declarefn.h"
 #include "debugprint.h"
 #include "exit.h"
 #include "jump.h"
