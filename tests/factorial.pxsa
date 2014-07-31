@@ -1,5 +1,6 @@
+MODULE_BODY:
         ADDVAR          idx
-        SET             idx, 10
+        SET             idx, 4
         ADDVAR          result
         SET             result, 1
         ADDVAR          i
@@ -20,3 +21,4 @@ __FOR_LOOP_12345_INCR:
 __FOR_LOOP_12345_END:
         DEBUGPRINT      result
         EXIT            1
+END_MODULE_BODY

@@ -1,5 +1,7 @@
+MODULE_BODY:
         ADDVAR          ありがとう
         ADD             8e2, -5e-3, ありがとう
         DEBUGPRINT      ありがとう
 LABEL1:
         EXIT            0
+END_MODULE_BODY

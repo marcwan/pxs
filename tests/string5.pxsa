@@ -1,5 +1,7 @@
+MODULE_BODY:
         ADDVAR          asdfasdfasdf_zxcvz_xcvxv
         MUL             "12"       , "10"           , asdfasdfasdf_zxcvz_xcvxv
         DEBUGPRINT      asdfasdfasdf_zxcvz_xcvxv
 MY_SUPER_AWESOME_LABEL:
         EXIT            0
+END_MODULE_BODY

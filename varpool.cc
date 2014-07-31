@@ -1,17 +1,17 @@
 #include "vm.h"
 
 #include <algorithm>
-#include <map>
-
-#include "utils.h"
 #include "varpool.h"
 
 using namespace std;
 
+
 string _unique_name_for_map(const map<string, Variable *> &m, string base);
+
 
 Varpool::Varpool() {
 }
+
 
 /** 
  * We have to do a bit of work here to copy over the variables and re-addref
@@ -49,6 +49,7 @@ bool Varpool::declare_var(string name, bool throw_if_exists) {
     this->m_vars[name] = v;
     return true;
 }
+
 
 /**
  * returns false if the variable did not exist already.

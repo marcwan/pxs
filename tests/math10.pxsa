@@ -1,3 +1,4 @@
+MODULE_BODY:
         ADDVAR          x
         SET             x, 5
         DEBUGPRINT      x
@@ -9,3 +10,4 @@
         DEBUGPRINT      王马克
 LABEL1:
         EXIT            0
+END_MODULE_BODY

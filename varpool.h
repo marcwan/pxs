@@ -1,8 +1,6 @@
 #ifndef __VARPOOL_H_
 #define __VARPOOL_H_
 
-#include <map>
-
 #include "variable.h"
 
 

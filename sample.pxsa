@@ -1,4 +1,5 @@
 MODULE_BODY:
+        ADDFUNC         factorial, ::__FACTORIAL_123__::
         ADDVAR          res
         PUSHARG         10
         CALLFUNC        factorial
@@ -7,7 +8,7 @@ MODULE_BODY:
         EXIT            0
 END_MODULE_BODY
 
-FUNCTION::FACTORIAL::
+FUNCTION ::__FACTORIAL_123__::
         ADDVAR          idx
         POPARG          idx
         ADDVAR          result
@@ -28,4 +29,4 @@ __FOR_LOOP_12345_INCR:
         JUMP            __FOR_LOOP_12345_TEST
 __FOR_LOOP_123345_END:
         EXITFUNC        result
-END::FACTORIAL::
+END_FUNCTION ::__FACTORIAL_123__::

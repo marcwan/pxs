@@ -24,6 +24,8 @@ class Engine : public IExecutionState {
     std::string m_jump_to_label;
     byte m_last_compare_flags;
 
+    std::map<std::string, InstructionRunner *> m_function_pool;
+
     ScopeStack *m_scope_stack;
 };
 

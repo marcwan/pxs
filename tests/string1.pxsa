@@ -1,5 +1,7 @@
+MODULE_BODY:
         ADDVAR          x
         ADD             "cat's ", "are cute", x
         DEBUGPRINT      x
 LABEL1:
         EXIT            0
+END_MODULE_BODY

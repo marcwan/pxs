@@ -1,3 +1,4 @@
+MODULE_BODY:
         ADDVAR          招呼
         SET             招呼, "你好吗？"
         DEBUGPRINT      招呼
@@ -5,3 +6,4 @@
         DEBUGPRINT      招呼
 ___LABEL:
         EXIT            0
+END_MODULE_BODY

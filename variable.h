@@ -87,6 +87,7 @@ struct OperationForTypeNotSupported : public std::exception {
 
 #include "boolean.h"
 #include "infinity.h"
+#include "function.h"
 #include "number.h"
 #include "nan.h"
 #include "string.h"

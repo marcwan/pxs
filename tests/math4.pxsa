@@ -1,5 +1,7 @@
+MODULE_BODY:
         ADDVAR          王马克
         DIV             8, 5, 王马克
         DEBUGPRINT      王马克
 LABEL1:
         EXIT            0
+END_MODULE_BODY

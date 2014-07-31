@@ -1,5 +1,8 @@
+MODULE_BODY:
+; this is my awesome test i love it.
         ADDVAR          王马克
         ADD             8, 5, 王马克
         DEBUGPRINT      王马克
 LABEL1:
         EXIT            0
+END_MODULE_BODY

@@ -1,6 +1,8 @@
+MODULE_BODY:
         ADDVAR          x
         SET             x, 500
         ADDVAR          y
         SET             y, false
         COMPARE         x, y
         DEBUGPRINT      :::FLAGS:::
+END_MODULE_BODY

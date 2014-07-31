@@ -1,9 +1,9 @@
-    #include "vm.h"
+#include "vm.h"
 
-#include <fstream>
+#include "assemblyloader.h"
 #include "engine.h"
-#include "instructionrunner.h"
 #include "instruction.h"
+#include "instructionrunner.h"
 #include "scopestack.h"
 
 using namespace std;
@@ -22,58 +22,28 @@ void Engine::init() {
 
 
 bool Engine::parse_assembly_file(const char *path) {
-    ifstream bcf(path);
-    if (!bcf.is_open()) {
-        cout << "Could not open \"" << path << "\"" << endl;
-        return 0;
-    }
+    InstructionRunner *ir;
+    AssemblyLoader al;
 
-    string line;
-    string last_label("");
-
-    vector<Instruction *> instructions;
-
-    while (getline(bcf, line)) {
-
-        // first see if this is a label. if so, remember for next
-        // line
-        if (!std::isspace(line[0]) && (line[line.length() - 1] == ':')) {
-            last_label = line;
-            continue;
-        }
-
-        // skip empty lines and comment lines
-        trim(line);
-        if (line.length() == 0) continue;
-        if (line[0] == ';') continue;
-
-        try {
-            Instruction *i = Instruction::instruction_from_line(line, last_label);
-            last_label = "";
-            if (!i) {
-                cout << "Didn't get an instruction for line:\n" << line << endl;
-                return false;
-            }
-
-            instructions.push_back(i);
-            
-        } catch (UnknownInstructionException e) {
-            cout << "Unknown instruction in " << path << ": " << e.what() << endl;
-            return false;
-        } catch (InstructionParseException e) {
-            cout << "Incorrect # arguments parsing: " << e.what() << endl;
-            return false;
-        }
-    }
-
-    InstructionRunner *ir = new InstructionRunner(instructions);
-    if (!ir) {
-        cerr << "Out of memory parsing instructions, terminating." << endl;
+    // this will add any new functions to the global function pool.
+    try {
+    ir = al.load_assembly(path, m_function_pool);
+    } catch (UnknownInstructionException e) {
+        cout << "Unknown instruction: " << e.what() << endl;
+        return false;
+    } catch (InstructionParseException e) {
+        cout << "Incorrect # arguments parsing: " << e.what() << endl;
+        return false;
+    } catch (MalformedAssemblyException e) {
+        cout << "Malformed assembly: " << e.what() << endl;
+        return false;
+    } catch (AssemblyLoadException e) {
+        cerr << "Fatal error processing file: " << e.what() << endl;
         return false;
     }
 
-    // got a stack of instructions. Push that puppy!!
     m_module_stack.push_back(ir);
+
     // we'll keep the refcount on the ir
     return true;
 }

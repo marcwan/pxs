@@ -1,5 +1,7 @@
+MODULE_BODY:
         ADDVAR          y
         SUB             123, 456           , y
         DEBUGPRINT      y
 MY_SUPER_AWESOME_LABEL:
         EXIT            0
+END_MODULE_BODY
