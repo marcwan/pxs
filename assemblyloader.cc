@@ -53,7 +53,6 @@ InstructionRunner *AssemblyLoader::load_assembly
         string fnname = this->extract_fn_name(marker);
         string endmarker = kMarkerFunctionEnd + fnname;
 
-        cout << "GOT FUNCTION: " << fnname << endl;
         InstructionRunner *fnbody = this->parse_until(endmarker);
         fn_pool[fnname] = fnbody;
         // fn_pool will own ref

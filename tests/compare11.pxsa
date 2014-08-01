@@ -1,6 +1,6 @@
 MODULE_BODY:
         DECLARE         x
-        SET             x, unknown
+        SET             x, undefined
         DECLARE         y
         SET             y, false
         COMPARE         x, y

@@ -9,7 +9,7 @@ extern const char *kTypeNameBoolean;
 extern const char *kTypeNameArray;
 extern const char *kTypeNameObject;
 extern const char *kTypeNameFunction;
-extern const char *kTypeNameUnknown;
+extern const char *kTypeNameUndefined;
 extern const char *kTypeNameNaN;
 extern const char *kTypeNameInfinity;
 
@@ -21,7 +21,7 @@ typedef enum VariableType {
     kTypeArray,
     kTypeObject,
     kTypeFunction,
-    kTypeUnknown,
+    kTypeUndefined,
     kTypeNaN,
     kTypeInfinity
 } VariableType;
@@ -100,6 +100,6 @@ struct OperationForTypeNotSupported : public std::exception {
 #include "number.h"
 #include "nan.h"
 #include "string.h"
-#include "unknown.h"
+#include "undefined.h"
 
 #endif // __VARIABLE_H_

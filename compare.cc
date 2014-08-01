@@ -65,7 +65,7 @@ byte CompareInstruction::compare() {
      */
     if (vtl == kTypeNaN || vtr == kTypeNaN)
         return kCompareAlwaysFalse;
-    else if (vtl == kTypeUnknown || vtr == kTypeUnknown)
+    else if (vtl == kTypeUndefined || vtr == kTypeUndefined)
         return kCompareNotEqual;
     else if (vtl == kTypeInfinity || vtr == kTypeInfinity)
         return kCompareNotEqual;
@@ -129,7 +129,7 @@ byte CompareInstruction::compare_equal_types() {
         case kTypeNaN:
             return kCompareAlwaysFalse;
 
-        case kTypeUnknown:
+        case kTypeUndefined:
             return kCompareIdentical | kCompareEqual;
 
         default:

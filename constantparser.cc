@@ -18,6 +18,8 @@ Variable *ConstantParser::parse_value(string arg) {
         return new Boolean(true);
     else if (arg.compare(kValueFalse) == 0)
         return new Boolean(false);
+    else if (arg.compare(kValueUndefined) == 0)
+        return new Undefined();
     else if (arg.compare(kValueNaN) == 0)
         return new NaN();
     else if (arg.compare(kValueInfinity) == 0)

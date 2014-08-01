@@ -1,10 +1,12 @@
-#ifndef __UNKNOWN_H_
-#define __UNKNOWN_H_
+#ifndef __UNDEFINED_H_
+#define __UNDEFINED_H_
 
-class Unknown : public Variable {
+extern const char *kValueUndefined;
+
+class Undefined : public Variable {
   public:
-    Unknown();
-    virtual ~Unknown();
+    Undefined();
+    virtual ~Undefined();
 
     virtual std::string to_string();
 
@@ -18,4 +20,4 @@ class Unknown : public Variable {
 
 };
 
-#endif // __UNKNOWN_H_
+#endif // __UNDEFINED_H_

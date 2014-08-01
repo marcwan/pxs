@@ -4,13 +4,13 @@
 
 using namespace std;
 
-const char *kTypeNameNumber   = "number";
-const char *kTypeNameString   = "string";
-const char *kTypeNameBoolean  = "boolean";
-const char *kTypeNameArray    = "array";
-const char *kTypeNameObject   = "object";
-const char *kTypeNameFunction = "function";
-const char *kTypeNameUnknown  = "unknown";
+const char *kTypeNameNumber    = "number";
+const char *kTypeNameString    = "string";
+const char *kTypeNameBoolean   = "boolean";
+const char *kTypeNameArray     = "array";
+const char *kTypeNameObject    = "object";
+const char *kTypeNameFunction  = "function";
+const char *kTypeNameUndefined = "undefined";
 
 struct TypeNameMappings {
     const char *name;
@@ -22,7 +22,7 @@ struct TypeNameMappings {
     { kTypeNameArray, kTypeArray },
     { kTypeNameObject, kTypeObject },
     { kTypeNameFunction, kTypeFunction },
-    { kTypeNameUnknown, kTypeUnknown }
+    { kTypeNameUndefined, kTypeUndefined }
 };
 
 
@@ -31,7 +31,7 @@ Variable *Variable::create_for_type(VariableType t) {
         case kTypeNaN: return new NaN();
         case kTypeNumber: return new Number();
         case kTypeString: return new String();
-        case kTypeUnknown: return new Unknown();
+        case kTypeUndefined: return new Undefined();
         default:
             throw new InternalErrorException("NOT IMPLEMENTED YET");
     }

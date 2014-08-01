@@ -45,7 +45,7 @@ bool Varpool::declare_var(string name, bool throw_if_exists) {
     }
 
     // our hash table takes ownership of ref.
-    Variable *v = Variable::create_for_type(kTypeUnknown);
+    Variable *v = Variable::create_for_type(kTypeUndefined);
     this->m_vars[name] = v;
     return true;
 }
