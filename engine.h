@@ -14,8 +14,11 @@ class Engine : public IExecutionState {
     bool run();
     void init();
 
+    // IExecutionState implementation
     virtual byte get_compare_flags();
     virtual void set_compare_flags(byte);
+    virtual void push_function_arg(Variable *);
+    virtual Variable *pop_function_arg();
     virtual void invoke_function(std::string implname);
     virtual void exit_function(Variable *);
     virtual void jump_to_label(std::string);
@@ -27,6 +30,8 @@ class Engine : public IExecutionState {
     byte m_last_compare_flags;
 
     std::map<std::string, InstructionRunner *> m_function_pool;
+
+    std::vector<Variable *> m_arg_stack;
 
     ScopeStack *m_scope_stack;
 };

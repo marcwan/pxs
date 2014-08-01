@@ -18,6 +18,9 @@ InstructionRunner::~InstructionRunner() {
     }
 }
 
+void InstructionRunner::reset() {
+    this->m_position = 0;
+}
 
 InstructionResult InstructionRunner::execute_next
 (

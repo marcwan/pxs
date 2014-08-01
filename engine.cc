@@ -77,6 +77,22 @@ void Engine::set_compare_flags(byte flags) {
 }
 
 
+void Engine::push_function_arg(Variable *v) {
+    v->addref();
+    this->m_arg_stack.push_back(v);
+}
+
+Variable *Engine::pop_function_arg() {
+    Variable *v = this->m_arg_stack.back();
+    this->m_arg_stack.pop_back();
+
+    // transfer refcount to caller.
+    return v;
+}
+
+
+
+
 void Engine::invoke_function(string impl_name) {
     if (m_function_pool[impl_name] == NULL)
         throw new InternalNoSuchFunctionException(impl_name);
@@ -86,6 +102,7 @@ void Engine::invoke_function(string impl_name) {
     vp->release();  // stack takes ownership
 
     m_execution_stack.push_back(m_function_pool[impl_name]);
+    m_function_pool[impl_name]->reset();
 }
 
 

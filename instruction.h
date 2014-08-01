@@ -11,19 +11,14 @@ class Varpool;
 
 
 extern const char * kInstNameADD;
-extern const char * kInstNameDECLARE;
-extern const char * kInstNameDECLAREFN;
 extern const char * kInstNameCALLFUNC;
-extern const char * kInstNameEXITFUNC;
 extern const char * kInstNameCOMPARE;
 extern const char * kInstNameDEBUGPRINT;
+extern const char * kInstNameDECLARE;
+extern const char * kInstNameDECLAREFN;
 extern const char * kInstNameDIV;
-extern const char * kInstNameMOD;
-extern const char * kInstNameMUL;
-extern const char * kInstNameREMOVEVAR;
-extern const char * kInstNameSET;
-extern const char * kInstNameSUB;
 extern const char * kInstNameEXIT;
+extern const char * kInstNameEXITFUNC;
 extern const char * kInstNameJUMP;
 extern const char * kInstNameJUMPEQ;
 extern const char * kInstNameJUMPIDENT;
@@ -33,21 +28,24 @@ extern const char * kInstNameJUMPGT;
 extern const char * kInstNameJUMPGTE;
 extern const char * kInstNameJUMPLT;
 extern const char * kInstNameJUMPLTE;
+extern const char * kInstNameMOD;
+extern const char * kInstNameMUL;
+extern const char * kInstNamePOPARG;
+extern const char * kInstNamePUSHARG;
+extern const char * kInstNameREMOVEVAR;
+extern const char * kInstNameSET;
+extern const char * kInstNameSUB;
 
 typedef enum InstructionCode {
     kInstADD,
-    kInstDECLARE,
-    kInstDECLAREFN,
     kInstCOMPARE,
     kInstCALLFUNC,
-    kInstEXITFUNC,
     kInstDEBUGPRINT,
+    kInstDECLARE,
+    kInstDECLAREFN,
     kInstDIV,
-    kInstMOD,
-    kInstMUL,
-    kInstREMOVEVAR,
-    kInstSET,
-    kInstSUB,
+    kInstEXIT,
+    kInstEXITFUNC,
     kInstJUMP,
     kInstJUMPEQ,
     kInstJUMPIDENT,
@@ -57,7 +55,13 @@ typedef enum InstructionCode {
     kInstJUMPGTE,
     kInstJUMPLT,
     kInstJUMPLTE,
-    kInstEXIT
+    kInstMOD,
+    kInstMUL,
+    kInstPOPARG,
+    kInstPUSHARG,
+    kInstREMOVEVAR,
+    kInstSET,
+    kInstSUB
 } InstructionCode;
 
 std::string instruction_code_to_string(InstructionCode);
@@ -137,6 +141,8 @@ struct InstructionParseException : public std::exception {
 #include "exitfunc.h"
 #include "jump.h"
 #include "mathop.h"
+#include "poparg.h"
+#include "pusharg.h"
 #include "removevar.h"
 #include "set.h"
 

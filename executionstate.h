@@ -23,8 +23,12 @@ class IExecutionState {
   public:
     virtual byte get_compare_flags() = 0;
     virtual void set_compare_flags(byte flags) = 0;
+
+    virtual void push_function_arg(Variable *) = 0;
+    virtual Variable *pop_function_arg() = 0;
     virtual void invoke_function(std::string implname) = 0;
     virtual void exit_function(Variable *) = 0;
+
     virtual void jump_to_label(std::string label) = 0;
     virtual void terminate_execution(int exitcode) = 0;
 };

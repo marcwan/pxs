@@ -29,6 +29,8 @@ const char * kInstNameJUMPLT = "JUMPLT";
 const char * kInstNameJUMPLTE = "JUMPLTE";
 const char * kInstNameMUL = "MUL";
 const char * kInstNameMOD = "MOD";
+const char * kInstNamePOPARG = "POPARG";
+const char * kInstNamePUSHARG = "PUSHARG";
 const char * kInstNameREMOVEVAR = "REMOVEVAR";
 const char * kInstNameSET = "SET";
 const char * kInstNameSUB = "SUB";
@@ -39,19 +41,14 @@ struct InstCodeMapping {
     int cargs;
 } const g_mappings [] = {
     { kInstNameADD, kInstADD, 3 },
-    { kInstNameDECLARE, kInstDECLARE, 1},
-    { kInstNameDECLAREFN, kInstDECLAREFN, 2},
     { kInstNameCOMPARE, kInstCOMPARE, 2},
     { kInstNameCALLFUNC, kInstCALLFUNC, 1},
-    { kInstNameEXITFUNC, kInstEXITFUNC, 1},
     { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameDIV, kInstDIV, 3 },
-    { kInstNameMOD, kInstMOD, 3 },
-    { kInstNameMUL, kInstMUL, 3 },
-    { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
-    { kInstNameSET, kInstSET, 2 },
-    { kInstNameSUB, kInstSUB, 3 },
+    { kInstNameDECLARE, kInstDECLARE, 1},
+    { kInstNameDECLAREFN, kInstDECLAREFN, 2},
     { kInstNameEXIT, kInstEXIT, 1 },
+    { kInstNameEXITFUNC, kInstEXITFUNC, 1},
     { kInstNameJUMP, kInstJUMP, 1 },
     { kInstNameJUMPEQ, kInstJUMPEQ, 1 },
     { kInstNameJUMPIDENT, kInstJUMPIDENT, 1 },
@@ -60,7 +57,14 @@ struct InstCodeMapping {
     { kInstNameJUMPGT, kInstJUMPGT, 1 },
     { kInstNameJUMPGTE, kInstJUMPGTE, 1 },
     { kInstNameJUMPLT, kInstJUMPLT, 1 },
-    { kInstNameJUMPLTE, kInstJUMPLTE, 1 }
+    { kInstNameJUMPLTE, kInstJUMPLTE, 1 },
+    { kInstNameMOD, kInstMOD, 3 },
+    { kInstNameMUL, kInstMUL, 3 },
+    { kInstNamePOPARG, kInstPOPARG, 1 },
+    { kInstNamePUSHARG, kInstPUSHARG, 1 },
+    { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
+    { kInstNameSET, kInstSET, 2 },
+    { kInstNameSUB, kInstSUB, 3 }
 };
 
 
@@ -82,30 +86,26 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
 
         // it'll have already thrown if the instruction is invalid
         switch (g_mappings[inst_idx].code) {
-            case kInstDECLARE:
-                i = new DeclareInstruction(); break;
-            case kInstDECLAREFN:
-                i = new DeclareFnInstruction(); break;
-            case kInstCALLFUNC:
-                i = new CallFuncInstruction(); break;
-            case kInstEXITFUNC:
-                i = new ExitFuncInstruction(); break;
             case kInstADD:
             case kInstSUB:
             case kInstMUL:
             case kInstDIV:
             case kInstMOD:
                 i = new MathopInstruction(g_mappings[inst_idx].code); break;
+            case kInstCALLFUNC:
+                i = new CallFuncInstruction(); break;
+            case kInstCOMPARE:
+                i = new CompareInstruction(); break;
+            case kInstDECLARE:
+                i = new DeclareInstruction(); break;
+            case kInstDECLAREFN:
+                i = new DeclareFnInstruction(); break;
             case kInstDEBUGPRINT:
                 i = new DebugPrintInstruction(); break;
             case kInstEXIT:
                 i = new ExitInstruction(); break;
-            case kInstREMOVEVAR:
-                i = new RemoveVarInstruction(); break;
-            case kInstSET:
-                i = new SetInstruction(); break;
-            case kInstCOMPARE:
-                i = new CompareInstruction(); break;
+            case kInstEXITFUNC:
+                i = new ExitFuncInstruction(); break;
             case kInstJUMP:
             case kInstJUMPEQ:
             case kInstJUMPIDENT:
@@ -116,6 +116,14 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
             case kInstJUMPLT:
             case kInstJUMPLTE:
                 i = new JumpInstruction(g_mappings[inst_idx].code); break;
+            case kInstPOPARG:
+                i = new PopArgInstruction(); break;
+            case kInstPUSHARG:
+                i = new PushArgInstruction(); break;
+            case kInstREMOVEVAR:
+                i = new RemoveVarInstruction(); break;
+            case kInstSET:
+                i = new SetInstruction(); break;
         }
 
         i->m_label = label;

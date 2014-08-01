@@ -1,7 +1,15 @@
 MODULE_BODY:
         DECLAREFN       factorial, ::__FACTORIAL_123__::
         DECLARE         res
-;        PUSHARG         10
+        PUSHARG         5
+        CALLFUNC        factorial
+        SET             res, ::__RETURN_VALUE__::
+        DEBUGPRINT      res
+        PUSHARG         8
+        CALLFUNC        factorial
+        SET             res, ::__RETURN_VALUE__::
+        DEBUGPRINT      res
+        PUSHARG         20
         CALLFUNC        factorial
         SET             res, ::__RETURN_VALUE__::
         DEBUGPRINT      res
@@ -10,8 +18,8 @@ END_MODULE_BODY
 
 FUNCTION ::__FACTORIAL_123__::
         DECLARE         idx
-        SET             idx, 4
-;        POPARG          idx
+        POPARG          idx
+        DEBUGPRINT      idx
         DECLARE         result
         SET             result, 1
         DECLARE         i
