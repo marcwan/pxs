@@ -1,0 +1,34 @@
+MODULE_BODY:
+        DECLAREFN       factorial, ::__FACTORIAL_123__::
+        DECLARE         res
+;        PUSHARG         10
+        CALLFUNC        factorial
+        SET             res, ::__RETURN_VALUE__::
+        DEBUGPRINT      res
+        EXIT            0
+END_MODULE_BODY
+
+FUNCTION ::__FACTORIAL_123__::
+        DECLARE         idx
+        SET             idx, 4
+;        POPARG          idx
+        DECLARE         result
+        SET             result, 1
+        DECLARE         i
+        SET             i, 0
+__FOR_LOOP_12345_TEST:
+        DECLARE         ::__TMP1_::
+        SUB             idx, 1, ::__TMP1_::
+        COMPARE         i, ::__TMP1_::
+        REMOVEVAR       ::__TMP1_::
+        JUMPGTE         __FOR_LOOP_12345_END
+        DECLARE         ::__TMP2__::
+        SUB             idx, i, ::__TMP2__::
+        MUL             result, ::__TMP2__::, result
+__FOR_LOOP_12345_INCR:
+        ADD             i, 1, i
+        JUMP            __FOR_LOOP_12345_TEST
+__FOR_LOOP_12345_END:
+        DEBUGPRINT      result
+        EXITFUNC        result
+END_FUNCTION ::__FACTORIAL_123__::
