@@ -1,5 +1,6 @@
 #include "vm.h"
 
+#include <stdio.h>
 #include "variable.h"
 
 using namespace std;

@@ -1,6 +1,7 @@
 #include "vm.h"
 
-#include <algorithm>
+//#include <algorithm>
+#include <stdio.h>
 #include "varpool.h"
 
 using namespace std;

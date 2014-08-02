@@ -6,6 +6,7 @@
 #include "instruction.h"
 #include "instructionrunner.h"
 #include <stdio.h>
+#include <string.h>
 
 using namespace std;
 

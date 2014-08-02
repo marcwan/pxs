@@ -1,7 +1,7 @@
 
 #include "vm.h"
 
-
+#include <stdio.h>
 
 InternalErrorException::InternalErrorException(std::string m, int val) {
     char msg[128];

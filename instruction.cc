@@ -222,7 +222,7 @@ vector<string> Instruction::parse_arguments(string line, int inst_idx, int &last
     int distance = utf8::distance(it, arglist.end());
     if (distance) {
         for (int i = 0; i < distance; i++) {
-            uint32_t c = utf8::next(it, arglist.end());
+            utf8::uint32_t c = utf8::next(it, arglist.end());
             if (c == 0x2c) { // ASCII ","
                 trim(arg);
                 args.push_back(arg);

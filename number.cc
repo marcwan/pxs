@@ -2,6 +2,7 @@
 
 #include "math.h"
 #include "number.h"
+#include <stdio.h>
 
 using namespace std;
 
