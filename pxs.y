@@ -23,11 +23,11 @@ statements:
            ;
 
 statement : decl  {  }
-          | assign { if (have_tmps()) printf("%s", remove_tmps()); }
+          | assign { if (have_tmps()) parseprint("%s", remove_tmps()); }
           | add_expr { }
           ;
 
-assign  : lvalue EQUALS add_expr { printf("\tSET\t%s, %s\n", $1, $3); }
+assign  : lvalue EQUALS add_expr { parseprint("\tSET\t%s, %s\n", $1, $3); }
 
 
 add_expr: OPENPAREN add_expr CLOSEPAREN { $$ = $2; }
@@ -35,13 +35,13 @@ add_expr: OPENPAREN add_expr CLOSEPAREN { $$ = $2; }
         | add_expr PLUS add_expr
         {
             char *tmp = get_temp();
-            printf("\tADD\t%s, %s, %s\n", $1, $3, tmp);
+            parseprint("\tADD\t%s, %s, %s\n", $1, $3, tmp);
             $$ = tmp;
         }
         | add_expr MINUS mul_expr
         {
             char *tmp = get_temp();
-            printf("\tSUB\t%s, %s, %s\n", $1, $3, tmp);
+            parseprint("\tSUB\t%s, %s, %s\n", $1, $3, tmp);
             $$ = tmp;
         }
         ;
@@ -50,13 +50,13 @@ mul_expr: primary
         | mul_expr MUL primary
         {
             char *tmp = get_temp();
-            printf("\tMUL\t%s, %s, %s\n", $1, $3, tmp);
+            parseprint("\tMUL\t%s, %s, %s\n", $1, $3, tmp);
             $$ = tmp;
         }
         | mul_expr DIV primary
         {
             char *tmp = get_temp();
-            printf("\tDIV\t%s, %s, %s\n", $1, $3, tmp);
+            parseprint("\tDIV\t%s, %s, %s\n", $1, $3, tmp);
             $$ = tmp;
         }
         ;
@@ -68,7 +68,7 @@ primary : NUMBER { $$ = $1; }
 
 decl    : VAR varlist
         {
-            printf("%s", pop_decls());
+            parseprint("%s", pop_decls());
         }
 
 varlist : lvalue                { push_decl($1); $$ = $1; }

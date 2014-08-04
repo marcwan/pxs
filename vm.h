@@ -16,4 +16,8 @@
 typedef unsigned char byte;
 
 
+// UNDONE: um ... clarify please
+#define PXSA_MAX_LINE_LENGTH       2048
+
+
 #endif // __VM_H_

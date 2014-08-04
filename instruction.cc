@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//#define PARSE_DEBUG
+#define PARSE_DEBUG
 
 
 const char * kInstNameADD = "ADD";

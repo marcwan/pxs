@@ -11,6 +11,7 @@ class InstructionRunner;
 class Engine : public IExecutionState {
   public:
     bool parse_assembly_file(const char *path);
+    bool parse_assembly_string(const std::string &contents);
     bool run();
     void init();
 

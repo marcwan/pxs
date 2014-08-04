@@ -3,6 +3,7 @@
 
 
 #include <fstream>
+#include <sstream>
 
 // forward decls
 class InstructionRunner;
@@ -14,10 +15,20 @@ class AssemblyLoader {
     InstructionRunner *load_assembly(
         const char *path, 
         std::map<std::string, InstructionRunner *> &fn_pool);
+    // return instruction runner for this module, put new fns in fn_pool
+    InstructionRunner *load_assembly(
+        const std::string &path, 
+        std::map<std::string, InstructionRunner *> &fn_pool);
 
   protected:
-    std::ifstream m_stream;
+    std::ifstream m_file_stream;
+    std::stringstream m_string_stream;
+    std::istream *m_stream;
+        
     std::string m_path;
+
+    InstructionRunner *load_assembly_from_stream(
+        std::map<std::string, InstructionRunner *> &fn_pool);
 
     bool look_for(std::string what, std::string &marker,  bool start_only = false);
     InstructionRunner *parse_until(std::string marker);

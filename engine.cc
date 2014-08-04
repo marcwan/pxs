@@ -41,6 +41,25 @@ bool Engine::parse_assembly_file(const char *path) {
     return true;
 }
 
+bool Engine::parse_assembly_string(const string &contents) {
+    InstructionRunner *ir = NULL;
+    AssemblyLoader al;
+
+    // this will add any new functions to the global function pool.
+    try {
+        ir = al.load_assembly(contents, m_function_pool);
+    } catch (std::exception *e) {
+        cout << e->what() << endl;
+        delete e;
+        return false;
+    }
+
+    m_execution_stack.push_back(ir);
+    return true;
+}
+
+
+
 
 
 bool Engine::run() {

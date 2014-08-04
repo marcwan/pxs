@@ -38,9 +38,34 @@ InstructionRunner *AssemblyLoader::load_assembly
     string marker;
 
     m_path = path;
-    m_stream.open(path);
-    if (!m_stream.is_open())
+    m_file_stream.open(path);
+    if (!m_file_stream.is_open())
         throw new AssemblyLoadException(strerror(errno));
+
+    m_stream = &m_file_stream;
+    return this->load_assembly_from_stream(fn_pool);
+}
+
+InstructionRunner *AssemblyLoader::load_assembly
+(
+    const string &contents,
+    map<string, InstructionRunner *> &fn_pool
+)
+{
+    m_string_stream.str(contents);
+    m_stream = &m_string_stream;
+    return this->load_assembly_from_stream(fn_pool);
+}
+
+
+
+
+InstructionRunner *AssemblyLoader::load_assembly_from_stream
+(
+    map<string, InstructionRunner *> &fn_pool
+)
+{
+    string marker;
 
     if (!this->look_for(kMarkerModuleBody, marker))
         throw new MalformedAssemblyException("No \"MODULE_BODY\" marker");
@@ -49,7 +74,7 @@ InstructionRunner *AssemblyLoader::load_assembly
     body = this->parse_until(kMarkerEndModuleBody);
 
     // next, load functions.
-    m_stream.seekg(0);
+    m_stream->seekg(0);
     while (this->look_for(kMarkerFunctionStart, marker, true)) {
         string fnname = this->extract_fn_name(marker);
         string endmarker = kMarkerFunctionEnd + fnname;
@@ -62,6 +87,7 @@ InstructionRunner *AssemblyLoader::load_assembly
     // make caller take ownership of refcount
     return body;
 }
+
     
 
 bool AssemblyLoader::look_for(string what, string &marker, bool start_only) {
@@ -69,7 +95,7 @@ bool AssemblyLoader::look_for(string what, string &marker, bool start_only) {
     int len;
     if (start_only) len = what.length();
 
-    while (getline(m_stream, line)) {
+    while (getline(*m_stream, line)) {
         trim(line);
         if (start_only) {
             if (line.length() >= len
@@ -97,7 +123,7 @@ InstructionRunner *AssemblyLoader::parse_until(string marker) {
 
     // we are positioned right after the staritng line, read until we get
     // to the end marker
-    while (getline(m_stream, line)) {
+    while (getline(*m_stream, line)) {
         // first see if this is a label. if so, remember for next
         // line
         if (!std::isspace(line[0]) && (line[line.length() - 1] == ':')) {

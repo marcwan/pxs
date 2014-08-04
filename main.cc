@@ -17,6 +17,8 @@ extern "C" int yyparse();
 
 const char *exename;
 
+extern string current_buffer;
+
 void usage();
 string get_file_extension(string fn);
 
@@ -55,6 +57,15 @@ int main (int argc, char **argv) {
         }
         yyparse();
         fclose(yyin);
+
+        current_buffer = string("MODULE_BODY:\n") + current_buffer
+            + string("\nEND_MODULE_BODY\n");
+        
+        if (!engine.parse_assembly_string(current_buffer)) {
+            return -1;
+        }
+
+        engine.run();
     }
     return 0;
 }
@@ -74,3 +85,5 @@ string get_file_extension(string fn) {
     if (idx == -1) usage();
     return fn.substr(idx + 1);
 }
+
+

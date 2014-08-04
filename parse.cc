@@ -1,17 +1,21 @@
 #include "vm.h"
 
 #include "parse.h"
+#include <stdarg.h>
+#include <stdio.h>
 
 using namespace std;
 
-vector<string> decls;
+string current_buffer;
 
+vector<string> decls;
 static int ctr = 0;
+
 
 char *get_temp() {
     char buf[30];
     snprintf(buf, sizeof(buf), "::__TMP%d__::", ++ctr);
-    printf("\tDECLARE\t%s\n", buf);
+    parseprint("\tDECLARE\t%s\n", buf);
     return strdup(buf);
 }
 
@@ -51,4 +55,16 @@ const char *remove_tmps() {
 
     ctr = 0;
     return remove.c_str();
+}
+
+
+
+
+void parseprint(const char *format, ...) {
+    char buf[PXSA_MAX_LINE_LENGTH];
+    va_list arglist;
+    va_start(arglist, format);
+    vsnprintf(buf, sizeof(buf), format, arglist);
+
+    current_buffer += string(buf);
 }
