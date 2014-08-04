@@ -30,8 +30,9 @@ statement : decl  {  }
 assign  : lvalue EQUALS add_expr { printf("\tSET\t%s, %s\n", $1, $3); }
 
 
-add_expr: mul_expr
-        | add_expr PLUS mul_expr
+add_expr: OPENPAREN add_expr CLOSEPAREN { $$ = $2; }
+        | mul_expr
+        | add_expr PLUS add_expr
         {
             char *tmp = get_temp();
             printf("\tADD\t%s, %s, %s\n", $1, $3, tmp);

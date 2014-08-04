@@ -11,6 +11,7 @@ static int ctr = 0;
 char *get_temp() {
     char buf[30];
     snprintf(buf, sizeof(buf), "::__TMP%d__::", ++ctr);
+    printf("\tDECLARE\t%s\n", buf);
     return strdup(buf);
 }
 
@@ -44,7 +45,7 @@ const char *remove_tmps() {
 
     for (int i = ctr; i > 0; i--) {
         char buf[50];
-        snprintf(buf, sizeof(buf), "\tUNDECLARE\t::__TMP%d__::\n", i);
+        snprintf(buf, sizeof(buf), "\tREMOVEVAR\t::__TMP%d__::\n", i);
         remove = remove + string(buf);
     }
 
