@@ -3,7 +3,9 @@ PixieScript (pxs)
 
 This is my first attempt to write a Virtual Machine for a new programming
 language that looks an awful lot like JavaScript, but cleaned up a little
-bit and with proper classes.
+bit and with proper classes. Why did I start doing this? Honestly, I was 
+just a little curious as to how one would implement closures. It seems like
+an interesting problem.
 
 This is kind of a personal experiment:
 
