@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
+#include "parse.h"
 #define YYSTYPE char *
 
 %}
@@ -13,30 +14,50 @@
 %left  PLUS MINUS
 %left  DIV MUL
 
-o%%
+%%
 
 file       : statements ;
 
-statements :
+statements:
            | statements statement SEMICOLON
            ;
 
-statement : decl  { printf("; decl\n"); }
-          | assign { printf("got assignment\n"); }
-          | add_expr { printf("expression statement\n"); }
+statement : decl  {  }
+          | assign { if (have_tmps()) printf("%s", remove_tmps()); }
+          | add_expr { }
           ;
 
-assign  : lvalue EQUALS add_expr { printf("ASSIGN %s = %s\n", $1, $3); }
+assign  : lvalue EQUALS add_expr { printf("\tSET\t%s, %s\n", $1, $3); }
 
 
 add_expr: mul_expr
-        | add_expr PLUS mul_expr  { printf("PLUS %s %s\n", $1, $3); }
-        | add_expr MINUS mul_expr { printf("MINUS %s %s\n", $1, $3); }
+        | add_expr PLUS mul_expr
+        {
+            char *tmp = get_temp();
+            printf("\tADD\t%s, %s, %s\n", $1, $3, tmp);
+            $$ = tmp;
+        }
+        | add_expr MINUS mul_expr
+        {
+            char *tmp = get_temp();
+            printf("\tSUB\t%s, %s, %s\n", $1, $3, tmp);
+            $$ = tmp;
+        }
         ;
 
 mul_expr: primary
-        | mul_expr MUL primary { printf("MUL %s %s\n", $1, $3); }
-        | mul_expr DIV primary { printf("DIV %s %s\n", $1, $3); }
+        | mul_expr MUL primary
+        {
+            char *tmp = get_temp();
+            printf("\tMUL\t%s, %s, %s\n", $1, $3, tmp);
+            $$ = tmp;
+        }
+        | mul_expr DIV primary
+        {
+            char *tmp = get_temp();
+            printf("\tDIV\t%s, %s, %s\n", $1, $3, tmp);
+            $$ = tmp;
+        }
         ;
 
 primary : NUMBER { $$ = $1; }
@@ -44,10 +65,13 @@ primary : NUMBER { $$ = $1; }
         ;
 
 
-decl    : VAR varlist { printf("\tDECLARE\t%s\n", $2); }
+decl    : VAR varlist
+        {
+            printf("%s", pop_decls());
+        }
 
-varlist : lvalue                { $$ = $1; }
-        | lvalue COMMA varlist  { $$ = $3; }
+varlist : lvalue                { push_decl($1); $$ = $1; }
+        | lvalue COMMA varlist  { push_decl($1); $$ = $1; }
         ;
 
 lvalue  : IDENTIFIER { $$ = $1; }
@@ -83,4 +107,6 @@ int warning (char *s, char *t)
   if ( t )
     fprintf( stderr , " %s\n" , t );
 }
+
+
 

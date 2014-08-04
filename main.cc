@@ -62,8 +62,8 @@ int main (int argc, char **argv) {
 
 
 void usage() {
-    cout << "\nUsage:   " << exename << " filename\n";
-    cout << "  filename = XYZ.pxs or XYZ.pxsa\n";
+    cout << "usage: " << exename << " filename\n";
+    cout << " * filename must have extension .pxs or .pxsa\n";
     exit(1);
 }
 
