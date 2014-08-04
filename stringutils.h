@@ -27,6 +27,7 @@ static inline std::string lowercase(std::string s) {
 }
 
 static inline void lowercaseme(std::string &s) {
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 }
 
 
