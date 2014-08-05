@@ -140,3 +140,6 @@ August 3:
 
 OMG I have basic compiler functionality working. It's mem-leaky as shit and crude, but i've basically got a working script language woooooooo!!!!
 
+
+AAAAND -- my first bit of bad design coming back to bite me in the butt. COMPARE might be the wrong thing to have done. must think on this more. I suspect I need to move it to TESTXXX instructions that all evalutate to a bool true/false flag, put those in TMPs/register, and then go from there. So, more complicated COMPARE/TESTs, but fewer JUMP instructions then.  D'oh!
+
