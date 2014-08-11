@@ -153,5 +153,5 @@ AAAAND -- my first bit of bad design coming back to bite me in the butt. COMPARE
 
 Great, my compiler is going a lot better now and I can generate a lot of code, but -- it's wrong. I need to move to an intermediate representation from which I will generate code.  This is basically gonna be an overly simplistic AST. That will let me do further analyses, generate better code, and start even thinkign about optimisations.
 
-#winning.
+\#winning.
 
