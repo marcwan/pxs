@@ -148,3 +148,10 @@ OMG I have basic compiler functionality working. It's mem-leaky as shit and crud
 
 AAAAND -- my first bit of bad design coming back to bite me in the butt. COMPARE might be the wrong thing to have done. must think on this more. I suspect I need to move it to TESTXXX instructions that all evalutate to a bool true/false flag, put those in TMPs/register, and then go from there. So, more complicated COMPARE/TESTs, but fewer JUMP instructions then.  D'oh!
 
+
+## August 7:
+
+Great, my compiler is going a lot better now and I can generate a lot of code, but -- it's wrong. I need to move to an intermediate representation from which I will generate code.  This is basically gonna be an overly simplistic AST. That will let me do further analyses, generate better code, and start even thinkign about optimisations.
+
+#winning.
+
