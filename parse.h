@@ -11,10 +11,11 @@ void *add_decl(void *node, const char *var);
 
 void *first_statement();
 void *add_statement(void *node, void *statement);
-
 void *create_assignment(void *lv, void *rv);
-
 void *expression_node(const char *op, void *a, void *b);
+
+void *if_statement_node(void *expr, void *stmtseq);
+
 
     char *get_temp();
 

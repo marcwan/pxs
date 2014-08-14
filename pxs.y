@@ -11,7 +11,7 @@
 %token OPENPAREN CLOSEPAREN OPENSQUIGGLY CLOSESQUIGGLY VAR COMMA
 %token SEMICOLON TRUEVAL FALSEVAL
 %token EQUALS
-%token FOR WHILE DO
+%token FOR WHILE DO IF ELSE ELSEIF
 %token NUMBER IDENTIFIER
 %left  EQUALITY IDENTITY INEQUALITY NOTIDENTITY
 %left  GT GTE LT LTE
@@ -25,15 +25,22 @@ file       : statements  { printnode($1); }
            ;
 
 statements : /* empty */                    { $$ = first_statement(); }
-           | statements statement SEMICOLON { add_statement($1, $2);  }
+           | statements statement { add_statement($1, $2);  }
            ;
 
-statement : decl     { $$ = $1; }
-          | assign   { $$ = $1; }
-          | expr     { }
+statement : decl SEMICOLON     { $$ = $1; }
+          | assign SEMICOLON   { $$ = $1; }
+          | expr SEMICOLON     { }
           | for_loop { }
+          | if_stmt  { $$ = $1; }
           ;
 
+
+if_stmt  : IF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
+         {
+             $$ = if_statement_node($3, $6);
+         }
+         ;
 
 for_loop : FOR OPENPAREN statement SEMICOLON expr SEMICOLON assign OPENSQUIGGLY statements CLOSESQUIGGLY
          | FOR OPENPAREN statement SEMICOLON expr SEMICOLON expr OPENSQUIGGLY statements CLOSESQUIGGLY

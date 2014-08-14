@@ -11,15 +11,22 @@ enum ParseNodeType {
     kNodeDeclaration,
     kNodeExpression,
     kNodeStatementSequence,
+    kNodeIfStatement,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
+
+
+class StatementSequenceNode;
+
 
 
 class ParseNode {
   public:
     ParseNode(ParseNodeType nt) : m_type(nt) { }
     virtual ~ParseNode();
+
+    inline ParseNodeType get_type() { return this->m_type; }
     virtual std::string to_string();
     virtual std::string to_string(int indent) = 0;
   protected:
@@ -77,6 +84,19 @@ class ExpressionNode : public StatementNode {
   protected:
     std::string m_op;
     ParseNode *m_a, *m_b;
+};
+
+class IfStatementNode : public StatementNode {
+  public:
+    IfStatementNode(ExpressionNode *, StatementSequenceNode *);
+    ~IfStatementNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    std::vector<ExpressionNode *> m_exprs;
+    std::vector<StatementSequenceNode *> m_thens;
+    StatementSequenceNode *m_else;
 };
 
 

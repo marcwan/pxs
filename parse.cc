@@ -60,6 +60,22 @@ void *expression_node(const char *op, void *a, void *b) {
     return (void *)en;
 }
 
+void *if_statement_node(void *expr, void *stmtseq) {
+    ExpressionNode *en = (ExpressionNode *)expr;
+    if (en->get_type() != kNodeExpression) {
+        cerr << "if (expr) Not an Expression!!!" << endl;
+        exit(-1);
+    }
+    StatementSequenceNode *ssn = (StatementSequenceNode *)stmtseq;
+    if (ssn->get_type() != kNodeStatementSequence) {
+        cerr << "if (then) Not an Expression!!!" << endl;
+        exit(-1);
+    }
+
+    IfStatementNode *isn = new IfStatementNode(en, ssn);
+    return (void *)isn;
+}
+
 
 
 void printnode(void *node) {

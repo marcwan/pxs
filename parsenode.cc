@@ -129,9 +129,32 @@ string AssignmentNode::to_string(int indent) {
 
 
 
+IfStatementNode::IfStatementNode
+(
+    ExpressionNode *expr,
+    StatementSequenceNode *stmts
+)
+: StatementNode(kNodeIfStatement)
+{
+    m_exprs.push_back(expr);
+    m_thens.push_back(stmts);
+}
 
+IfStatementNode::~IfStatementNode() {
+}
 
+string IfStatementNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
 
+    str << "IF" << endl;
+    __add_spaces(str, indent);
+    str << "(expr): " << endl;
+    str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
+    str << "(then): " << endl;
+    str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
+    return str.str();
+}
 
 
 
