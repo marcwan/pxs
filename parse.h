@@ -1,15 +1,33 @@
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-char *get_temp();
+
+void *value_node(const char *);
+
+void *first_decl(const char *var);
+void *add_decl(void *node, const char *var);
+
+void *first_statement();
+void *add_statement(void *node, void *statement);
+
+void *create_assignment(void *lv, void *rv);
+
+void *expression_node(const char *op, void *a, void *b);
+
+    char *get_temp();
+
+
+void printnode(void *node);
+
 const char *pop_decls();
-void push_decl(const char *name);
-int have_tmps();
-const char *remove_tmps();
+
 void parseprint(const char *format, ...);
+
+void *add_node(const char *name, ...);
+
+
 
 #ifdef __cplusplus
 }

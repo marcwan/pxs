@@ -21,16 +21,41 @@ JumpInstruction::~JumpInstruction() {
  * just throw if it's bad.
  */
 bool JumpInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
-    if (this->m_args.size() != 1)
-        throw new InternalErrorException("Need a destination label for JUMPXYZ inst.");
+    string label;
 
-    string label = this->m_args[0];
-    byte flags = state->get_compare_flags();
+    if (this->m_op == kInstJUMPF || this->m_op == kInstJUMPT) {
+        if (this->m_args.size() != 2)
+            throw new InternalErrorException("Wrong # of args for JUMPF/T.");
+        Variable *v = Instruction::get_const_or_var(scope_stack, this->m_args[0]);
 
-    switch (this->m_op) {
-        case kInstJUMP:
+        if (!v)
+            throw new UndeclaredVariableException(this->m_args[0]);
+        else if (v->get_type() != kTypeBoolean)
+            throw new ExpectedBooleanException(this->m_args[0], v->get_type());
+
+        Boolean *b = dynamic_cast<Boolean *>(v);
+        bool val = b->get_value();
+        b->release();
+        label = this->m_args[1];
+        if (this->m_op == kInstJUMPF && !val) {
+            state->jump_to_label(label);
+            return true;
+        } else if (this->m_op == kInstJUMPT && val) {
+            state->jump_to_label(label);
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if (this->m_args.size() != 1)
+            throw new InternalErrorException("Wrong # of args for JUMPXYZ");
+        label = this->m_args[0];
             state->jump_to_label(label); 
             return true;
+    }
+/*
+    switch (this->m_op) {
+        case kInstJUMP:
         case kInstJUMPEQ:
             if (flags & kCompareEqual) {
                 state->jump_to_label(label);
@@ -82,7 +107,7 @@ bool JumpInstruction::execute(IExecutionState *state, ScopeStack *scope_stack) {
         default:
             throw new InternalErrorException("Are you sure that's a jump?");
     }
-
+*/
     // didn't actually modify instruction pointer. as you were.
     return false;
 }

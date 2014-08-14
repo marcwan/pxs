@@ -8,13 +8,14 @@ MODULE_BODY:
 __FOR_LOOP_12345_TEST:
         DECLARE         ::__TMP1_::
         SUB             idx, 1, ::__TMP1_::
-        COMPARE         i, ::__TMP1_::
-        REMOVEVAR       ::__TMP1_::
-        JUMPGTE         __FOR_LOOP_12345_END
         DECLARE         ::__TMP2__::
-        SUB             idx, i, ::__TMP2__::
-        MUL             result, ::__TMP2__::, result
-        REMOVEVAR       ::__TMP2__::
+        TESTGTE         i, ::__TMP1_::, ::__TMP2__::
+        REMOVEVAR       ::__TMP1_::
+        JUMPF           ::__TMP2__::, __FOR_LOOP_12345_END
+        DECLARE         ::__TMP3__::
+        SUB             idx, i, ::__TMP3__::
+        MUL             result, ::__TMP3__::, result
+        REMOVEVAR       ::__TMP3__::
 __FOR_LOOP_12345_INCR:
         ADD             i, 1, i
         JUMP            __FOR_LOOP_12345_TEST

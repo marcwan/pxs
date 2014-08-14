@@ -2,99 +2,127 @@
 #include <stdio.h>
 #include <string.h>
 #include "parse.h"
+
 #define YYSTYPE char *
 
 %}
 
 
 %token OPENPAREN CLOSEPAREN OPENSQUIGGLY CLOSESQUIGGLY VAR COMMA
-%token SEMICOLON
+%token SEMICOLON TRUEVAL FALSEVAL
 %token EQUALS
+%token FOR WHILE DO
 %token NUMBER IDENTIFIER
+%left  EQUALITY IDENTITY INEQUALITY NOTIDENTITY
+%left  GT GTE LT LTE
 %left  PLUS MINUS
+%left  MOD
 %left  DIV MUL
 
 %%
 
-file       : statements ;
-
-statements:
-           | statements statement SEMICOLON
+file       : statements  { printnode($1); }
            ;
 
-statement : decl  {  }
-          | assign { if (have_tmps()) parseprint("%s", remove_tmps()); }
-          | add_expr { }
+statements : /* empty */                    { $$ = first_statement(); }
+           | statements statement SEMICOLON { add_statement($1, $2);  }
+           ;
+
+statement : decl     { $$ = $1; }
+          | assign   { $$ = $1; }
+          | expr     { }
+          | for_loop { }
           ;
 
-assign  : lvalue EQUALS add_expr { parseprint("\tSET\t%s, %s\n", $1, $3); }
+
+for_loop : FOR OPENPAREN statement SEMICOLON expr SEMICOLON assign OPENSQUIGGLY statements CLOSESQUIGGLY
+         | FOR OPENPAREN statement SEMICOLON expr SEMICOLON expr OPENSQUIGGLY statements CLOSESQUIGGLY
+         ;
 
 
-add_expr: OPENPAREN add_expr CLOSEPAREN { $$ = $2; }
-        | mul_expr
-        | add_expr PLUS add_expr
-        {
-            char *tmp = get_temp();
-            parseprint("\tADD\t%s, %s, %s\n", $1, $3, tmp);
-            $$ = tmp;
-        }
-        | add_expr MINUS mul_expr
-        {
-            char *tmp = get_temp();
-            parseprint("\tSUB\t%s, %s, %s\n", $1, $3, tmp);
-            $$ = tmp;
-        }
+assign  : lvalue EQUALS expr { $$ = create_assignment($1, $3); }
+
+expr    : OPENPAREN expr CLOSEPAREN { $$ = $2; }
+        | op_expr { $$ = $1; }
         ;
 
-mul_expr: primary
-        | mul_expr MUL primary
-        {
-            char *tmp = get_temp();
-            parseprint("\tMUL\t%s, %s, %s\n", $1, $3, tmp);
-            $$ = tmp;
-        }
-        | mul_expr DIV primary
-        {
-            char *tmp = get_temp();
-            parseprint("\tDIV\t%s, %s, %s\n", $1, $3, tmp);
-            $$ = tmp;
-        }
+op_expr    : primary
+           | expr EQUALITY expr
+           {
+               $$ = expression_node("TESTEQ", $1, $3);
+           }
+           | expr INEQUALITY expr
+           {
+               $$ = expression_node("TESTNEQ", $1, $3);
+           }
+           | expr IDENTITY expr
+           {
+               $$ = expression_node("TESTIDENT", $1, $3);
+           }
+           | expr NOTIDENTITY expr
+           {
+               $$ = expression_node("TESTNIDENT", $1, $3);
+           }
+           | expr GT expr
+           {
+               $$ = expression_node("TESTGT", $1, $3);
+           }
+           | expr GTE expr
+           {
+               $$ = expression_node("TESTGTE", $1, $3);
+           }
+           | expr LT expr
+           {
+               $$ = expression_node("TESTLT", $1, $3);
+           }
+           | expr LTE expr
+           {
+               $$ = expression_node("TESTLTE", $1, $3);
+           }
+           | expr PLUS expr
+           {
+               $$ = expression_node("ADD", $1, $3);
+           }
+           | expr MINUS expr
+           {
+               $$ = expression_node("MINUS", $1, $3);
+           }
+           | expr MUL expr
+           {
+               $$ = expression_node("MUL", $1, $3);
+           }
+           | expr DIV expr
+           {
+               $$ = expression_node("DIV", $1, $3);
+           }
+           | expr MOD expr
+           {
+               $$ = expression_node("MOD", $1, $3);
+           }
+           ;
+
+primary : NUMBER   { $$ = value_node($1); }
+        | lvalue   { $$ = value_node($1); }
+        | TRUEVAL  { $$ = value_node($1); }
+        | FALSEVAL { $$ = value_node($1); }
         ;
 
-primary : NUMBER { $$ = $1; }
-        | IDENTIFIER { $$ = $1; }
-        ;
 
+decl    : VAR varlist { $$ = $2; }
 
-decl    : VAR varlist
-        {
-            parseprint("%s", pop_decls());
-        }
-
-varlist : lvalue                { push_decl($1); $$ = $1; }
-        | lvalue COMMA varlist  { push_decl($1); $$ = $1; }
+varlist : lvalue                { $$ = first_decl($1);   }
+        | lvalue COMMA varlist  { $$ = add_decl($3, $1); }
         ;
 
 lvalue  : IDENTIFIER { $$ = $1; }
         ;
+
+
 %%
 
+
 extern const char *exename;
-
-#if 0
-#include <stdio.h>
-char *progname;
-
-
-main( argc, argv )
-char *argv[];
-{
-  progname = argv[0];
-  yyparse();
-}
-
-#endif // 0
-
+extern int   yylineno;
 
 int yyerror(char *s)
 {
@@ -104,7 +132,7 @@ int yyerror(char *s)
 
 int warning (char *s, char *t)
 {
-  fprintf( stderr ,"%s: %s\n" , exename , s );
+  fprintf( stderr ,"%s: %s (line %d)\n" , exename , s, yylineno );
   if ( t )
     fprintf( stderr , " %s\n" , t );
 }

@@ -12,7 +12,7 @@ class Varpool;
 
 extern const char * kInstNameADD;
 extern const char * kInstNameCALLFUNC;
-extern const char * kInstNameCOMPARE;
+//extern const char * kInstNameCOMPARE;
 extern const char * kInstNameDEBUGPRINT;
 extern const char * kInstNameDECLARE;
 extern const char * kInstNameDECLAREFN;
@@ -20,6 +20,9 @@ extern const char * kInstNameDIV;
 extern const char * kInstNameEXIT;
 extern const char * kInstNameEXITFUNC;
 extern const char * kInstNameJUMP;
+extern const char * kInstNameJUMPF;
+extern const char * kInstNameJUMPT;
+/*
 extern const char * kInstNameJUMPEQ;
 extern const char * kInstNameJUMPIDENT;
 extern const char * kInstNameJUMPNEQ;
@@ -28,6 +31,7 @@ extern const char * kInstNameJUMPGT;
 extern const char * kInstNameJUMPGTE;
 extern const char * kInstNameJUMPLT;
 extern const char * kInstNameJUMPLTE;
+*/
 extern const char * kInstNameMOD;
 extern const char * kInstNameMUL;
 extern const char * kInstNamePOPARG;
@@ -36,9 +40,18 @@ extern const char * kInstNameREMOVEVAR;
 extern const char * kInstNameSET;
 extern const char * kInstNameSUB;
 
+extern const char * kInstNameTESTEQ;
+extern const char * kInstNameTESTIDENT;
+extern const char * kInstNameTESTNEQ;
+extern const char * kInstNameTESTNIDENT;
+extern const char * kInstNameTESTGT;
+extern const char * kInstNameTESTGTE;
+extern const char * kInstNameTESTLT;
+extern const char * kInstNameTESTLTE;
+
 typedef enum InstructionCode {
     kInstADD,
-    kInstCOMPARE,
+//    kInstCOMPARE,
     kInstCALLFUNC,
     kInstDEBUGPRINT,
     kInstDECLARE,
@@ -47,6 +60,9 @@ typedef enum InstructionCode {
     kInstEXIT,
     kInstEXITFUNC,
     kInstJUMP,
+    kInstJUMPF,
+    kInstJUMPT,
+/*
     kInstJUMPEQ,
     kInstJUMPIDENT,
     kInstJUMPNEQ,
@@ -55,13 +71,23 @@ typedef enum InstructionCode {
     kInstJUMPGTE,
     kInstJUMPLT,
     kInstJUMPLTE,
+*/
     kInstMOD,
     kInstMUL,
     kInstPOPARG,
     kInstPUSHARG,
     kInstREMOVEVAR,
     kInstSET,
-    kInstSUB
+    kInstSUB,
+    kInstTESTEQ,
+    kInstTESTIDENT,
+    kInstTESTNEQ,
+    kInstTESTNIDENT,
+    kInstTESTGT,
+    kInstTESTGTE,
+    kInstTESTLT,
+    kInstTESTLTE
+
 } InstructionCode;
 
 std::string instruction_code_to_string(InstructionCode);
@@ -133,7 +159,7 @@ struct InstructionParseException : public std::exception {
  * We'll include all the instructions here to save people some include hell.
  */
 #include "callfunc.h"
-#include "compare.h"
+//#include "compare.h"
 #include "declare.h"
 #include "declarefn.h"
 #include "debugprint.h"
@@ -145,6 +171,7 @@ struct InstructionParseException : public std::exception {
 #include "pusharg.h"
 #include "removevar.h"
 #include "set.h"
+#include "test.h"
 
 
 #endif // __INSTRUCTION_H_

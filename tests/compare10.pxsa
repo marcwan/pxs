@@ -3,6 +3,7 @@ MODULE_BODY:
         SET             x, NaN
         DECLARE         y
         SET             y, 234234234.2352352
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLARE         __TMP__
+        TESTEQ          x, y, __TMP__
+        DEBUGPRINT      __TMP__
 END_MODULE_BODY

@@ -4,6 +4,8 @@
 #define YYSTYPE char *
 #include "pxs.tab.h"
 %}
+%option yylineno
+
 ALPHA   [a-zA-Z]
 NUMERIC [0-9]
 ALNUM   {ALPHA}|{NUMERIC}
@@ -21,22 +23,35 @@ UONLY   {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 
 %%
 
+\n                    { }
+\<                    return LT;
+\<=                   return LTE;
+\>                    return GT;
+\>=                   return GTE;
 ,                     return COMMA;
+true                  return TRUEVAL;
+false                 return FALSEVAL;
 var                   return VAR;
+for                   return FOR;
 \(                    return OPENPAREN;
 \)                    return CLOSEPAREN;
 \{                    return OPENSQUIGGLY;
 \}                    return CLOSESQUIGGLY;
 ;                     return SEMICOLON;
 =                     return EQUALS;
+!=                    return INEQUALITY;
+==                    return EQUALITY;
+===                   return IDENTITY;
+!==                   return NOTIDENTITY;
 \+                    return PLUS;
 \-                    return MINUS;
 \*                    return MUL;
 \/                    return DIV;
+%                     return MOD;
 {NUMERIC}+            { yylval = strdup(yytext); return NUMBER; }
 ({NUMERIC}+)(\.{NUMERIC}+)?e(\+|\-)?({NUMERIC}+) { yylval = strdup(yytext); return NUMBER; }
 ({NUMERIC}+)(\.{NUMERIC}+)? { yylval = strdup(yytext); return NUMBER; }
-({ALPHA}|{UONLY})?({ALNUM}|{UONLY})+ { yylval = strdup(yytext); return IDENTIFIER; }
+({ALPHA}|{UONLY})?(_|{ALNUM}|{UONLY})+ { yylval = strdup(yytext); return IDENTIFIER; }
 
 
 

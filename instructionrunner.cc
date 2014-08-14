@@ -33,6 +33,7 @@ InstructionResult InstructionRunner::execute_next
 
     // otherwise, let's execute that puppy!
     try {
+//cout << "ExECUTIN' " << this->m_instructions[this->m_position]->get_line() << endl;
         bool dont_incr = this->m_instructions[this->m_position]->execute(state, ss);
         if (!dont_incr) m_position++;
     } catch (std::exception *e) {

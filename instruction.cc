@@ -6,12 +6,12 @@
 
 using namespace std;
 
-#define PARSE_DEBUG
+//#define PARSE_DEBUG
 
 
 const char * kInstNameADD = "ADD";
 const char * kInstNameCALLFUNC = "CALLFUNC";
-const char * kInstNameCOMPARE = "COMPARE";
+//const char * kInstNameCOMPARE = "COMPARE";
 const char * kInstNameDEBUGPRINT = "DEBUGPRINT";
 const char * kInstNameDECLARE = "DECLARE";
 const char * kInstNameDECLAREFN = "DECLAREFN";
@@ -19,6 +19,9 @@ const char * kInstNameDIV = "DIV";
 const char * kInstNameEXIT = "EXIT";
 const char * kInstNameEXITFUNC = "EXITFUNC";
 const char * kInstNameJUMP = "JUMP";
+const char * kInstNameJUMPF = "JUMPF";
+const char * kInstNameJUMPT = "JUMPT";
+/*
 const char * kInstNameJUMPEQ = "JUMPEQ";
 const char * kInstNameJUMPIDENT = "JUMPIDENT";
 const char * kInstNameJUMPNEQ = "JUMPNEQ";
@@ -27,6 +30,7 @@ const char * kInstNameJUMPGT = "JUMPGT";
 const char * kInstNameJUMPGTE = "JUMPGTE";
 const char * kInstNameJUMPLT = "JUMPLT";
 const char * kInstNameJUMPLTE = "JUMPLTE";
+*/
 const char * kInstNameMUL = "MUL";
 const char * kInstNameMOD = "MOD";
 const char * kInstNamePOPARG = "POPARG";
@@ -34,6 +38,15 @@ const char * kInstNamePUSHARG = "PUSHARG";
 const char * kInstNameREMOVEVAR = "REMOVEVAR";
 const char * kInstNameSET = "SET";
 const char * kInstNameSUB = "SUB";
+const char * kInstNameTESTEQ = "TESTEQ";
+const char * kInstNameTESTIDENT = "TESTIDENT";
+const char * kInstNameTESTNEQ = "TESTNEQ";
+const char * kInstNameTESTNIDENT = "TESTNIDENT";
+const char * kInstNameTESTGT = "TESTGT";
+const char * kInstNameTESTGTE = "TESTGTE";
+const char * kInstNameTESTLT = "TESTLT";
+const char * kInstNameTESTLTE = "TESTLTE";
+
 
 struct InstCodeMapping {
     const char *instruction;
@@ -41,7 +54,7 @@ struct InstCodeMapping {
     int cargs;
 } const g_mappings [] = {
     { kInstNameADD, kInstADD, 3 },
-    { kInstNameCOMPARE, kInstCOMPARE, 2},
+//    { kInstNameCOMPARE, kInstCOMPARE, 2},
     { kInstNameCALLFUNC, kInstCALLFUNC, 1},
     { kInstNameDEBUGPRINT, kInstDEBUGPRINT, 1},
     { kInstNameDIV, kInstDIV, 3 },
@@ -50,6 +63,9 @@ struct InstCodeMapping {
     { kInstNameEXIT, kInstEXIT, 1 },
     { kInstNameEXITFUNC, kInstEXITFUNC, 1},
     { kInstNameJUMP, kInstJUMP, 1 },
+    { kInstNameJUMPF, kInstJUMPF, 2 },
+    { kInstNameJUMPT, kInstJUMPT, 2 },
+/*
     { kInstNameJUMPEQ, kInstJUMPEQ, 1 },
     { kInstNameJUMPIDENT, kInstJUMPIDENT, 1 },
     { kInstNameJUMPNEQ, kInstJUMPNEQ, 1 },
@@ -58,13 +74,22 @@ struct InstCodeMapping {
     { kInstNameJUMPGTE, kInstJUMPGTE, 1 },
     { kInstNameJUMPLT, kInstJUMPLT, 1 },
     { kInstNameJUMPLTE, kInstJUMPLTE, 1 },
+*/
     { kInstNameMOD, kInstMOD, 3 },
     { kInstNameMUL, kInstMUL, 3 },
     { kInstNamePOPARG, kInstPOPARG, 1 },
     { kInstNamePUSHARG, kInstPUSHARG, 1 },
     { kInstNameREMOVEVAR, kInstREMOVEVAR, 1},
     { kInstNameSET, kInstSET, 2 },
-    { kInstNameSUB, kInstSUB, 3 }
+    { kInstNameSUB, kInstSUB, 3 },
+    { kInstNameTESTEQ, kInstTESTEQ, 3 },
+    { kInstNameTESTIDENT, kInstTESTIDENT, 3 },
+    { kInstNameTESTNEQ, kInstTESTNEQ, 3 },
+    { kInstNameTESTNIDENT, kInstTESTNIDENT, 3 },
+    { kInstNameTESTGT, kInstTESTGT, 3 },
+    { kInstNameTESTGTE, kInstTESTGTE, 3 },
+    { kInstNameTESTLT, kInstTESTLT, 3 },
+    { kInstNameTESTLTE, kInstTESTLTE, 3 }
 };
 
 
@@ -94,8 +119,8 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new MathopInstruction(g_mappings[inst_idx].code); break;
             case kInstCALLFUNC:
                 i = new CallFuncInstruction(); break;
-            case kInstCOMPARE:
-                i = new CompareInstruction(); break;
+//            case kInstCOMPARE:
+//                i = new CompareInstruction(); break;
             case kInstDECLARE:
                 i = new DeclareInstruction(); break;
             case kInstDECLAREFN:
@@ -107,6 +132,9 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
             case kInstEXITFUNC:
                 i = new ExitFuncInstruction(); break;
             case kInstJUMP:
+            case kInstJUMPF:
+            case kInstJUMPT:
+/*
             case kInstJUMPEQ:
             case kInstJUMPIDENT:
             case kInstJUMPNEQ:
@@ -115,6 +143,7 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
             case kInstJUMPGTE:
             case kInstJUMPLT:
             case kInstJUMPLTE:
+*/
                 i = new JumpInstruction(g_mappings[inst_idx].code); break;
             case kInstPOPARG:
                 i = new PopArgInstruction(); break;
@@ -124,6 +153,15 @@ Instruction *Instruction::instruction_from_line(string line, string lbl) {
                 i = new RemoveVarInstruction(); break;
             case kInstSET:
                 i = new SetInstruction(); break;
+            case kInstTESTEQ:
+            case kInstTESTIDENT:
+            case kInstTESTNEQ:
+            case kInstTESTNIDENT:
+            case kInstTESTGT:
+            case kInstTESTGTE:
+            case kInstTESTLT:
+            case kInstTESTLTE:
+                i = new TestInstruction(g_mappings[inst_idx].code); break;
         }
 
         i->m_label = label;

@@ -3,6 +3,7 @@ MODULE_BODY:
         SET             x, "adsfojapsdofiajsdfo"
         DECLARE         y
         SET             y, false
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLARE         __TMP1__
+        TESTIDENT       x, y, __TMP1__
+        DEBUGPRINT      __TMP1__
 END_MODULE_BODY

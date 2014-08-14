@@ -3,6 +3,7 @@ MODULE_BODY:
         SET             x, 5
         DECLARE         y
         SET             y, 2
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLARE         z
+        TESTEQ          x, y, z
+        DEBUGPRINT      z
 END_MODULE_BODY

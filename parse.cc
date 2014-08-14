@@ -1,6 +1,7 @@
 #include "vm.h"
 
 #include "parse.h"
+#include "parsenode.h"
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -12,12 +13,62 @@ vector<string> decls;
 static int ctr = 0;
 
 
-char *get_temp() {
-    char buf[30];
-    snprintf(buf, sizeof(buf), "::__TMP%d__::", ++ctr);
-    parseprint("\tDECLARE\t%s\n", buf);
-    return strdup(buf);
+
+void *value_node(const char *val) {
+    ValueNode *v = new ValueNode(val);
+    return (void *)v;
 }
+
+
+void *first_decl(const char *var) {
+    DeclarationNode *dn = new DeclarationNode(string(var));
+    return (void *)dn;
+}
+
+void *add_decl(void *node, const char *var) {
+    DeclarationNode *dn = (DeclarationNode *)node;
+    dn->add_var(var);
+    return dn;
+}
+
+
+
+void *first_statement() {
+    return (void *)new StatementSequenceNode();
+}
+
+void *add_statement(void *node, void *statement) {
+    StatementSequenceNode *ssn = (StatementSequenceNode *)node;
+    ssn->add_statement((StatementNode *)statement);
+    return node;
+}
+
+
+void *create_assignment(void *lv, void *rv) {
+    const char *lvalue = (const char *)lv;
+    ParseNode *r = (ParseNode *)rv;
+
+    AssignmentNode *an = new AssignmentNode(lvalue, r);
+    return (void *)an;
+}
+
+void *expression_node(const char *op, void *a, void *b) {
+    ParseNode *pna = (ParseNode *)a;
+    ParseNode *pnb = (ParseNode *)b;
+
+    ExpressionNode *en = new ExpressionNode(op, pna, pnb);
+    return (void *)en;
+}
+
+
+
+void printnode(void *node) {
+    ParseNode *pn = (ParseNode *)node;
+    cout << pn->to_string() << endl;
+}
+
+
+
 
 
 
@@ -38,6 +89,47 @@ const char *pop_decls() {
     decls.clear();
     return strdup(declstr.c_str());
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+char *get_temp() {
+    char buf[30];
+    snprintf(buf, sizeof(buf), "::__TMP%d__::", ++ctr);
+    parseprint("\tDECLARE\t%s\n", buf);
+    return strdup(buf);
+}
+
+
 
 
 int have_tmps() {

@@ -60,6 +60,8 @@ int main (int argc, char **argv) {
 
         current_buffer = string("MODULE_BODY:\n") + current_buffer
             + string("\nEND_MODULE_BODY\n");
+
+        cout << current_buffer << endl;
         
         if (!engine.parse_assembly_string(current_buffer)) {
             return -1;

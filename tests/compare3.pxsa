@@ -3,6 +3,11 @@ MODULE_BODY:
         SET             x, "cat"
         DECLARE         y
         SET             y, "cat"
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLARE         ::_TMP1_::
+        TESTNEQ         x, y, ::_TMP1_::
+        DEBUGPRINT      ::_TMP1_::
+        TESTEQ          x, y, ::_TMP1_::
+        DEBUGPRINT      ::_TMP1_::
+        TESTIDENT       x, y, ::_TMP1_::
+        DEBUGPRINT      ::_TMP1_::
 END_MODULE_BODY

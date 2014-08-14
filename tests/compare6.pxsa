@@ -3,6 +3,11 @@ MODULE_BODY:
         SET             x, 500
         DECLARE         y
         SET             y, true
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLRE          __TMP1__
+        TESTEQ          x, y, __TMP1__
+        DEBUGPRINT      __TMP1__
+        TESTNEQ         x, y, __TMP1__
+        DEBUGPRINT      __TMP1__
+        TESTNIDENT      x, y, __TMP1__
+        DEBUGPRINT      __TMP1__
 END_MODULE_BODY

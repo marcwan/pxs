@@ -3,6 +3,11 @@ MODULE_BODY:
         SET             x, undefined
         DECLARE         y
         SET             y, false
-        COMPARE         x, y
-        DEBUGPRINT      :::FLAGS:::
+        DECLARE         __TMP__
+        TESTEQ          x, y, __TMP__
+        DEBUGPRINT      __TMP__
+        TESTIDENT       x, y, __TMP__
+        DEBUGPRINT      __TMP__
+        TESTNIDENT      x, y, __TMP__
+        DEBUGPRINT      __TMP__
 END_MODULE_BODY
