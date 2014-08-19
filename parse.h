@@ -14,10 +14,12 @@ void *add_statement(void *node, void *statement);
 void *create_assignment(void *lv, void *rv);
 void *expression_node(const char *op, void *a, void *b);
 
-void *if_statement_node(void *expr, void *stmtseq);
+void *if_statement_node(void *expr, void *stmtseq, void *elses);
+void *danglingelse(void *stmtseq);
+void *elseif(void *expr, void *statements, void *existing);
 
 
-    char *get_temp();
+char *get_temp();
 
 
 void printnode(void *node);

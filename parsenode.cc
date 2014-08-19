@@ -153,11 +153,44 @@ string IfStatementNode::to_string(int indent) {
     str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
     str << "(then): " << endl;
     str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
+    for (int i = 1; i < this->m_exprs.size(); i++) {
+        str << "ELSEIF" << endl;
+        __add_spaces(str, indent);
+        str << "(expr): " << endl;
+        str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
+        str << "(then): " << endl;
+        str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
+    }
+
+    if (this->m_else) {
+        __add_spaces(str, indent);
+        str << "(else): " << endl;
+        str << this->m_else->to_string(indent + INDENT_INCREMENT);
+    }
+
     return str.str();
 }
 
+void IfStatementNode::add_elseif
+(
+    ExpressionNode *expr,
+    StatementSequenceNode *stmtseq
+)
+{
+    if (expr) {
+        this->m_exprs.push_back(expr);
+        this->m_thens.push_back(stmtseq);
+    } else if (stmtseq) {
+        this->m_else = stmtseq;
+    } else {
+        throw new InternalErrorException("add_elseif params are all null");
+    }
+}
 
 
+void IfStatementNode::add_else(StatementSequenceNode *stmtseq) {
+    this->add_elseif(NULL, stmtseq);
+}
 
 
 

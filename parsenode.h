@@ -91,6 +91,9 @@ class IfStatementNode : public StatementNode {
     IfStatementNode(ExpressionNode *, StatementSequenceNode *);
     ~IfStatementNode();
 
+    void add_elseif(ExpressionNode *, StatementSequenceNode *);
+    void add_else(StatementSequenceNode *);
+
     virtual std::string to_string(int indent);
 
   protected:
@@ -106,6 +109,7 @@ class StatementSequenceNode : public ParseNode {
     virtual ~StatementSequenceNode();
     void add_statement(StatementNode *n);
 
+    inline int stmt_count() { return this->m_sequence.size(); }
     virtual std::string to_string(int indent);
 
   protected:

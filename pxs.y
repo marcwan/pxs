@@ -4,6 +4,9 @@
 #include "parse.h"
 
 #define YYSTYPE char *
+int yyerror(char *s);
+int warning (char *s, char *t);
+int yylex (void);
 
 %}
 
@@ -36,11 +39,22 @@ statement : decl SEMICOLON     { $$ = $1; }
           ;
 
 
-if_stmt  : IF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
+if_stmt  : IF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY else_chain
          {
-             $$ = if_statement_node($3, $6);
+             $$ = if_statement_node($3, $6, $8);
          }
          ;
+
+else_chain : /* empty */ { $$ = NULL; }
+           | ELSEIF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY else_chain
+           {
+               $$ = elseif($3, $6, $8);
+           }
+           | ELSE OPENSQUIGGLY statements CLOSESQUIGGLY
+           {
+               $$ = danglingelse($3);
+           }
+           ;
 
 for_loop : FOR OPENPAREN statement SEMICOLON expr SEMICOLON assign OPENSQUIGGLY statements CLOSESQUIGGLY
          | FOR OPENPAREN statement SEMICOLON expr SEMICOLON expr OPENSQUIGGLY statements CLOSESQUIGGLY
@@ -135,6 +149,7 @@ int yyerror(char *s)
 {
   warning( s , ( char * )0 );
   yyparse();
+  return 0;
 }
 
 int warning (char *s, char *t)
@@ -142,6 +157,7 @@ int warning (char *s, char *t)
   fprintf( stderr ,"%s: %s (line %d)\n" , exename , s, yylineno );
   if ( t )
     fprintf( stderr , " %s\n" , t );
+  return 0;
 }
 
 
