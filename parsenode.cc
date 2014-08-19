@@ -193,6 +193,44 @@ void IfStatementNode::add_else(StatementSequenceNode *stmtseq) {
 }
 
 
+ForLoopNode::ForLoopNode
+(
+    StatementNode *assign,
+    ExpressionNode *test,
+    StatementNode *iterate,
+    StatementSequenceNode *body
+)
+: StatementNode(kNodeForLoop)
+{
+    this->m_assign = assign;
+    this->m_test = test;
+    this->m_iterator = iterate;
+    this->m_body = body;
+}
+
+ForLoopNode::~ForLoopNode() {
+
+}
+
+
+string ForLoopNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+
+    str << "FOR" << endl;
+    __add_spaces(str, indent);
+    str << "(assign): " << endl;
+    str << this->m_assign->to_string(indent + INDENT_INCREMENT);
+    str << "(test): " << endl;
+    str << this->m_test->to_string(indent + INDENT_INCREMENT);
+    str << "(iterate): " << endl;
+    str << this->m_iterator->to_string(indent + INDENT_INCREMENT);
+    str << "(body): " << endl;
+    str << this->m_body->to_string(indent + INDENT_INCREMENT);
+    return str.str();
+}
+
+
 
 void __add_spaces(ostringstream & str, int indent) {
     char spaces[128];

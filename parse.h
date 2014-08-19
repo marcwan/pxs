@@ -18,18 +18,10 @@ void *if_statement_node(void *expr, void *stmtseq, void *elses);
 void *danglingelse(void *stmtseq);
 void *elseif(void *expr, void *statements, void *existing);
 
-
-char *get_temp();
+void *for_loop_node(void *assign, void *expr, void *iter, void *body);
 
 
 void printnode(void *node);
-
-const char *pop_decls();
-
-void parseprint(const char *format, ...);
-
-void *add_node(const char *name, ...);
-
 
 
 #ifdef __cplusplus

@@ -27,7 +27,7 @@ int yylex (void);
 file       : statements  { printnode($1); }
            ;
 
-statements : /* empty */                    { $$ = first_statement(); }
+statements : /* empty */          { $$ = first_statement(); }
            | statements statement { add_statement($1, $2);  }
            ;
 
@@ -56,9 +56,17 @@ else_chain : /* empty */ { $$ = NULL; }
            }
            ;
 
-for_loop : FOR OPENPAREN statement SEMICOLON expr SEMICOLON assign OPENSQUIGGLY statements CLOSESQUIGGLY
-         | FOR OPENPAREN statement SEMICOLON expr SEMICOLON expr OPENSQUIGGLY statements CLOSESQUIGGLY
+/*for_loop : FOR OPENPAREN assign SEMICOLON expr SEMICOLON assign_expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY*/
+for_loop : FOR OPENPAREN assign  SEMICOLON expr SEMICOLON assign_expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
+         {
+             fprintf(stderr, "WOOO\n"); fflush(stderr);
+             $$ = for_loop_node($3, $5, $7, $10);
+         }
          ;
+
+assign_expr : assign { $$ = $1; }
+            | expr   { $$ = $1; }
+            ;
 
 
 assign  : lvalue EQUALS expr { $$ = create_assignment($1, $3); }

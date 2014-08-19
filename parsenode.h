@@ -12,6 +12,7 @@ enum ParseNodeType {
     kNodeExpression,
     kNodeStatementSequence,
     kNodeIfStatement,
+    kNodeForLoop,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
@@ -100,6 +101,25 @@ class IfStatementNode : public StatementNode {
     std::vector<ExpressionNode *> m_exprs;
     std::vector<StatementSequenceNode *> m_thens;
     StatementSequenceNode *m_else;
+};
+
+
+
+class ForLoopNode : public StatementNode {
+  public:
+    ForLoopNode(StatementNode *,
+                ExpressionNode *,
+                StatementNode *,
+                StatementSequenceNode *);
+    ~ForLoopNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    StatementNode *m_assign;
+    ExpressionNode *m_test;
+    StatementNode *m_iterator;
+    StatementSequenceNode *m_body;
 };
 
 

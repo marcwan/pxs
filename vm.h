@@ -20,4 +20,11 @@ typedef unsigned char byte;
 #define PXSA_MAX_LINE_LENGTH       2048
 
 
+
+#define ASSERT(x, msg)   if (!x) { cerr << "ASSERTION FAILED: \"" << #x << "\"" << endl; cerr << msg << endl; cerr << "Aborting." << endl; exit(-1); }
+
+
+
+
+
 #endif // __VM_H_
