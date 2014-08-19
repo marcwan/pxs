@@ -34,6 +34,8 @@ true                  return TRUEVAL;
 false                 return FALSEVAL;
 var                   return VAR;
 for                   return FOR;
+while                 return WHILE;
+do                    return DO;
 if                    return IF;
 else                  return ELSE;
 elseif                return ELSEIF;

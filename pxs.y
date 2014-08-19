@@ -4,6 +4,7 @@
 #include "parse.h"
 
 #define YYSTYPE char *
+
 int yyerror(char *s);
 int warning (char *s, char *t);
 int yylex (void);
@@ -33,9 +34,10 @@ statements : /* empty */          { $$ = first_statement(); }
 
 statement : decl SEMICOLON     { $$ = $1; }
           | assign SEMICOLON   { $$ = $1; }
-          | expr SEMICOLON     { }
-          | for_loop { }
-          | if_stmt  { $$ = $1; }
+          | expr SEMICOLON     { $$ = $1; }
+          | for_loop           { $$ = $1; }
+          | while_loop         { $$ = $1; }
+          | if_stmt            { $$ = $1; }
           ;
 
 
@@ -62,10 +64,15 @@ elseif   : ELSEIF
 
 for_loop : FOR OPENPAREN assign  SEMICOLON expr SEMICOLON assign_expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
          {
-             fprintf(stderr, "WOOO\n"); fflush(stderr);
              $$ = for_loop_node($3, $5, $7, $10);
          }
          ;
+
+while_loop : WHILE OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
+           {
+               $$ = while_loop_node($3, $6);
+           }
+           ;
 
 assign_expr : assign { $$ = $1; }
             | expr   { $$ = $1; }
@@ -151,7 +158,8 @@ function_call : IDENTIFIER OPENPAREN arglist CLOSEPAREN
               }
               ;
 
-arglist : expr                  { $$ = first_func_arg($1); }
+arglist : /* empty */           { $$ = NULL; }
+        | expr                  { $$ = first_func_arg($1); }
         | expr COMMA arglist    { $$ = add_func_arg($3, $1); }
         ;
 

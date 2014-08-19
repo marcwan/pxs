@@ -153,13 +153,16 @@ string IfStatementNode::to_string(int indent) {
     __add_spaces(str, indent);
     str << "(expr): " << endl;
     str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
+    __add_spaces(str, indent);
     str << "(then): " << endl;
     str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
     for (int i = 1; i < this->m_exprs.size(); i++) {
+        __add_spaces(str, indent);
         str << "ELSEIF" << endl;
         __add_spaces(str, indent);
         str << "(expr): " << endl;
         str << this->m_exprs[i]->to_string(indent + INDENT_INCREMENT);
+        __add_spaces(str, indent);
         str << "(then): " << endl;
         str << this->m_thens[i]->to_string(indent + INDENT_INCREMENT);
     }
@@ -233,6 +236,34 @@ string ForLoopNode::to_string(int indent) {
 }
 
 
+WhileLoopNode::WhileLoopNode
+(
+    ExpressionBaseNode *expr,
+    StatementSequenceNode *stmts
+)
+: StatementNode(kNodeWhileLoop)
+{
+    this->m_expr = expr;
+    this->m_body = stmts;
+}
+
+WhileLoopNode::~WhileLoopNode() {
+}
+
+
+string WhileLoopNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+
+    str << "WHILE" << endl;
+    __add_spaces(str, indent);
+    str << "(expr): " << endl;
+    str << this->m_expr->to_string(indent + INDENT_INCREMENT);
+    str << "(body): " << endl;
+    str << this->m_body->to_string(indent + INDENT_INCREMENT);
+    return str.str();
+}
+
 
 
 
@@ -252,12 +283,14 @@ string FunctionCallNode::to_string(int indent) {
     __add_spaces(str, indent);
 
     str << "FUNCTION CALL (" << this->m_name << "):" << endl;
-    __add_spaces(str, indent);
-    int max = this->m_arglist->size() - 1;
-    for (int i = max; i >= 0; i--) {
-        string s = this->m_arglist->at(i)->to_string(indent + INDENT_INCREMENT);
-        __add_spaces(str, indent + INDENT_INCREMENT);
-        str << "[" << i << "]" << s << endl;
+    if (this->m_arglist) {
+        __add_spaces(str, indent);
+        int max = this->m_arglist->size() - 1;
+        for (int i = max; i >= 0; i--) {
+            string s = this->m_arglist->at(i)->to_string(indent + INDENT_INCREMENT);
+            __add_spaces(str, indent + INDENT_INCREMENT);
+            str << "[" << (max - i) << "]" << s << endl;
+        }
     }
 
     return str.str();

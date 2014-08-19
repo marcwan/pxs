@@ -14,6 +14,7 @@ enum ParseNodeType {
     kNodeStatementSequence,
     kNodeIfStatement,
     kNodeForLoop,
+    kNodeWhileLoop,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
@@ -149,6 +150,20 @@ class ForLoopNode : public StatementNode {
     StatementNode *m_iterator;
     StatementSequenceNode *m_body;
 };
+
+
+class WhileLoopNode : public StatementNode {
+  public: 
+    WhileLoopNode(ExpressionBaseNode *, StatementSequenceNode *);
+    ~WhileLoopNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    ExpressionBaseNode *m_expr;
+    StatementSequenceNode *m_body;
+};
+
 
 
 class StatementSequenceNode : public ParseNode {

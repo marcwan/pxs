@@ -23,6 +23,7 @@ void *danglingelse(void *stmtseq);
 void *elseif(void *expr, void *statements, void *existing);
 
 void *for_loop_node(void *assign, void *expr, void *iter, void *body);
+void *while_loop_node(void *expr, void *stmts);
 
 void *function_call_node(const char *name, void *arglist);
 void *first_func_arg(void *arg);

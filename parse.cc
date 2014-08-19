@@ -168,6 +168,19 @@ void *for_loop_node(void *assign, void *expr, void *iter, void *body) {
     return new ForLoopNode(assignobj, exprobj, iterobj, bodyobj);
 }
 
+void *while_loop_node(void *expr, void *stmts) {
+    ExpressionBaseNode *exprobj = (ExpressionBaseNode *)expr;
+    StatementSequenceNode *stmtseq = (StatementSequenceNode *)stmts;
+
+    ASSERT(IS_EXPRESSION(exprobj), "While (expr) is wrong");
+    ASSERT(IS_STMT_SEQ(stmtseq), "While (body) is wrong");
+
+    WhileLoopNode *wln = new WhileLoopNode(exprobj, stmtseq);
+    return wln;
+}
+
+
+
 
 
 void *function_call_node(const char *name, void *arglist) {
