@@ -97,6 +97,8 @@ void *if_statement_node(void *expr, void *stmtseq, void *elses) {
             isn->add_elseif(es.expr, es.stmts);
         }
     }
+
+    delete e;
     return (void *)isn;
 }
 
@@ -116,6 +118,7 @@ void *danglingelse(void *stmtseq) {
     return pairs;
 }
 
+
 void *elseif(void *exprs, void *stmtseq, void *existing) {
     vector<ExpressionStatement> *exist;
     exist = (vector<ExpressionStatement> *)existing;
@@ -126,6 +129,7 @@ void *elseif(void *exprs, void *stmtseq, void *existing) {
     ExpressionStatement es;
     es.expr = (ExpressionNode *)exprs;
     es.stmts = (StatementSequenceNode *)stmtseq;
+
     if (es.expr->get_type() != kNodeExpression
         || es.stmts->get_type() != kNodeStatementSequence) {
         cerr << "elseif didn't get expression or statements eq" << endl;

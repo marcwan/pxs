@@ -157,9 +157,9 @@ string IfStatementNode::to_string(int indent) {
         str << "ELSEIF" << endl;
         __add_spaces(str, indent);
         str << "(expr): " << endl;
-        str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
+        str << this->m_exprs[i]->to_string(indent + INDENT_INCREMENT);
         str << "(then): " << endl;
-        str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
+        str << this->m_thens[i]->to_string(indent + INDENT_INCREMENT);
     }
 
     if (this->m_else) {
