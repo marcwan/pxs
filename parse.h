@@ -6,6 +6,10 @@ extern "C" {
 
 void *value_node(const char *);
 
+
+void *negative_const_value_node(const char *);
+void *negative_identifier_value_node(const char *);
+
 void *first_decl(const char *var);
 void *add_decl(void *node, const char *var);
 
@@ -19,6 +23,10 @@ void *danglingelse(void *stmtseq);
 void *elseif(void *expr, void *statements, void *existing);
 
 void *for_loop_node(void *assign, void *expr, void *iter, void *body);
+
+void *function_call_node(const char *name, void *arglist);
+void *first_func_arg(void *arg);
+void *add_func_arg(void *list, void *arg);
 
 
 void printnode(void *node);

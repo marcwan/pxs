@@ -24,6 +24,7 @@ UONLY   {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 %%
 
 \n                    { }
+\                     { } 
 \<                    return LT;
 \<=                   return LTE;
 \>                    return GT;
@@ -52,7 +53,7 @@ elseif                return ELSEIF;
 \/                    return DIV;
 %                     return MOD;
 {NUMERIC}+            { yylval = strdup(yytext); return NUMBER; }
-({NUMERIC}+)(\.{NUMERIC}+)?e(\+|\-)?({NUMERIC}+) { yylval = strdup(yytext); return NUMBER; }
+({NUMERIC}+)(\.{NUMERIC}+)?e([\+\-])?({NUMERIC}+) { yylval = strdup(yytext); return NUMBER; }
 ({NUMERIC}+)(\.{NUMERIC}+)? { yylval = strdup(yytext); return NUMBER; }
 ({ALPHA}|{UONLY})?(_|{ALNUM}|{UONLY})+ { yylval = strdup(yytext); return IDENTIFIER; }
 

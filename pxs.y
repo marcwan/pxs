@@ -46,7 +46,7 @@ if_stmt  : IF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY el
          ;
 
 else_chain : /* empty */ { $$ = NULL; }
-           | ELSEIF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY else_chain
+           | elseif OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY else_chain
            {
                $$ = elseif($3, $6, $8);
            }
@@ -56,7 +56,10 @@ else_chain : /* empty */ { $$ = NULL; }
            }
            ;
 
-/*for_loop : FOR OPENPAREN assign SEMICOLON expr SEMICOLON assign_expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY*/
+elseif   : ELSEIF 
+         | ELSE IF
+         ;
+
 for_loop : FOR OPENPAREN assign  SEMICOLON expr SEMICOLON assign_expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY
          {
              fprintf(stderr, "WOOO\n"); fflush(stderr);
@@ -73,6 +76,7 @@ assign  : lvalue EQUALS expr { $$ = create_assignment($1, $3); }
 
 expr    : OPENPAREN expr CLOSEPAREN { $$ = $2; }
         | op_expr { $$ = $1; }
+        | function_call { $$ = $1; }
         ;
 
 op_expr    : primary
@@ -131,11 +135,25 @@ op_expr    : primary
            ;
 
 primary : NUMBER   { $$ = value_node($1); }
+        | PLUS NUMBER { $$ = value_node($2); }
+        | MINUS NUMBER { $$ = negative_const_value_node($2); }
         | lvalue   { $$ = value_node($1); }
-        | TRUEVAL  { $$ = value_node($1); }
-        | FALSEVAL { $$ = value_node($1); }
+        | PLUS lvalue   { $$ = value_node($2); }
+        | MINUS lvalue   { $$ = negative_identifier_value_node($2); }
+        | TRUEVAL  { $$ = value_node(strdup("true")); }
+        | FALSEVAL { $$ = value_node(strdup("false")); }
         ;
 
+
+function_call : IDENTIFIER OPENPAREN arglist CLOSEPAREN
+              { 
+                  $$ = function_call_node($1, $3);
+              }
+              ;
+
+arglist : expr                  { $$ = first_func_arg($1); }
+        | expr COMMA arglist    { $$ = add_func_arg($3, $1); }
+        ;
 
 decl    : VAR varlist { $$ = $2; }
 

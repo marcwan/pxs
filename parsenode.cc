@@ -64,7 +64,7 @@ string DeclarationNode::to_string(int indent) {
 
 
 ExpressionNode::ExpressionNode(string op, ParseNode *a, ParseNode *b) 
-    : StatementNode(kNodeExpression) {
+    : ExpressionBaseNode(kNodeExpression) {
     this->m_op = op;
     this->m_a = a;
     this->m_b = b;
@@ -96,7 +96,7 @@ string StatementSequenceNode::to_string(int indent) {
     ostringstream str;
 
     for (int i = 0; i < this->m_sequence.size(); i++) {
-        str << this->m_sequence[i]->to_string(indent) << ";" << endl;
+        str << this->m_sequence[i]->to_string(indent) << endl;
     }
 
     return str.str();
@@ -115,6 +115,8 @@ AssignmentNode::AssignmentNode(const char *lv, ParseNode *rv)
 AssignmentNode::~AssignmentNode() {
 }
 
+
+
 string AssignmentNode::to_string(int indent) {
     ostringstream str;
     __add_spaces(str, indent);
@@ -131,7 +133,7 @@ string AssignmentNode::to_string(int indent) {
 
 IfStatementNode::IfStatementNode
 (
-    ExpressionNode *expr,
+    ExpressionBaseNode *expr,
     StatementSequenceNode *stmts
 )
 : StatementNode(kNodeIfStatement)
@@ -173,7 +175,7 @@ string IfStatementNode::to_string(int indent) {
 
 void IfStatementNode::add_elseif
 (
-    ExpressionNode *expr,
+    ExpressionBaseNode *expr,
     StatementSequenceNode *stmtseq
 )
 {
@@ -196,7 +198,7 @@ void IfStatementNode::add_else(StatementSequenceNode *stmtseq) {
 ForLoopNode::ForLoopNode
 (
     StatementNode *assign,
-    ExpressionNode *test,
+    ExpressionBaseNode *test,
     StatementNode *iterate,
     StatementSequenceNode *body
 )
@@ -229,6 +231,39 @@ string ForLoopNode::to_string(int indent) {
     str << this->m_body->to_string(indent + INDENT_INCREMENT);
     return str.str();
 }
+
+
+
+
+
+FunctionCallNode::FunctionCallNode(string name, vector<ExpressionBaseNode *> *args)
+    : ExpressionBaseNode(kNodeFunctionCall)
+{
+    this->m_name = name;
+    this->m_arglist = args;
+}
+
+FunctionCallNode::~FunctionCallNode() {
+}
+
+
+string FunctionCallNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+
+    str << "FUNCTION CALL (" << this->m_name << "):" << endl;
+    __add_spaces(str, indent);
+    int max = this->m_arglist->size() - 1;
+    for (int i = max; i >= 0; i--) {
+        string s = this->m_arglist->at(i)->to_string(indent + INDENT_INCREMENT);
+        __add_spaces(str, indent + INDENT_INCREMENT);
+        str << "[" << i << "]" << s << endl;
+    }
+
+    return str.str();
+}
+
+
 
 
 

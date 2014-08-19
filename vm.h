@@ -21,7 +21,8 @@ typedef unsigned char byte;
 
 
 
-#define ASSERT(x, msg)   if (!x) { cerr << "ASSERTION FAILED: \"" << #x << "\"" << endl; cerr << msg << endl; cerr << "Aborting." << endl; exit(-1); }
+#define ASSERT(x, msg)   if (!x) {\
+ cerr << "ASSERTION FAILED: " << __FILE__ << ", line " << __LINE__ << "): \"" << #x << "\"" << endl; cerr << msg << endl; cerr << "Aborting." << endl; exit(-1); }
 
 
 

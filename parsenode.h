@@ -10,12 +10,19 @@ enum ParseNodeType {
     kNodeStatement,
     kNodeDeclaration,
     kNodeExpression,
+    kNodeFunctionCall,
     kNodeStatementSequence,
     kNodeIfStatement,
     kNodeForLoop,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
+
+
+#define IS_EXPRESSION(n)          (((n)->get_type() == kNodeExpression) || ((n)->get_type() == kNodeFunctionCall) || ((n)->get_type() == kNodeValue))
+#define IS_STMT_SEQ(n)            ((n)->get_type() == kNodeStatementSequence)
+
+
 
 
 class StatementSequenceNode;
@@ -35,20 +42,6 @@ class ParseNode {
 };
 
 
-
-class ValueNode : public ParseNode {
-  public:
-    ValueNode(std::string v) : ParseNode(kNodeValue), m_value(v) {}
-    ~ValueNode();
-
-    virtual std::string to_string(int indent);
-
-
-    inline std::string get_value() { return this->m_value; }
-
-  protected:
-    std::string m_value;
-};
 
 
 
@@ -74,31 +67,66 @@ class DeclarationNode : public StatementNode {
     std::vector<std::string> m_vars;
 };
 
-class ExpressionNode : public StatementNode {
+class ExpressionBaseNode : public StatementNode {
+  public:
+    ExpressionBaseNode(ParseNodeType pnt) : StatementNode(pnt) { }
+    virtual std::string to_string(int indent) = 0;
+};
+
+
+class ValueNode : public ExpressionBaseNode {
+  public:
+    ValueNode(std::string v) : ExpressionBaseNode(kNodeValue), m_value(v) {}
+    ~ValueNode();
+
+    virtual std::string to_string(int indent);
+
+    inline std::string get_value() { return this->m_value; }
+
+  protected:
+    std::string m_value;
+};
+
+
+
+class ExpressionNode : public ExpressionBaseNode {
   public:
     ExpressionNode(std::string op, ParseNode *a, ParseNode *b);
     ~ExpressionNode();
 
     virtual std::string to_string(int indent);
 
-
   protected:
     std::string m_op;
     ParseNode *m_a, *m_b;
 };
 
+
+class FunctionCallNode : public ExpressionBaseNode {
+  public:
+    FunctionCallNode(std::string name, std::vector<ExpressionBaseNode *> *args);
+    ~FunctionCallNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    std::string m_name;
+    std::vector<ExpressionBaseNode *> *m_arglist;
+};
+
+
 class IfStatementNode : public StatementNode {
   public:
-    IfStatementNode(ExpressionNode *, StatementSequenceNode *);
+    IfStatementNode(ExpressionBaseNode *, StatementSequenceNode *);
     ~IfStatementNode();
 
-    void add_elseif(ExpressionNode *, StatementSequenceNode *);
+    void add_elseif(ExpressionBaseNode *, StatementSequenceNode *);
     void add_else(StatementSequenceNode *);
 
     virtual std::string to_string(int indent);
 
   protected:
-    std::vector<ExpressionNode *> m_exprs;
+    std::vector<ExpressionBaseNode *> m_exprs;
     std::vector<StatementSequenceNode *> m_thens;
     StatementSequenceNode *m_else;
 };
@@ -108,7 +136,7 @@ class IfStatementNode : public StatementNode {
 class ForLoopNode : public StatementNode {
   public:
     ForLoopNode(StatementNode *,
-                ExpressionNode *,
+                ExpressionBaseNode *,
                 StatementNode *,
                 StatementSequenceNode *);
     ~ForLoopNode();
@@ -117,7 +145,7 @@ class ForLoopNode : public StatementNode {
 
   protected:
     StatementNode *m_assign;
-    ExpressionNode *m_test;
+    ExpressionBaseNode *m_test;
     StatementNode *m_iterator;
     StatementSequenceNode *m_body;
 };

@@ -14,8 +14,10 @@ static int ctr = 0;
 
 
 
+
+
 struct ExpressionStatement {
-    ExpressionNode *expr;
+    ExpressionBaseNode *expr;
     StatementSequenceNode *stmts;
 };
 
@@ -25,6 +27,23 @@ struct ExpressionStatement {
 void *value_node(const char *val) {
     ValueNode *v = new ValueNode(val);
     return (void *)v;
+}
+
+
+void *negative_const_value_node(const char *val) {
+    ASSERT(val, "Can't negate NULL, man");
+    int len = strlen(val) + 2;
+    char *buf = (char *)malloc(len);
+    strncpy(buf + 1, val, len - 1);
+    free((void *)val);
+    buf[0] = '-';
+    return value_node(buf);
+}
+
+void *negative_identifier_value_node(const char *ident) {
+    char *m1 = (char *)malloc(3);
+    strncpy(m1, "-1", 3);
+    return expression_node("MUL", value_node(ident), value_node(m1));
 }
 
 
@@ -60,6 +79,7 @@ void *create_assignment(void *lv, void *rv) {
     return (void *)an;
 }
 
+
 void *expression_node(const char *op, void *a, void *b) {
     ParseNode *pna = (ParseNode *)a;
     ParseNode *pnb = (ParseNode *)b;
@@ -68,19 +88,15 @@ void *expression_node(const char *op, void *a, void *b) {
     return (void *)en;
 }
 
+
+
 void *if_statement_node(void *expr, void *stmtseq, void *elses) {
     vector<ExpressionStatement> *e = (vector<ExpressionStatement> *)elses;
 
-    ExpressionNode *en = (ExpressionNode *)expr;
-    if (en->get_type() != kNodeExpression) {
-        cerr << "if (expr) Not an Expression!!!" << endl;
-        exit(-1);
-    }
+    ExpressionBaseNode *en = (ExpressionBaseNode *)expr;
+    ASSERT(IS_EXPRESSION(en), "IF (expr) wrong type");
     StatementSequenceNode *ssn = (StatementSequenceNode *)stmtseq;
-    if (ssn->get_type() != kNodeStatementSequence) {
-        cerr << "if (then) Not an Expression!!!" << endl;
-        exit(-1);
-    }
+    ASSERT(IS_STMT_SEQ(ssn), "IF (then) not a stmt sequence");
 
     IfStatementNode *isn = new IfStatementNode(en, ssn);
 
@@ -102,13 +118,10 @@ void *if_statement_node(void *expr, void *stmtseq, void *elses) {
     return (void *)isn;
 }
 
-
 void *danglingelse(void *stmtseq) {
     StatementSequenceNode *ssn = (StatementSequenceNode *)stmtseq;
-    if (ssn->get_type() != kNodeStatementSequence) {
-        cerr << "Dangling else isn't a statement sequence!";
-        exit(-1);
-    }
+    ASSERT(IS_STMT_SEQ(ssn), "Dangling (else) not a stmt seq");
+
     vector<ExpressionStatement> *pairs = new vector<ExpressionStatement>();
     ExpressionStatement p;
     p.expr = NULL;
@@ -118,7 +131,6 @@ void *danglingelse(void *stmtseq) {
     return pairs;
 }
 
-
 void *elseif(void *exprs, void *stmtseq, void *existing) {
     vector<ExpressionStatement> *exist;
     exist = (vector<ExpressionStatement> *)existing;
@@ -127,33 +139,68 @@ void *elseif(void *exprs, void *stmtseq, void *existing) {
     }
 
     ExpressionStatement es;
-    es.expr = (ExpressionNode *)exprs;
+    es.expr = (ExpressionBaseNode *)exprs;
     es.stmts = (StatementSequenceNode *)stmtseq;
 
-    if (es.expr->get_type() != kNodeExpression
-        || es.stmts->get_type() != kNodeStatementSequence) {
-        cerr << "elseif didn't get expression or statements eq" << endl;
-        exit(-1);
-    }
+    ASSERT(IS_EXPRESSION(es.expr), "ELSEIF (expr) not right");
+    ASSERT(IS_STMT_SEQ(es.stmts), "ELSEIF (body) not stmt seq");
 
     exist->push_back(es);
     return exist;
 }
 
 
+
 void *for_loop_node(void *assign, void *expr, void *iter, void *body) {
     StatementNode *assignobj;
-    ExpressionNode *exprobj;
+    ExpressionBaseNode *exprobj;
     StatementNode *iterobj;
     StatementSequenceNode *bodyobj;
 
     assignobj = (StatementNode *)assign;
-    exprobj = (ExpressionNode *)expr;
+    exprobj = (ExpressionBaseNode *)expr;
     iterobj = (StatementNode *)iter;
     bodyobj = (StatementSequenceNode *)body;
 
+    ASSERT(IS_EXPRESSION(exprobj), "FOR (expr) is not an expression");
+    ASSERT(IS_STMT_SEQ(bodyobj), "FOR body not a stmt seq");
+
     return new ForLoopNode(assignobj, exprobj, iterobj, bodyobj);
 }
+
+
+
+void *function_call_node(const char *name, void *arglist) {
+    string fn = string(name);
+    vector<ExpressionBaseNode *> *args;
+    args = (vector<ExpressionBaseNode *> *)arglist;
+
+    FunctionCallNode *fcn = new FunctionCallNode(fn, args);
+    return fcn;
+}
+
+void *first_func_arg(void *arg) {
+    vector<ExpressionBaseNode *> *args;
+    args = new vector<ExpressionBaseNode *>();
+
+    ExpressionBaseNode *ebn = (ExpressionBaseNode *)arg;
+    ASSERT(IS_EXPRESSION(ebn), "Func arg isn't expression");
+    args->push_back(ebn);
+    return args;
+}
+
+void *add_func_arg(void *list, void *arg) {
+    vector<ExpressionBaseNode *> *args;
+    args = (vector<ExpressionBaseNode *> *)list;
+    ASSERT((args->size() > 0), "should already have soem args!");
+
+    ExpressionBaseNode *ebn = (ExpressionBaseNode *)arg;
+    ASSERT(IS_EXPRESSION(ebn), "fn arg wrong type");
+
+    args->push_back(ebn);
+    return args;
+}
+
 
 
 
