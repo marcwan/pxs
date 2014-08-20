@@ -40,6 +40,7 @@ if                    return IF;
 else                  return ELSE;
 elseif                return ELSEIF;
 function              return FUNCTION;
+return                return RETURN;
 \(                    return OPENPAREN;
 \)                    return CLOSEPAREN;
 \{                    return OPENSQUIGGLY;

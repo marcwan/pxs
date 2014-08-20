@@ -5,17 +5,19 @@
 
 #define YYSTYPE char *
 
-int yyerror(char *s);
+int yyerror(void **pout, char *s);
 int warning (char *s, char *t);
 int yylex (void);
 
 %}
 
 
+%parse-param { void **output_node }
+
 %token OPENPAREN CLOSEPAREN OPENSQUIGGLY CLOSESQUIGGLY VAR COMMA
 %token SEMICOLON TRUEVAL FALSEVAL
 %token EQUALS
-%token FOR WHILE DO IF ELSE ELSEIF FUNCTION
+%token FOR WHILE DO IF ELSE ELSEIF FUNCTION RETURN
 %token NUMBER IDENTIFIER
 %left  EQUALITY IDENTITY INEQUALITY NOTIDENTITY
 %left  GT GTE LT LTE
@@ -25,20 +27,21 @@ int yylex (void);
 
 %%
 
-file       : statements  { printnode($1); }
+file       : statements  { *output_node = $1; }
            ;
 
 statements : /* empty */          { $$ = first_statement(); }
            | statements statement { add_statement($1, $2);  }
            ;
 
-statement : decl SEMICOLON     { $$ = $1; }
-          | assign SEMICOLON   { $$ = $1; }
-          | expr SEMICOLON     { $$ = $1; }
-          | for_loop           { $$ = $1; }
-          | while_loop         { $$ = $1; }
-          | if_stmt            { $$ = $1; }
-          | function_decl      { $$ = $1; }
+statement : decl SEMICOLON        { $$ = $1; }
+          | assign SEMICOLON      { $$ = $1; }
+          | expr SEMICOLON        { $$ = $1; }
+          | return_stmt SEMICOLON { $$ = $1; }
+          | for_loop              { $$ = $1; }
+          | while_loop            { $$ = $1; }
+          | if_stmt               { $$ = $1; }
+          | function_decl         { $$ = $1; }
           ;
 
 
@@ -86,6 +89,10 @@ expr    : OPENPAREN expr CLOSEPAREN { $$ = $2; }
         | op_expr { $$ = $1; }
         | function_call { $$ = $1; }
         ;
+
+expr_emptyok : /* empty ok */    { $$ = NULL; }
+             | expr              { $$ = $1;   }
+             ;
 
 op_expr    : primary
            | expr EQUALITY expr
@@ -153,6 +160,11 @@ primary : NUMBER   { $$ = value_node($1); }
         ;
 
 
+return_stmt : RETURN expr_emptyok { $$ = return_node($2); }
+            ;
+
+
+
 function_decl: FUNCTION IDENTIFIER OPENPAREN paramlist_empty CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY 
              {
                  $$ = function_declaration($2, $4, $7);
@@ -174,6 +186,7 @@ arglist : /* empty */           { $$ = NULL; }
         ;
 
 decl    : VAR varlist { $$ = $2; }
+        ;
 
 paramlist_empty : /* empty ok */      { $$ = NULL; }
                 | paramlist           { $$ = $1;   }
@@ -198,10 +211,10 @@ extern const char *exename;
 extern int   yylineno;
 
 
-int yyerror(char *s)
+int yyerror(void **pout, char *s)
 {
   warning( s , ( char * )0 );
-  yyparse();
+  yyparse(pout);
   return 0;
 }
 

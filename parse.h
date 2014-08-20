@@ -35,6 +35,9 @@ void *first_func_arg(void *arg);
 void *add_func_arg(void *list, void *arg);
 
 
+void *return_node(void *expr);
+
+
 void printnode(void *node);
 
 

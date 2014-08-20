@@ -192,6 +192,7 @@ void *function_call_node(const char *name, void *arglist) {
     return fcn;
 }
 
+
 void *first_func_arg(void *arg) {
     vector<ExpressionBaseNode *> *args;
     args = new vector<ExpressionBaseNode *>();
@@ -201,7 +202,6 @@ void *first_func_arg(void *arg) {
     args->push_back(ebn);
     return args;
 }
-
 void *add_func_arg(void *list, void *arg) {
     vector<ExpressionBaseNode *> *args;
     args = (vector<ExpressionBaseNode *> *)list;
@@ -215,6 +215,18 @@ void *add_func_arg(void *list, void *arg) {
 }
 
 
+
+void *function_declaration(const char *name, void *param_list, void *stmtseq) {
+    vector<ValueNode *> *params = (vector<ValueNode *> *)param_list;
+    StatementSequenceNode *body = (StatementSequenceNode *)stmtseq;
+
+    ASSERT(IS_STMT_SEQ(body), "Function decl body is wrong");
+
+    FunctionDeclarationNode *fdn;
+    fdn = new FunctionDeclarationNode(name, params, body);
+    return fdn;
+}
+
 void *first_func_param(void *param) {
     vector<ValueNode *> *params;
     params = new vector<ValueNode *>();
@@ -224,7 +236,6 @@ void *first_func_param(void *param) {
     params->push_back(vn);
     return params;
 }
-
 void *add_func_param(void *list, void *param) {
     vector<ValueNode *> *params;
     params = (vector<ValueNode *> *)list;
@@ -238,19 +249,14 @@ void *add_func_param(void *list, void *param) {
 }
 
 
-void *function_declaration(const char *name, void *param_list, void *stmtseq) {
-    vector<ValueNode *> *params = (vector<ValueNode *> *)param_list;
-    StatementSequenceNode *body = (StatementSequenceNode *)stmtseq;
 
-    ASSERT(IS_STMT_SEQ(body), "Function decl body is wrong");
 
-    FunctionDeclarationNode *fdn;
-    fdn = new FunctionDeclarationNode(name, params, body);
-    return fdn;
+void *return_node(void *expr) {
+    ExpressionBaseNode *ebn = (ExpressionBaseNode *)expr;
+    ASSERT((!expr || IS_EXPRESSION(ebn)), "Returns need an expression");
+
+    return new ReturnNode(ebn);
 }
-
-
-
 
 
 

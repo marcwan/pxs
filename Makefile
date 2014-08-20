@@ -7,7 +7,7 @@ YACC=bison
 LIBS=-ll
 
 
-SRCS = main.cc assemblyloader.cc instruction.cc instructionrunner.cc engine.cc refcounted.cc variable.cc constantparser.cc varpool.cc boolean.cc function.cc infinity.cc nan.cc number.cc string.cc undefined.cc exception.cc mathop.cc callfunc.cc exitfunc.cc declare.cc declarefn.cc jump.cc test.cc exit.cc debugprint.cc poparg.cc pusharg.cc removevar.cc set.cc scopestack.cc utils.cc parse.cc parsenode.cc
+SRCS = main.cc assemblyloader.cc instruction.cc instructionrunner.cc engine.cc refcounted.cc variable.cc constantparser.cc varpool.cc boolean.cc function.cc infinity.cc nan.cc number.cc string.cc undefined.cc exception.cc mathop.cc callfunc.cc exitfunc.cc declare.cc declarefn.cc jump.cc test.cc exit.cc debugprint.cc poparg.cc pusharg.cc removevar.cc set.cc scopestack.cc utils.cc compiler.cc parse.cc parsenode.cc
 OBJS = $(SRCS:.cc=.o)
 MAIN = pxs
 

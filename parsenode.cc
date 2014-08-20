@@ -10,11 +10,6 @@ void   __add_spaces(ostringstream & str, int indent);
 string __get_unique_name(string base);
 
 
-struct FunctionInfo {
-    string first_known_namme;
-    vector<ValueNode *> *params;
-    StatementSequenceNode *body;
-};  
 
 /**
  * we'll store all functions in this node here.
@@ -168,25 +163,25 @@ string IfStatementNode::to_string(int indent) {
 
     str << "IF" << endl;
     __add_spaces(str, indent);
-    str << "(expr): " << endl;
+    str << "  (expr): " << endl;
     str << this->m_exprs[0]->to_string(indent + INDENT_INCREMENT);
     __add_spaces(str, indent);
-    str << "(then): " << endl;
+    str << "  (then): " << endl;
     str << this->m_thens[0]->to_string(indent + INDENT_INCREMENT);
     for (int i = 1; i < this->m_exprs.size(); i++) {
         __add_spaces(str, indent);
         str << "ELSEIF" << endl;
         __add_spaces(str, indent);
-        str << "(expr): " << endl;
+        str << "  (expr): " << endl;
         str << this->m_exprs[i]->to_string(indent + INDENT_INCREMENT);
         __add_spaces(str, indent);
-        str << "(then): " << endl;
+        str << "  (then): " << endl;
         str << this->m_thens[i]->to_string(indent + INDENT_INCREMENT);
     }
 
     if (this->m_else) {
         __add_spaces(str, indent);
-        str << "(else): " << endl;
+        str << "  (else): " << endl;
         str << this->m_else->to_string(indent + INDENT_INCREMENT);
     }
 
@@ -241,13 +236,16 @@ string ForLoopNode::to_string(int indent) {
 
     str << "FOR" << endl;
     __add_spaces(str, indent);
-    str << "(assign): " << endl;
+    str << "  (assign): " << endl;
     str << this->m_assign->to_string(indent + INDENT_INCREMENT);
-    str << "(test): " << endl;
+    __add_spaces(str, indent);
+    str << "  (test): " << endl;
     str << this->m_test->to_string(indent + INDENT_INCREMENT);
-    str << "(iterate): " << endl;
+    __add_spaces(str, indent);
+    str << "  (iterate): " << endl;
     str << this->m_iterator->to_string(indent + INDENT_INCREMENT);
-    str << "(body): " << endl;
+    __add_spaces(str, indent);
+    str << "  (body): " << endl;
     str << this->m_body->to_string(indent + INDENT_INCREMENT);
     return str.str();
 }
@@ -301,12 +299,12 @@ string FunctionCallNode::to_string(int indent) {
 
     str << "FUNCTION CALL (" << this->m_name << "):" << endl;
     if (this->m_arglist) {
-        __add_spaces(str, indent);
         int max = this->m_arglist->size() - 1;
         for (int i = max; i >= 0; i--) {
-            string s = this->m_arglist->at(i)->to_string(indent + INDENT_INCREMENT);
+            string s = this->m_arglist->at(i)->to_string(indent + 2 * INDENT_INCREMENT);
             __add_spaces(str, indent + INDENT_INCREMENT);
-            str << "[" << (max - i) << "]" << s << endl;
+            str << "[" << (max - i) << "]\n";
+            str << s << endl;
         }
     }
 
@@ -338,10 +336,8 @@ FunctionDeclarationNode::FunctionDeclarationNode
     g_module_functions[this->m_fntblname] = fi;
 }
 
-
 FunctionDeclarationNode::~FunctionDeclarationNode() {
 }
-
 
 string FunctionDeclarationNode::to_string(int indent) {
     ostringstream str;
@@ -353,6 +349,31 @@ string FunctionDeclarationNode::to_string(int indent) {
     str << "(expects " << size << " params)";
     return str.str();
 }
+
+
+
+ReturnNode::ReturnNode(ExpressionBaseNode *expr) : StatementNode(kNodeReturn) {
+    this->m_expr = expr;
+}
+
+ReturnNode::~ReturnNode() {
+}
+
+string ReturnNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+
+    str << "RETURN: " << endl;
+    if (!this->m_expr)
+        str << "(no return value)";
+    else
+        str << this->m_expr->to_string(indent + INDENT_INCREMENT);
+
+    return str.str();
+}
+
+
+
 
 
 

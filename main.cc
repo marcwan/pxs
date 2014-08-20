@@ -1,6 +1,7 @@
 #include "vm.h"
 
 #include <algorithm>
+#include "compiler.h"
 #include "engine.h"
 #include <errno.h>
 #include "instruction.h"
@@ -10,10 +11,6 @@
 #include <string.h>
 
 using namespace std;
-
-extern "C" FILE *yyin, *yyout;
-
-extern "C" int yyparse();
 
 const char *exename;
 
@@ -49,20 +46,11 @@ int main (int argc, char **argv) {
 
         engine.run();
     } else if (ext == "pxs") {
-        yyin = fopen(argv[1], "r");
-        if (!yyin) {
-            cout << "Unable to open file: " << argv[1]
-                 << " (" << strerror(errno) << ")\n";
-            return -1;
-        }
-        yyparse();
-        fclose(yyin);
+        string asmbly = compile(argv[1]);
 
-        current_buffer = string("MODULE_BODY:\n") + current_buffer
-            + string("\nEND_MODULE_BODY\n");
+        cout << asmbly << endl;
+        return 0;
 
-        cout << current_buffer << endl;
-        
         if (!engine.parse_assembly_string(current_buffer)) {
             return -1;
         }

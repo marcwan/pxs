@@ -2,6 +2,9 @@
 #define __PARSENODE_H_
 
 
+class StatementSequenceNode;
+class ValueNode;
+
 #define INDENT_INCREMENT     4
 
 enum ParseNodeType {
@@ -16,6 +19,7 @@ enum ParseNodeType {
     kNodeForLoop,
     kNodeWhileLoop,
     kNodeFunctionDecl,
+    kNodeReturn,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
@@ -27,7 +31,12 @@ enum ParseNodeType {
 
 
 
-class StatementSequenceNode;
+struct FunctionInfo {
+    std::string first_known_namme;
+    std::vector<ValueNode *> *params;
+    StatementSequenceNode *body;
+};  
+
 
 
 
@@ -208,6 +217,19 @@ class AssignmentNode : public StatementNode {
     std::string m_lval;
     ParseNode *m_rval;
 };
+
+
+class ReturnNode : public StatementNode {
+  public:
+    ReturnNode(ExpressionBaseNode *);
+    ~ReturnNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    ExpressionBaseNode *m_expr;
+};
+
 
 
 #endif // __PARSENODE_H_
