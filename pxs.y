@@ -17,7 +17,7 @@ int yylex (void);
 %token OPENPAREN CLOSEPAREN OPENSQUIGGLY CLOSESQUIGGLY VAR COMMA
 %token SEMICOLON TRUEVAL FALSEVAL
 %token EQUALS
-%token FOR WHILE DO IF ELSE ELSEIF FUNCTION RETURN
+%token FOR WHILE DO IF ELSE ELSEIF FUNCTION RETURN BREAK CONTINUE
 %token NUMBER IDENTIFIER
 %left  EQUALITY IDENTITY INEQUALITY NOTIDENTITY
 %left  GT GTE LT LTE
@@ -41,8 +41,17 @@ statement : decl SEMICOLON        { $$ = $1; }
           | for_loop              { $$ = $1; }
           | while_loop            { $$ = $1; }
           | if_stmt               { $$ = $1; }
+          | cont_stmt SEMICOLON   { $$ = $1; }
+          | break_stmt SEMICOLON  { $$ = $1; }
           | function_decl         { $$ = $1; }
           ;
+
+
+cont_stmt : CONTINUE              { $$ = continue_node(); }
+          ;
+
+break_stmt : BREAK                { $$ = break_node();    }
+           ;
 
 
 if_stmt  : IF OPENPAREN expr CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY else_chain

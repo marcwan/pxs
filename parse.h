@@ -36,7 +36,8 @@ void *add_func_arg(void *list, void *arg);
 
 
 void *return_node(void *expr);
-
+void *continue_node();
+void *break_node();
 
 void printnode(void *node);
 

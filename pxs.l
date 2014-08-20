@@ -41,6 +41,8 @@ else                  return ELSE;
 elseif                return ELSEIF;
 function              return FUNCTION;
 return                return RETURN;
+break                 return BREAK;
+continue              return CONTINUE;
 \(                    return OPENPAREN;
 \)                    return CLOSEPAREN;
 \{                    return OPENSQUIGGLY;

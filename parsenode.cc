@@ -374,6 +374,33 @@ string ReturnNode::to_string(int indent) {
 
 
 
+ContinueNode::~ContinueNode() {
+}
+
+string ContinueNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+    str << "CONTINUE";
+    return str.str();
+}
+
+
+
+BreakNode::~BreakNode() {
+}
+
+string BreakNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+    str << "BREAK";
+    return str.str();
+}
+
+
+
+
+
+
 
 
 

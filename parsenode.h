@@ -20,6 +20,8 @@ enum ParseNodeType {
     kNodeWhileLoop,
     kNodeFunctionDecl,
     kNodeReturn,
+    kNodeContinue,
+    kNodeBreak,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
@@ -228,6 +230,26 @@ class ReturnNode : public StatementNode {
 
   protected:
     ExpressionBaseNode *m_expr;
+};
+
+class ContinueNode : public StatementNode {
+  public:
+    ContinueNode() : StatementNode(kNodeContinue) { }
+    ~ContinueNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+};
+
+class BreakNode : public StatementNode {
+  public:
+    BreakNode() : StatementNode(kNodeBreak) { }
+    ~BreakNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
 };
 
 

@@ -258,6 +258,13 @@ void *return_node(void *expr) {
     return new ReturnNode(ebn);
 }
 
+void *continue_node() {
+    return new ContinueNode();
+}
+
+void *break_node() {
+    return new BreakNode();
+}
 
 
 
