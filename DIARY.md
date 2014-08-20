@@ -155,3 +155,21 @@ Great, my compiler is going a lot better now and I can generate a lot of code, b
 
 \#winning.
 
+
+## August 11:
+
+I'm basically reworking how the compiler is set up, and generating an AST now. Have most basic nodes working; need to add some more complicated stuff like loops and functions.
+
+
+## August 20:
+
+Looping now supported in the AST.
+
+## August 21:
+
+Add more functionality, function calls, function definitions, and flow-of-control statements.
+
+Next big project: code generation from this AST. Can't wait!
+
+
+
