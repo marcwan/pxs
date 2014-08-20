@@ -15,6 +15,7 @@ enum ParseNodeType {
     kNodeIfStatement,
     kNodeForLoop,
     kNodeWhileLoop,
+    kNodeFunctionDecl,
     kNodeAssignment,
     kNodeLast = kNodeAssignment
 };
@@ -22,7 +23,7 @@ enum ParseNodeType {
 
 #define IS_EXPRESSION(n)          (((n)->get_type() == kNodeExpression) || ((n)->get_type() == kNodeFunctionCall) || ((n)->get_type() == kNodeValue))
 #define IS_STMT_SEQ(n)            ((n)->get_type() == kNodeStatementSequence)
-
+#define IS_VALUE_NODE(n)          ((n)->get_type() == kNodeValue)
 
 
 
@@ -161,6 +162,23 @@ class WhileLoopNode : public StatementNode {
 
   protected:
     ExpressionBaseNode *m_expr;
+    StatementSequenceNode *m_body;
+};
+
+
+class FunctionDeclarationNode : public ParseNode {
+  public:
+    FunctionDeclarationNode(const char *name,
+                            std::vector<ValueNode *> *paramlist,
+                            StatementSequenceNode *stmtseq);
+    ~FunctionDeclarationNode();
+
+    virtual std::string to_string(int indent);
+
+  protected:
+    std::string m_name;
+    std::string m_fntblname;
+    std::vector<ValueNode *> *m_params;
     StatementSequenceNode *m_body;
 };
 

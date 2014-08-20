@@ -6,8 +6,25 @@
 using namespace std;
 
 
-void __add_spaces(ostringstream & str, int indent);
+void   __add_spaces(ostringstream & str, int indent);
+string __get_unique_name(string base);
 
+
+struct FunctionInfo {
+    string first_known_namme;
+    vector<ValueNode *> *params;
+    StatementSequenceNode *body;
+};  
+
+/**
+ * we'll store all functions in this node here.
+ */
+map<string, FunctionInfo> g_module_functions;
+
+/**
+ * We'll use this to iterate for unique names 
+ */
+int g_name_iter = 0;
 
 
 
@@ -299,6 +316,46 @@ string FunctionCallNode::to_string(int indent) {
 
 
 
+FunctionDeclarationNode::FunctionDeclarationNode
+(
+    const char *name,
+    std::vector<ValueNode *> *paramlist,
+    StatementSequenceNode *stmtseq
+)
+: ParseNode(kNodeFunctionDecl)
+{
+    this->m_name = string(name ? name : "");
+    this->m_params = paramlist;
+    this->m_body = stmtseq;
+
+    // add the body to the global function pool.
+    this->m_fntblname = __get_unique_name(name ? this->m_name : "ANONYMOUS");
+    FunctionInfo fi;
+    fi.first_known_namme = this->m_name;
+    fi.params = this->m_params;
+    fi.body = this->m_body;
+
+    g_module_functions[this->m_fntblname] = fi;
+}
+
+
+FunctionDeclarationNode::~FunctionDeclarationNode() {
+}
+
+
+string FunctionDeclarationNode::to_string(int indent) {
+    ostringstream str;
+    __add_spaces(str, indent);
+
+    str << "DECLAREFN " << this->m_name << ", " << this->m_fntblname << endl;
+    __add_spaces(str, indent + INDENT_INCREMENT);
+    int size = this->m_params ? this->m_params->size() : 0;
+    str << "(expects " << size << " params)";
+    return str.str();
+}
+
+
+
 
 void __add_spaces(ostringstream & str, int indent) {
     char spaces[128];
@@ -309,4 +366,13 @@ void __add_spaces(ostringstream & str, int indent) {
     spaces[indent] = '\0';
 
     str << spaces;
+}
+
+
+string __get_unique_name(string base) {
+    string u = uppercase(trim(base));
+
+    ostringstream str;
+    str << "::__" << u << "__" << g_name_iter++ << "__::";
+    return str.str();    
 }

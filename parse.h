@@ -25,6 +25,11 @@ void *elseif(void *expr, void *statements, void *existing);
 void *for_loop_node(void *assign, void *expr, void *iter, void *body);
 void *while_loop_node(void *expr, void *stmts);
 
+void *function_declaration(const char *name, void *param_list, void *stmtseq);
+void *first_func_param(void *param);
+void *add_func_param(void *list, void *param);
+
+
 void *function_call_node(const char *name, void *arglist);
 void *first_func_arg(void *arg);
 void *add_func_arg(void *list, void *arg);

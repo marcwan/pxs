@@ -215,6 +215,41 @@ void *add_func_arg(void *list, void *arg) {
 }
 
 
+void *first_func_param(void *param) {
+    vector<ValueNode *> *params;
+    params = new vector<ValueNode *>();
+
+    ValueNode *vn = (ValueNode *)param;
+    ASSERT(IS_VALUE_NODE(vn), "Func param isn't expression");
+    params->push_back(vn);
+    return params;
+}
+
+void *add_func_param(void *list, void *param) {
+    vector<ValueNode *> *params;
+    params = (vector<ValueNode *> *)list;
+    ASSERT((params->size() > 0), "should already have some params!");
+
+    ValueNode *vn = (ValueNode *)param;
+    ASSERT(IS_VALUE_NODE(vn), "fn param wrong type");
+
+    params->push_back(vn);
+    return params;
+}
+
+
+void *function_declaration(const char *name, void *param_list, void *stmtseq) {
+    vector<ValueNode *> *params = (vector<ValueNode *> *)param_list;
+    StatementSequenceNode *body = (StatementSequenceNode *)stmtseq;
+
+    ASSERT(IS_STMT_SEQ(body), "Function decl body is wrong");
+
+    FunctionDeclarationNode *fdn;
+    fdn = new FunctionDeclarationNode(name, params, body);
+    return fdn;
+}
+
+
 
 
 

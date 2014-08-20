@@ -15,7 +15,7 @@ int yylex (void);
 %token OPENPAREN CLOSEPAREN OPENSQUIGGLY CLOSESQUIGGLY VAR COMMA
 %token SEMICOLON TRUEVAL FALSEVAL
 %token EQUALS
-%token FOR WHILE DO IF ELSE ELSEIF
+%token FOR WHILE DO IF ELSE ELSEIF FUNCTION
 %token NUMBER IDENTIFIER
 %left  EQUALITY IDENTITY INEQUALITY NOTIDENTITY
 %left  GT GTE LT LTE
@@ -38,6 +38,7 @@ statement : decl SEMICOLON     { $$ = $1; }
           | for_loop           { $$ = $1; }
           | while_loop         { $$ = $1; }
           | if_stmt            { $$ = $1; }
+          | function_decl      { $$ = $1; }
           ;
 
 
@@ -152,7 +153,16 @@ primary : NUMBER   { $$ = value_node($1); }
         ;
 
 
-function_call : IDENTIFIER OPENPAREN arglist CLOSEPAREN
+function_decl: FUNCTION IDENTIFIER OPENPAREN paramlist_empty CLOSEPAREN OPENSQUIGGLY statements CLOSESQUIGGLY 
+             {
+                 $$ = function_declaration($2, $4, $7);
+             }
+             ;
+
+
+
+
+function_call : IDENTIFIER OPENPAREN arglist CLOSEPAREN 
               { 
                   $$ = function_call_node($1, $3);
               }
@@ -164,6 +174,14 @@ arglist : /* empty */           { $$ = NULL; }
         ;
 
 decl    : VAR varlist { $$ = $2; }
+
+paramlist_empty : /* empty ok */      { $$ = NULL; }
+                | paramlist           { $$ = $1;   }
+                ;
+
+paramlist : lvalue                 { $$ = first_func_param($1);   }
+          | lvalue COMMA paramlist { $$ = add_func_param($3, $1); }
+          ;
 
 varlist : lvalue                { $$ = first_decl($1);   }
         | lvalue COMMA varlist  { $$ = add_decl($3, $1); }
@@ -179,12 +197,14 @@ lvalue  : IDENTIFIER { $$ = $1; }
 extern const char *exename;
 extern int   yylineno;
 
+
 int yyerror(char *s)
 {
   warning( s , ( char * )0 );
   yyparse();
   return 0;
 }
+
 
 int warning (char *s, char *t)
 {

@@ -26,8 +26,18 @@ static inline std::string lowercase(std::string s) {
     return snew;
 }
 
+static inline std::string uppercase(std::string s) {
+    std::string snew = s;
+    std::transform(snew.begin(), snew.end(), snew.begin(), ::toupper);
+    return snew;
+}
+
 static inline void lowercaseme(std::string &s) {
     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+}
+
+static inline void uppercaseme(std::string &s) {
+    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
 }
 
 
